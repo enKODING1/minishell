@@ -2,7 +2,7 @@ CC = cc -g
 # CFLAG = -Wall -Wextra -Werror
 NAME = test
 
-SOURCES = ./lexer/lexer_test.c
+SOURCES = ./lexer/lexer_test.c ./lexer/utils.c 
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft/

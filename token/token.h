@@ -3,13 +3,14 @@
 
 #include <stdlib.h>
 
+// dollor sign도 토큰화 해야하나
 typedef enum e_token {
-    PIPE,
-    HEREDOC,
-    APPEND,
-    OUT,
-    IN,
-    WORD,
+    PIPE, // |
+    HEREDOC, // << 
+    APPEND, // >>
+    OUT, // >
+    IN, // <
+    WORD, 
     END,
 } t_token;
 

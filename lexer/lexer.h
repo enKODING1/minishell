@@ -29,5 +29,6 @@ void skip_whitespace(t_lexer *self);
 const char * token_type_str(t_token type);
 t_token_type *new_token(t_token token_type, char *ch);
 t_lexer *new(char *input);
+int is_letter(int c);
 
 #endif

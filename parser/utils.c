@@ -5,13 +5,17 @@
 t_token_node * create_token_list(t_lexer *lexer)
 {
     t_token_type *tok;
-    t_token_node *tok_head;
+    t_token_node *tok_head = NULL;
     t_token_node *tok_node;
     
-    // add 잘되는지 확인하기
-    while(tok->type != END)
+    while(1)
     {
         tok = lexer->next_token(lexer);
+        if (tok->type == END)
+        {
+            free_token(tok);
+            break;
+        }
         tok_node = create_token_node(tok);
         add_token_node(&tok_head, tok_node);
     }
@@ -19,8 +23,8 @@ t_token_node * create_token_list(t_lexer *lexer)
     t_token_node *head = tok_head;
     while(head)
     {
+        printf("type[%s], val[%s]\n", token_type_str(head->token->type), head->token->value);
         head = head->next;
-        printf("type[%s], val[%s]\n", token_type_str(head->next->token->type), head->next->token->value);
     }
     
     return tok_head;
@@ -38,20 +42,20 @@ t_token_node *create_token_node(t_token_type *tok)
     return tok_node;
 }
 
-int add_token_node(t_token_node **head, t_token_node *tok)
+int add_token_node(t_token_node **head, t_token_node *new_node)
 {
-    t_token_node *tok_node;
+    t_token_node *current;
 
-    if((*head)->next == NULL)
+    if (!head || !new_node)
+        return (-1);
+    if (*head == NULL)
     {
-       (*head)->next = tok; 
-        return 0 ;
+       *head = new_node; 
+        return (0);
     }
-
-    tok_node = (*head);   
-    while(tok_node)
-        tok_node = tok_node->next;
-
-    tok_node->next = tok;
-    return 1;
+    current = *head;
+    while(current->next != NULL)
+        current = current->next;
+    current->next = new_node;
+    return (1);
 }

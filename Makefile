@@ -2,19 +2,25 @@ CC = cc -g
 # CFLAG = -Wall -Wextra -Werror
 NAME = test
 
+# lexer test
 SOURCES = ./lexer/lexer_test.c ./lexer/utils.c 
+
+# parser test
+# SOURCES = ./lexer/utils.c \
+		  ./parser/parser_test.c ./parser/utils.c
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft/
 LEXER_DIR = ./lexer/
 TOKEN_DIR = ./token/
+PARSER_DIR = ./parser/
 LIBFT_LIB = ${LIBFT_DIR}/libft.a
 
 all:$(NAME)
 
 $(NAME): $(LIBFT_LIB) $(OBJECTS) 
 	$(CC) $(CFLAG) -o $(NAME) $(OBJECTS) \
-	-I${LIBFT_DIR} -I${TOKEN_DIR} -I{LEXER_DIR} \
+	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} \
 	-L${LIBFT_DIR} -lft
 
 $(LIBFT_LIB):
@@ -23,7 +29,7 @@ $(LIBFT_LIB):
 
 %.o: %.c
 	$(CC) $(CFLAG)  -c $< -o $@ \
-	-I${LIBFT_DIR} -I${LEXER_DIR} -I${TOKEN_DIR} 
+	-I${LIBFT_DIR} -I${LEXER_DIR} -I${TOKEN_DIR}  -I${PARSER_DIR}
 	
 clean:
 	make clean -C $(LIBFT_DIR)

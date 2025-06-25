@@ -12,6 +12,7 @@ typedef struct s_lexer{
     void (*read_char)(struct s_lexer *self);
     t_token_type *(*next_token)(struct s_lexer *self);
     char *(*read_identifier)(struct s_lexer * self);
+    char *(*read_string)(struct s_lexer *self);
     char *(* read_number)(struct s_lexer * self);
     char (*peek_char)(struct s_lexer *self);
     void (* skip_whitespace)(struct s_lexer *self);
@@ -21,6 +22,7 @@ typedef struct s_lexer{
 void read_char(t_lexer *self);
 t_token_type *next_token(t_lexer *self);
 char * read_identifier(t_lexer *self);
+char * read_string(t_lexer *self);
 char * read_number(t_lexer *self);
 char peek_char(t_lexer *self);
 void skip_whitespace(t_lexer *self);

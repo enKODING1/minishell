@@ -15,7 +15,7 @@ int main(void)
     // char *input = "ls -l | grep .txt < << > >> ./../blog cat -e";
     // char *input = "ls -l";
     // char *input = "cat < input.txt";
-    char *input = "ls -l | grep \".txt\" *";
+    char *input = "echo 'hello world' | cat";
     t_lexer *lexer = new(input);
     t_token_type *tok; 
 

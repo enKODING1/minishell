@@ -27,6 +27,7 @@ t_lexer *new(char *input)
     lexer->read_char = read_char;
     lexer->next_token = next_token;
     lexer->read_identifier = read_identifier;
+    lexer->read_string = read_string;
     // lexer->read_number = read_number;
     lexer->peek_char = peek_char;
     lexer->skip_whitespace = skip_whitespace;
@@ -88,13 +89,30 @@ t_token_type *next_token(t_lexer *self){
             tok = new_token(OUT, str);
         }
     }
+    else if (self->ch == '\'' || self->ch == '"')
+    {
+        char *ident = self->read_string(self);
+        tok = new_token(WORD, ident);
+        free(ident);
+    }
     else if (self->ch == '\0')
         tok = new_token(END, "");
     else 
     {
-        char* ident = self->read_identifier(self);
-        tok = new_token(WORD, ident);
-        free(ident);
+        if (is_letter(self->ch))
+        {
+            char* ident = self->read_identifier(self);
+            tok = new_token(WORD, ident);
+            free(ident);
+            return (tok);
+        }
+        else
+        {
+            char str_single[2];
+            str_single[0] = self->ch;
+            str_single[1] = '\0';
+            tok = new_token(WORD, str_single);
+        }
     }
     self->read_char(self);
     return tok;
@@ -127,6 +145,26 @@ char * read_identifier(t_lexer *self)
         self->read_char(self);
     }
 
+    return ft_substr(self->input, position, self->position - position);
+}
+
+char * read_string(t_lexer *self)
+{
+    int position;
+    char quote;
+
+    quote = self->ch;
+    self->read_char(self);
+    position = self->position;
+    while(self->ch != quote)
+    {
+        if (self->ch == '\0')
+        {
+            // 닫히지 않은 따옴표 처리
+            break;
+        }
+        self->read_char(self);
+    }
     return ft_substr(self->input, position, self->position - position);
 }
 

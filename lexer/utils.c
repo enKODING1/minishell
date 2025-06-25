@@ -17,8 +17,6 @@ const char * token_type_str(t_token type){
         return "WORD";
     if (type == END)
         return "END";
-    if (type == ILLEGAL)
-        return "ILLEGAL";
     return NULL;
 }
 
@@ -47,70 +45,56 @@ char peek_char(t_lexer *self)
 
 t_token_type *next_token(t_lexer *self){
     t_token_type *tok;
+    char str[3];
+
     self->skip_whitespace(self);
-    // ", ' 도 처리하기
     if (self->ch == '|')
-        tok = new_token(PIPE, &self->ch);
+    {
+        str[0] = self->ch;
+        str[1] = '\0';
+        tok = new_token(PIPE, str);
+    }
     else if (self->ch == '<')
     {
         if(self->peek_char(self) == '<')
         {
-            char prev_ch = self->ch;
-            char *str;
             self->read_char(self);
-
-            str = (char *)malloc(sizeof(char) * 3); // [<, <, \0]
-
-            if(!str)
-                return NULL;
-            str[0] = prev_ch;
-            str[1] = self->ch;
+            str[0] = '<';
+            str[1] = '<';
             str[2] = '\0';
-
             tok = new_token(HEREDOC, str);
-            free(str);
-        }else
+        }
+        else
         {
-            tok = new_token(IN, &self->ch);
+            str[0] = self->ch;
+            str[1] = '\0';
+            tok = new_token(IN, str);
         }
     }
     else if (self->ch == '>')
     {
         if(self->peek_char(self) == '>')
         {
-            char prev_ch = self->ch;
-            char *str;
             self->read_char(self);
-            str = (char *)malloc(sizeof(char) * 3); // [>, >, \0]
-            if(!str)
-                return NULL;
-            str[0] = prev_ch;
-            str[1] = self->ch;
+            str[0] = '>';
+            str[1] = '>';
             str[2] = '\0';
-
             tok = new_token(APPEND, str);
-            free(str);
-        }else
+        }
+        else
         {
-            tok = new_token(OUT, &self->ch);
+            str[0] = self->ch;
+            str[1] = '\0';
+            tok = new_token(OUT, str);
         }
     }
     else if (self->ch == '\0')
         tok = new_token(END, "");
-    // else if (ft_isalpha(self->ch) || self->ch == '.' || self->ch == '-' || self->ch == '_')
     else 
     {
-        tok = (t_token_type *)malloc(sizeof(t_token_type));
-        if(is_letter(self->ch))
-        {
-         tok->value = self->read_identifier(self);
-         /* 
-            모든 문자열은 word토큰으로 취급할 거기 때문에 
-            별도의 lookupident로 위 identifier에 맞는 토큰을 찾을 필요 없이
-            word 토큰으로 취급해도 되지 않을까 ?
-         */
-         tok->type = WORD;
-        }
+        char* ident = self->read_identifier(self);
+        tok = new_token(WORD, ident);
+        free(ident);
     }
     self->read_char(self);
     return tok;
@@ -135,7 +119,9 @@ void read_char(t_lexer *self)
 
 char * read_identifier(t_lexer *self)
 {
-    int position = self->position;
+    int position;
+
+    position = self->position;
     while(is_letter(self->ch))
     {
         self->read_char(self);
@@ -161,4 +147,22 @@ void skip_whitespace(t_lexer *self)
     {
         self->read_char(self);
     }
+}
+
+void free_lexer(t_lexer *lexer)
+{
+    if (!lexer)
+        return ;
+    if (lexer->input)
+        free(lexer->input);
+    free(lexer);
+}
+
+void free_token(t_token_type *tok)
+{
+    if (!tok)
+        return ;
+    if (tok->value)
+        free(tok->value);
+    free(tok);
 }

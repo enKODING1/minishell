@@ -30,5 +30,7 @@ const char * token_type_str(t_token type);
 t_token_type *new_token(t_token token_type, char *ch);
 t_lexer *new(char *input);
 int is_letter(int c);
+void free_lexer(t_lexer *lexer);
+void free_token(t_token_type *tok);
 
 #endif

@@ -10,7 +10,6 @@ typedef enum e_token {
     APPEND, // >>
     OUT, // >
     IN, // <
-    ILLEGAL,
     WORD, 
     END,
 } t_token;

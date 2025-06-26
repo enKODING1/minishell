@@ -9,37 +9,50 @@ typedef struct s_token_node{
     struct s_token_node *next;
 }t_token_node;
 
-typedef enum s_node_type{
-    PIPE_NODE,
-    CMD_NODE,
-    REDIRS_NODE
+typedef enum e_node_type { 
+    NODE_PIPE, NODE_CMD 
 } t_node_type;
 
-// 범용 타입
-typedef struct s_node{
-    t_node_type node;
-}t_node;
+typedef struct s_node {
+     t_node_type type; 
+} t_node;
 
-typedef struct s_redirs{
-    t_token_type type;
-    char *file; 
-    struct s_redirs *redirs;
-} t_redirs;
+typedef struct s_redir { 
+    t_token type; 
+    char *filename; 
+    struct s_redir *next; 
+} t_redir;
 
-typedef struct s_pipe_node{
-
-} t_pipe_node;
-
-typedef struct s_cmd_node{
-    t_node_type node_type;
-    t_token_type type;
-    char **args;
-    t_redirs *redirs;
+typedef struct s_cmd_node { 
+    t_node_type type; 
+    char *cmd; 
+    char **args; 
+    t_redir *redirs; 
 } t_cmd_node;
 
-t_node *parse_pipe(t_lexer *lexer);
-t_node *parse_cmd(t_lexer *lexer);
-t_redirs *parse_redirs(t_lexer *lexer);
+typedef struct s_pipe_node { 
+    t_node_type type; 
+    t_node *left; 
+    t_node *right; 
+} t_pipe_node;
+
+typedef struct t_parser {
+    t_token_node *current_token;
+    int has_error;
+} t_parser;
+
+/* parser main function */
+t_node *parse_pipe(t_parser *parser);
+t_node *parse_cmd(t_parser *parser);
+t_redir *parse_redirs(t_parser *parser);
+
+/* parser utils */
+void parser_init(t_parser *parser, t_token_node *tok_head);
+t_token_type * peek_token(t_parser *parser);
+void consume_token(t_parser *parser);
+void free_token_list(t_token_node *head);
+void free_ast(t_node *node);
+void print_ast(t_node *node, int indent);
 
 /* token list */
 t_token_node *create_token_list(t_lexer *lexer);

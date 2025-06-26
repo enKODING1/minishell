@@ -1,6 +1,17 @@
 #include "parser.h"
 #include <stdio.h>
 
+void print_token_list(t_token_node *head)
+{
+    t_token_node *current = head;
+    printf("--- Token List ---\n");
+    while(current)
+    {
+        printf("type[%s], val[%s]\n", token_type_str(current->token->type), current->token->value);
+        current = current->next;
+    }
+    printf("------------------\n");
+}
 
 t_token_node * create_token_list(t_lexer *lexer)
 {
@@ -20,13 +31,6 @@ t_token_node * create_token_list(t_lexer *lexer)
         add_token_node(&tok_head, tok_node);
     }
      
-    t_token_node *head = tok_head;
-    while(head)
-    {
-        printf("type[%s], val[%s]\n", token_type_str(head->token->type), head->token->value);
-        head = head->next;
-    }
-    
     return tok_head;
 }
 

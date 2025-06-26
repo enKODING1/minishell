@@ -45,6 +45,6 @@ t_redirs *parse_redirs(t_lexer *lexer);
 t_token_node *create_token_list(t_lexer *lexer);
 t_token_node *create_token_node(t_token_type *tok);
 int add_token_node(t_token_node **head, t_token_node *tok);
-
+void print_token_list(t_token_node *head);
 
 #endif

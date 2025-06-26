@@ -26,7 +26,9 @@ int main(void)
     
     char *input = "< file cat | cat > outfile";
     t_lexer *lexer = new(input);
-    create_token_list(lexer);
+    t_token_node *tok_head = create_token_list(lexer);
+    print_token_list(tok_head);
+
     // t_node *ast_root = (t_node *)malloc(sizeof(t_node));
     // if (!ast_root)
     //     return 0;

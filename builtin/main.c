@@ -4,6 +4,8 @@
 #include "builtin.h"
 #include "../exec/exec.h"
 #include "libft.h"
+#include <readline/readline.h>   // readline 사용을 위해 추가
+#include <readline/history.h>   // add_history 사용을 위해 추가
 #define TEXT_COLOR "\033[38;2;0;255;150m"
 #define BORDER_COLOR "\033[38;2;255;0;140m"
 #define RESET_COLOR "\033[0m"
@@ -112,7 +114,7 @@ char **parse_input(char *line)
 
 int main(int argc, char **argv, char **envp)
 {
-    char line[1024];
+    char *line;
     char **args;
     int fd[3];
 
@@ -127,17 +129,19 @@ int main(int argc, char **argv, char **envp)
     set_sig();
     while (1)
     {
-        printf("edgeshell> ");
-        if (fgets(line, sizeof(line), stdin) == NULL)
+        line = readline("edgeshell> ");
+        if (line == NULL)
         {
-            printf("exit\n");
+            ft_putendl_fd("exit", STDOUT_FILENO);
             break;
         }
-
+        if (*line)
+            add_history(line);
         args = parse_input(line);
         if (args[0] == NULL)
         {
             free_argv(args);
+            free(line);
             continue;
         }
         if (ft_strncmp(args[0], "echo",4) == 0)
@@ -156,7 +160,10 @@ int main(int argc, char **argv, char **envp)
             exec_exit(fd, args);
         else if (args[0])
             printf("edgeshell: command not found: %s\n", args[0]);
+
         free_argv(args);
+        
+        free(line);
     }
     free_envp_tmp();
     return (0);

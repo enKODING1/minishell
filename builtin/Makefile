@@ -23,7 +23,7 @@ SRCS =  main.c \
 OBJS = $(SRCS:.c=.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
-LIBS = -L$(LIBFT_DIR) -lft
+LIBS = -L$(LIBFT_DIR) -lft -lreadline
 
 all: $(NAME)
 

@@ -1,0 +1,42 @@
+#include "builtin.h"
+
+int ft_arglen(char **argv)
+{
+    int i;
+
+    i = 0;
+    while(argv[i] != NULL)
+        i++;
+    return (i);
+}
+
+char **get_envp_list(char **envp)
+{
+    char **tmp_list;
+    int i;
+    int j;
+
+    i = 0;
+    j = 0;
+    tmp_list = malloc(sizeof(char *) * (ft_arglen(envp) + 1));
+    if (!envp_list)
+        return (NULL);
+    while(envp[i])
+    {
+        tmp_list[i] = ft_strdup(envp[i]);
+        i++;
+    }
+    tmp_list[i] = NULL;
+    return (tmp_list);
+}
+
+void free_envp(char **envp_list)
+{
+    int i = 0;
+    while (envp_list && envp_list[i])
+    {
+        free(envp_list[i]);
+        i++;
+    }
+    free(envp_list);
+}

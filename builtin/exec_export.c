@@ -93,14 +93,16 @@ void exec_export(int *fd, char **argv)
 
     j = 0;
     i = 0;
-    tmp_list = get_envp_list(envp_list);
+    tmp_list = NULL;
     if (argv[0][0] == '=')
     {
         exec_error_handler(fd[2], "export", NULL, EXPORT_DOSE_NOT_EQUAL);
+        free_envp(tmp_list);
         return ;
     }
     if (ft_arglen(argv) == 1) // 나중에 cmd로 올거 고려 고칠땐 0으로
     {
+        tmp_list = get_envp_list(envp_list);
         sort_envp(tmp_list);
         while (tmp_list[j])
         {
@@ -108,6 +110,7 @@ void exec_export(int *fd, char **argv)
             ft_putendl_fd(tmp_list[j],fd[1]);
             j++;
         }
+        free_envp(tmp_list);
     }
     else
     {

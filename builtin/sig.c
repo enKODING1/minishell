@@ -11,10 +11,9 @@ void sig_c()
     rl_redisplay();
 }
 
-
-void sig_back()
+void sig_back(int sig)
 {
-    write(1,"^\\",1);
+    (void) sig;
 }
 
 void set_printf_off()

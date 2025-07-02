@@ -6,9 +6,6 @@
 #include <fcntl.h>
 
 int is_builtint(char *str);
-char **get_envp_list(char **envp); // 일단은 exec_util쪽에 만들어 놓자
-
-extern char **envp_list; // env 명령어를 실행하기 위해 필요한 변수 나중에 main쪽 헤더에 편입 될 예정
 
 typedef struct s_command
 {

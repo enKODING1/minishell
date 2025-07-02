@@ -25,14 +25,15 @@ static int ft_check(char *str)
 static void ft_pull(int i, char **envp_list)
 {
     free(envp_list[i]);
-    while (envp_list[i])
+    while (envp_list[i + 1])
     {
         envp_list[i] = envp_list[i + 1];
         i++;
     }
+    envp_list[i] = NULL;
 }
 
-void exec_unset(int *fd, char **argv)
+void exec_unset(int *fd, char **argv, char ***envp_list)
 {
     size_t key_len;
     int i;
@@ -46,11 +47,11 @@ void exec_unset(int *fd, char **argv)
         if (!ft_check(argv[i]))
             continue; // bash에선 에러메시지 발생안해서 이랬는데 에러메시지를 출력하는게 맞는건가...
         key_len = ft_strlen(argv[i]);
-        while (envp_list[j])
+        while ((*envp_list)[j])
         {
-            if (ft_strncmp(argv[i],envp_list[j],key_len) == 0 && envp_list[j][key_len] == '=')
+            if (ft_strncmp(argv[i],(*envp_list)[j],key_len) == 0 && (*envp_list)[j][key_len] == '=')
             {
-                ft_pull(j,envp_list);
+                ft_pull(j,*envp_list);
                 continue;
             }
             j++;

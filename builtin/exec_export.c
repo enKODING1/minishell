@@ -64,7 +64,7 @@ void sort_envp(char **envp)
         i++;
     }
 }
-char ** add_envp(char *arg)
+char ** add_envp(char *arg, char **envp_list)
 {
     size_t i;
     size_t len;
@@ -85,7 +85,7 @@ char ** add_envp(char *arg)
     return (tmp_list);
 }
 
-void exec_export(int *fd, char **argv)
+void exec_export(int *fd, char **argv, char ***envp_list)
 {
     char **tmp_list;
     int i;
@@ -102,7 +102,7 @@ void exec_export(int *fd, char **argv)
     }
     if (ft_arglen(argv) == 1) // 나중에 cmd로 올거 고려 고칠땐 0으로
     {
-        tmp_list = get_envp_list(envp_list);
+        tmp_list = get_envp_list(*envp_list);
         sort_envp(tmp_list);
         while (tmp_list[j])
         {
@@ -114,8 +114,8 @@ void exec_export(int *fd, char **argv)
     }
     else
     {
-        tmp_list = add_envp(argv[1]);
-        free_envp(envp_list);
-        envp_list = tmp_list;
+        tmp_list = add_envp(argv[1], *envp_list);
+        free_envp(*envp_list);
+        *envp_list = tmp_list;
     }
 }

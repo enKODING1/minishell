@@ -10,10 +10,6 @@
 #define BORDER_COLOR "\033[38;2;255;0;140m"
 #define RESET_COLOR "\033[0m"
 
-char **envp_list;
-
-
-
 void print_edge_shell_banner_with_style(void)
 
 {
@@ -31,8 +27,9 @@ void print_edge_shell_banner_with_style(void)
     printf(BORDER_COLOR "└───────────────────────────────────────────────────────────────────────────────────┘\n" RESET_COLOR);
 }
 
-static void init_envp(char **envp)
+static char **init_envp(char **envp)
 {
+    char **envp_list;
     int i = 0;
     while (envp[i])
         i++;
@@ -54,11 +51,14 @@ static void init_envp(char **envp)
         i++;
     }
     envp_list[i] = NULL;
+    return envp_list;
 }
 
-static void free_envp_tmp()
+static void free_envp_tmp(char **envp_list)
 {
-    int i = 0;
+    int i;
+    
+    i = 0;
     while (envp_list && envp_list[i])
     {
         free(envp_list[i]);
@@ -114,6 +114,7 @@ char **parse_input(char *line)
 
 int main(int argc, char **argv, char **envp)
 {
+    char **envp_list = NULL;
     char *line;
     char **args;
     int fd[3];
@@ -125,7 +126,7 @@ int main(int argc, char **argv, char **envp)
     (void)argc;
     (void)argv;
     print_edge_shell_banner_with_style();
-    init_envp(envp);
+    envp_list = init_envp(envp);
     set_sig();
     while (1)
     {
@@ -147,24 +148,22 @@ int main(int argc, char **argv, char **envp)
         if (ft_strncmp(args[0], "echo",4) == 0)
             exec_echo(fd, args);
         else if (ft_strncmp(args[0], "cd",2) == 0)
-            exec_cd(fd, args);
+            exec_cd(fd, args, envp_list);
         else if (ft_strncmp(args[0], "pwd",3) == 0)
-            exec_pwd(fd, args);
+            exec_pwd(fd, args, envp_list);
         else if (ft_strncmp(args[0], "export",6) == 0)
-            exec_export(fd, args);
+            exec_export(fd, args, &envp_list);
         else if (ft_strncmp(args[0], "unset",5) == 0)
-            exec_unset(fd, args);
+            exec_unset(fd, args, &envp_list);
         else if (ft_strncmp(args[0], "env",3) == 0)
-            exec_env(fd);
+            exec_env(fd, envp_list);
         else if (ft_strncmp(args[0], "exit",4) == 0)
             exec_exit(fd, args);
         else if (args[0])
             printf("edgeshell: command not found: %s\n", args[0]);
-
         free_argv(args);
-        
         free(line);
     }
-    free_envp_tmp();
+    free_envp_tmp(envp_list);
     return (0);
 }

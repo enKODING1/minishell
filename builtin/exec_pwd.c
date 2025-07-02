@@ -1,6 +1,6 @@
 #include "builtin.h"
 
-void exec_pwd(int *fd, char **argv) // 매개변수 나중에 수정
+void exec_pwd(int *fd, char **argv, char **envp_list) // 매개변수 나중에 수정
 {
     char *str;
     char *tmp;

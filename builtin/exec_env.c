@@ -13,7 +13,7 @@ int has_equal(char *str)
     }
     return (0);
 }
-void exec_env(int *fd)
+void exec_env(int *fd, char **envp_list)
 {
     int i;
 

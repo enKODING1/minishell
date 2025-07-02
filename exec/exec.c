@@ -65,24 +65,24 @@ void exec_handler(t_command *cmd)
     }
 }
 
-int main()
-{
-    t_command test;
-    char **test_argv;
+// int main()
+// {
+//     t_command test;
+//     char **test_argv;
 
-    printf("--- Running test for: pwd >> a.txt ---\n");    
-    test_argv = malloc(sizeof(char *) * 2);
-    test_argv[0] = strdup("pwd");
-    test_argv[1] = NULL;
-    test.argv = test_argv;
-    test.output_dir = strdup("a.txt"); // 출력 파일 이름
-    test.mode = 1;                     // `>>` (append mode)를 의미
-    test.input_dir = NULL;
-    test.next = NULL;
-    builtin_handler(&test);
-    printf("--- Test finished. Check the 'a.txt' file. ---\n");
-    free(test.argv[0]);
-    free(test.argv);
-    free(test.output_dir);
-    return (0);
-}
+//     printf("--- Running test for: pwd >> a.txt ---\n");    
+//     test_argv = malloc(sizeof(char *) * 2);
+//     test_argv[0] = strdup("pwd");
+//     test_argv[1] = NULL;
+//     test.argv = test_argv;
+//     test.output_dir = strdup("a.txt"); // 출력 파일 이름
+//     test.mode = 1;                     // `>>` (append mode)를 의미
+//     test.input_dir = NULL;
+//     test.next = NULL;
+//     builtin_handler(&test);
+//     printf("--- Test finished. Check the 'a.txt' file. ---\n");
+//     free(test.argv[0]);
+//     free(test.argv);
+//     free(test.output_dir);
+//     return (0);
+// }

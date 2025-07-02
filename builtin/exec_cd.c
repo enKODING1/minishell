@@ -2,7 +2,7 @@
 
 // PWD,OLD_PWD 값을 바꾸고 cd의 다양한 상황에 대해서 대처하라
 // cd -가 먹통이 되는 상황 발생
-void set_env(char *key, char *value)
+void set_env(char *key, char *value, char **envp_list)
 {
     size_t key_len;
     char *key_eq;
@@ -34,7 +34,7 @@ void set_env(char *key, char *value)
     free(new_entry);
 }
 
-char *search_envp(char *target)
+char *search_envp(char *target, char **envp_list)
 {
     size_t len;
     int i;
@@ -52,14 +52,14 @@ char *search_envp(char *target)
     return (NULL);
 }
 
-void exec_cd(int *fd, char **argv)
+void exec_cd(int *fd, char **argv, char **envp_list)
 {
     int num;
     int is_minus;
     char *path;
     char *old_path;
     
-    old_path = search_envp("PWD");
+    old_path = search_envp("PWD", envp_list);
     is_minus = 0;
     if (ft_arglen(argv) > 2)
     {
@@ -68,7 +68,7 @@ void exec_cd(int *fd, char **argv)
     }
     if (argv[1] == NULL || argv[1][0] == '\0' || argv[1][0] == '~')
     {
-        path = search_envp("HOME");
+        path = search_envp("HOME", envp_list);
         if(!path)
         {
             exec_error_handler(fd[2], "cd", NULL, ": HOME NOT SET \n");
@@ -77,7 +77,7 @@ void exec_cd(int *fd, char **argv)
     }
     else if (argv[1][0] == '-' && argv[1][1] == '\0')
     {
-        path = search_envp("OLDPWD");
+        path = search_envp("OLDPWD", envp_list);
         is_minus = 1;
         if(!path)
         {
@@ -94,9 +94,9 @@ void exec_cd(int *fd, char **argv)
         exec_error_handler(fd[2], "cd", path, CD_DOES_NOT_EXIT_ERROR);
         return ;
     }
-    set_env("OLDPWD",old_path);
+    set_env("OLDPWD",old_path, envp_list);
     path = getcwd(NULL,0);
-    set_env("PWD",path);
+    set_env("PWD",path, envp_list);
     if (is_minus)
         ft_putendl_fd(path, fd[1]);
     free(path);

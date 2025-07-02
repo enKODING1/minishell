@@ -11,14 +11,15 @@
 #include <signal.h>
 
 int ft_arglen(char **argv);
+char **get_envp_list(char **envp_list);
 void exec_error_handler(int fd,char *command,char *target, char *error_message);
-void exec_cd(int *fd, char **argv);
+void exec_cd(int *fd, char **argv, char **envp_list);
+void exec_env(int *fd, char **envp_list);
 void exec_echo(int *fd, char **argv);
-void exec_env(int *fd);
-void exec_pwd(int *fd, char **argv);
-void exec_unset(int *fd, char **argv);
 void exec_exit(int *fd,char **argv);
-void exec_export(int *fd, char **argv);
+void exec_export(int *fd, char **argv, char ***envp_list);
+void exec_pwd(int *fd, char **argv, char **envp_list);
+void exec_unset(int *fd, char **argv, char ***envp_list);
 void free_envp(char **envp_list);
 void set_sig();
 # endif

@@ -10,7 +10,7 @@ int ft_arglen(char **argv)
     return (i);
 }
 
-char **get_envp_list(char **envp)
+char **get_envp_list(char **envp_list)
 {
     char **tmp_list;
     int i;
@@ -18,12 +18,12 @@ char **get_envp_list(char **envp)
 
     i = 0;
     j = 0;
-    tmp_list = malloc(sizeof(char *) * (ft_arglen(envp) + 1));
+    tmp_list = malloc(sizeof(char *) * (ft_arglen(envp_list) + 1));
     if (!envp_list)
         return (NULL);
-    while(envp[i])
+    while(envp_list[i])
     {
-        tmp_list[i] = ft_strdup(envp[i]);
+        tmp_list[i] = ft_strdup(envp_list[i]);
         i++;
     }
     tmp_list[i] = NULL;

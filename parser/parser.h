@@ -3,6 +3,7 @@
 
 #include "libft.h"
 #include "lexer.h"
+#include <stdio.h>
 
 typedef struct s_token_node{
     t_token_type *token;

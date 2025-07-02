@@ -111,7 +111,7 @@ char **parse_input(char *line)
     tokens[position] = NULL;
     return tokens;
 }
-
+//쉘을 실행할때마다 쉘 레벨이 올라가야함
 int main(int argc, char **argv, char **envp)
 {
     char **envp_list = NULL;

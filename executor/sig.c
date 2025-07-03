@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include <termios.h>
-#include <readline/readline.h>
+#include "executor.h"
 
 void	sig_c(int sig)
 {
@@ -35,6 +33,12 @@ void	set_printf_off(void)
 	tcgetattr(1, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(1, 0, &term);
+}
+
+void set_sig_fork(void)
+{
+	signal(SIGINT, sig_c);
+	signal(SIGQUIT, sig_back);
 }
 
 void	set_sig(void)

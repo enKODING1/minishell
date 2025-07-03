@@ -98,11 +98,9 @@ t_node *parse_pipe(t_parser *parser)
 {
     if (!peek_token(parser) || peek_token(parser)->type == END) 
         return NULL;
-
     t_node *node = parse_cmd(parser);
 	if (parser->has_error) 
         return NULL;
-
 	if (peek_token(parser) && peek_token(parser)->type == PIPE)
 	{
 		consume_token(parser);

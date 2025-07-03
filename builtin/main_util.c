@@ -12,17 +12,3 @@
 
 #include "builtin.h"
 
-char	*shell_lv_up(char **envp_list)
-{
-	char	*target;
-	char	*lv_str;
-	int		level;
-
-	target = search_envp("SHLVL", envp_list);
-	level = ft_atoi(target);
-	level++;
-	lv_str = ft_itoa(level);
-	target = ft_strjoin("SHLVL=", lv_str);
-	free(lv_str);
-	return (target);
-}

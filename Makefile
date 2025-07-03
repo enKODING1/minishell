@@ -2,17 +2,26 @@ CC = cc -g
 # CFLAG = -Wall -Wextra -Werror
 NAME = test
 
+VPATH = ./executor ./builtin ./lexer ./parser
+
 # lexer test
 # SOURCES = ./lexer/lexer_test.c ./lexer/utils.c 
 
 # parser test
-SOURCES = ./lexer/utils.c \
+#SOURCES = ./lexer/utils.c \
 		  ./parser/parser_test.c ./parser/utils.c ./parser/ast_utils.c
 
 # executor test
 # SOURCES = ./executor/executor.c \
 		  ./lexer/utils.c \
 		  ./parser/utils.c ./parser/ast_utils.c
+ SOURCES = ./executor/executor_tmp.c \
+ 		./executor/executor_util.c ./executor/executor_util2.c \
+		./executor/sig.c \
+		./builtin/builtin_util.c \
+		./lexer/utils.c \
+		./parser/utils.c ./parser/ast_utils.c
+
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft/
@@ -29,7 +38,7 @@ all:$(NAME)
 $(NAME): $(LIBFT_LIB) $(OBJECTS) 
 	$(CC) $(CFLAG) -o $(NAME) $(OBJECTS) \
 	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} \
-	-L${LIBFT_DIR} -lft
+	-L${LIBFT_DIR} -lft -lreadline
 
 $(LIBFT_LIB):
 	make -C $(LIBFT_DIR)

@@ -38,7 +38,6 @@ void	exec_export(int *fd, char **argv, char ***envp_list);
 void	exec_pwd(int *fd, char **argv, char **envp_list);
 void	exec_unset(int *fd, char **argv, char ***envp_list);
 void	free_envp(char **envp_list);
-void	set_sig(void);
 int		ft_arglen(char **argv);
 
 #	endif

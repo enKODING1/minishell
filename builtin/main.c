@@ -40,7 +40,10 @@ static char **init_envp(char **envp)
     i = 0;
     while (envp[i])
     {
-        envp_list[i] = ft_strdup(envp[i]);
+        if(ft_strncmp("SHLVL=", envp[i], 6) != 0)
+            envp_list[i] = ft_strdup(envp[i]);
+        else
+            envp_list[i] = shell_lv_up(envp);
         if (!envp_list[i])
         {
             while (i > 0)

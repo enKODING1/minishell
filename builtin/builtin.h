@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/02 20:32:40 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:05:52 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 char	**get_envp_list(char **envp_list);
 char	*search_envp(char *target, char **envp_list);
+char	*shell_lv_up(char **envp_list);
 void	exec_error_handler(int fd,
 			char *command,
 			char *target,
@@ -39,4 +40,5 @@ void	exec_unset(int *fd, char **argv, char ***envp_list);
 void	free_envp(char **envp_list);
 void	set_sig(void);
 int		ft_arglen(char **argv);
+
 #	endif

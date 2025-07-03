@@ -1,7 +1,7 @@
 #include "parser.h"
 #include <stdio.h>
 #include "builtin.h"
-#include <wait.h>
+#include <sys/wait.h>
 
 static void	free_matrix(char **matrix)
 {
@@ -67,6 +67,50 @@ char *get_cmd_path(char *cmd, char **envp)
 	return (NULL); 
 }
 
+void redirection_handler(t_cmd_node *cmd_node)
+{
+	int fd;
+	t_redir *redir = cmd_node->redirs;
+	while(redir)	
+	{
+		if (redir->type == IN)
+		{
+			fd = open(redir->filename, O_RDONLY);
+			if (fd == -1)
+			{
+				printf("open error\n");
+				exit(0);
+			}
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+		}
+		if(redir->type == OUT)
+		{
+				fd = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (fd == -1)
+				{
+					printf("open error\n");
+					exit(0);
+				}
+				dup2(fd, STDOUT_FILENO);
+				close(fd);
+		}
+		if (redir->type == APPEND)
+		{
+			fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd == -1)
+			{
+				printf("open error\n");
+				exit(0);
+			}
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+		}
+		//heredoc구현하기	
+		redir = redir->next;
+	}
+}
+
 void run_command(t_cmd_node *cmd_node, char *cmd_path, char **envp)
 {
 	char **args;
@@ -116,6 +160,7 @@ void external_command(t_cmd_node *cmd_node, char **envp)
 			printf("not found command\n");
 			return;
 		}
+		redirection_handler(cmd_node);
 		run_command(cmd_node, cmd, envp);	
 		free(cmd);
 		exit(0);
@@ -133,7 +178,7 @@ void execute_pipe_command(t_cmd_node *cmd_node, char **envp)
 			printf("not found command\n");
 			return ;
 		}
-
+		redirection_handler(cmd_node);
 		run_command(cmd_node, cmd, envp);
 		free(cmd);
 }

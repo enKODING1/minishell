@@ -3,24 +3,32 @@ CC = cc -g
 NAME = test
 
 # lexer test
-SOURCES = ./lexer/lexer_test.c ./lexer/utils.c 
+# SOURCES = ./lexer/lexer_test.c ./lexer/utils.c 
 
 # parser test
-# SOURCES = ./lexer/utils.c \
-		  ./parser/parser_test.c ./parser/utils.c
+SOURCES = ./lexer/utils.c \
+		  ./parser/parser_test.c ./parser/utils.c ./parser/ast_utils.c
+
+# executor test
+# SOURCES = ./executor/executor.c \
+		  ./lexer/utils.c \
+		  ./parser/utils.c ./parser/ast_utils.c
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft/
 LEXER_DIR = ./lexer/
 TOKEN_DIR = ./token/
 PARSER_DIR = ./parser/
+BUILTIN_DIR = ./builtin/
+EXEC_TESTER_DIR = ./exec/
+
 LIBFT_LIB = ${LIBFT_DIR}/libft.a
 
 all:$(NAME)
 
 $(NAME): $(LIBFT_LIB) $(OBJECTS) 
 	$(CC) $(CFLAG) -o $(NAME) $(OBJECTS) \
-	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} \
+	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} \
 	-L${LIBFT_DIR} -lft
 
 $(LIBFT_LIB):
@@ -29,7 +37,7 @@ $(LIBFT_LIB):
 
 %.o: %.c
 	$(CC) $(CFLAG)  -c $< -o $@ \
-	-I${LIBFT_DIR} -I${LEXER_DIR} -I${TOKEN_DIR}  -I${PARSER_DIR}
+	-I${LIBFT_DIR} -I${LEXER_DIR} -I${TOKEN_DIR}  -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR}
 	
 clean:
 	make clean -C $(LIBFT_DIR)

@@ -97,13 +97,13 @@ void external_command(t_cmd_node *cmd_node, char **envp)
 	int pid;
 	char *cmd;
 	pid = fork();
-	set_sig_fork();
 	if (pid == -1)
 		printf("error run: %s\n", cmd_node->cmd);
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
 		// child process
-
 		cmd = get_cmd_path(cmd_node->cmd, envp);
 		// printf("cmd: %s\n", cmd);
 		if (cmd == NULL)
@@ -113,7 +113,10 @@ void external_command(t_cmd_node *cmd_node, char **envp)
 		}
 		run_command(cmd_node, cmd, envp);	
 	}
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, NULL, 0);
+	set_sig();
 }
 
 void execute(t_node *node, char **envp)

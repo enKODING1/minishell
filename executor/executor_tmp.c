@@ -6,7 +6,6 @@ char **main_init(int argc, char **argv, char **envp)
     if(argc != 2)
         (void) argc;
     (void) argv;
-    // 시그널 처리 추가
     print_edge_shell_banner_with_style();
     return (init_envp(envp));
 }
@@ -22,6 +21,8 @@ int main(int argc, char **argv, char **envp)
     int is_parser_error;
 
     envp_list = main_init(argc,argv,envp);
+    set_sig();
+    // set_printf_off();
     while (1)
     {
         is_parser_error = 0;

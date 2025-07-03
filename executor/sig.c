@@ -21,6 +21,15 @@ void	sig_c(int sig)
 	rl_redisplay();
 }
 
+// void	sig_c_fork(int sig)
+// {
+// 	(void) sig;
+// 	ft_putstr_fd("\n", 2);
+// 	rl_on_new_line();
+// 	rl_replace_line("", 0);
+// 	rl_redisplay();
+// }
+
 void	sig_back(int sig)
 {
 	(void) sig;
@@ -35,11 +44,11 @@ void	set_printf_off(void)
 	tcsetattr(1, 0, &term);
 }
 
-void set_sig_fork(void)
-{
-	signal(SIGINT, sig_c);
-	signal(SIGQUIT, sig_back);
-}
+// void set_sig_fork(void)
+// {
+// 	signal(SIGINT, sig_c_fork);
+// 	signal(SIGQUIT, sig_back);
+// }
 
 void	set_sig(void)
 {

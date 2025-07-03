@@ -92,7 +92,8 @@ void run_command(t_cmd_node *cmd_node, char *cmd_path, char **envp)
 	if(execve(cmd_path, args, envp) == -1)
 	{
 		printf("execve error\n");
-		/* free 하기*/
+		free_matrix(args);
+		exit(0);
 	}
 }
 
@@ -116,8 +117,82 @@ void external_command(t_cmd_node *cmd_node, char **envp)
 			return;
 		}
 		run_command(cmd_node, cmd, envp);	
+		free(cmd);
+		exit(0);
 	}
+
 	waitpid(pid, NULL, 0);
+}
+
+void execute_pipe_command(t_cmd_node *cmd_node, char **envp)
+{
+		char *cmd;
+		cmd = get_cmd_path(cmd_node->cmd, envp);
+		if (cmd == NULL)
+		{
+			printf("not found command\n");
+			return ;
+		}
+
+		run_command(cmd_node, cmd, envp);
+		free(cmd);
+}
+
+void execute_pipe(t_pipe_node *pipe_node, char **envp)
+{
+		int pipefd[2];
+
+		if(pipe(pipefd) == -1)
+		{
+			printf("pipe error\n");
+			return;
+		}
+
+		int left_pid = fork();
+		if(left_pid == -1)
+		{
+			printf("fork error\n");
+			return;
+		}
+		if(left_pid == 0)
+		{
+			close(pipefd[0]);
+			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[1]);
+			if (pipe_node->left->type == NODE_PIPE)
+			{
+				execute_pipe((t_pipe_node *)pipe_node->left, envp);
+			}else if (pipe_node->left->type == NODE_CMD)
+			{
+				execute_pipe_command((t_cmd_node *)pipe_node->left, envp);
+			}
+			exit(0);
+		}
+
+		int right_pid = fork();
+		if(right_pid == -1)
+		{
+			printf("fork error\n");
+			return;
+		}
+		if(right_pid == 0)
+		{
+			close(pipefd[1]);
+			dup2(pipefd[0], STDIN_FILENO);
+			close(pipefd[0]);
+			if (pipe_node->right->type == NODE_PIPE)
+			{
+				execute_pipe((t_pipe_node *)pipe_node->right, envp);
+			}else if (pipe_node->right->type == NODE_CMD)
+			{
+				execute_pipe_command((t_cmd_node *)pipe_node->right, envp);
+			}
+			exit(0);
+		}
+		close(pipefd[0]);
+		close(pipefd[1]);
+		waitpid(left_pid, NULL, 0);
+		waitpid(right_pid, NULL, 0);
 }
 
 void execute(t_node *node, char **envp)
@@ -125,8 +200,9 @@ void execute(t_node *node, char **envp)
     if (!node) return;
     if (node->type == PIPE)
     {
-        printf("pipe is not supported yet..\n");
-		return;
+        // printf("pipe is not supported yet..\n");
+			execute_pipe((t_pipe_node *)node, envp);
+			return;
     }
     else if(node->type == NODE_CMD)
     {

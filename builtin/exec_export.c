@@ -103,7 +103,7 @@ void	exec_export(char **argv, char ***envp_list)
 	// 	free_envp(tmp_list);
 	// }
 	if (ft_arglen(argv) == 0)
-		echo_export(*envp_list, 1);
+		echo_export(*envp_list, STDOUT_FILENO);
 	else
 	{
 		tmp_list = add_envp(argv[0], *envp_list);

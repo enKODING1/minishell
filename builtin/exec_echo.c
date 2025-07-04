@@ -32,16 +32,16 @@ void	exec_echo(char **argv)
 	if (argv[i] == NULL)
 	{
 		if (option == 0)
-			ft_putstr_fd("\n", 1);
+			ft_putstr_fd("\n", STDOUT_FILENO);
 		return ;
 	}
 	while (argv[i])
 	{
-		ft_putstr_fd(argv[i], 1);
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
 		if (argv[i + 1] != NULL)
-			ft_putstr_fd(" ", 1);
+			ft_putstr_fd(" ", STDOUT_FILENO);
 		i++;
 	}
 	if (option == 0)
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 }

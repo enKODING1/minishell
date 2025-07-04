@@ -84,20 +84,20 @@ void	exec_cd(char **argv, char **envp_list)
 
 	old_path = search_envp("PWD", envp_list);
 	is_minus = 0;
-	path = set_path(argv, 2, &is_minus, envp_list);
+	path = set_path(argv, STDERR_FILENO, &is_minus, envp_list);
 	if (!path)
 		return ;
 	num = chdir(path);
 	if (num < 0)
 	{
 		free(old_path);
-		exec_error_handler(2, "cd", path, CD_DOES_NOT_EXIT_ERROR);
+		exec_error_handler(STDERR_FILENO, "cd", path, CD_DOES_NOT_EXIT_ERROR);
 		return ;
 	}
 	set_env("OLDPWD", old_path, envp_list);
 	path = getcwd(NULL, 0);
 	set_env("PWD", path, envp_list);
 	if (is_minus)
-		ft_putendl_fd(path, 1);
+		ft_putendl_fd(path, STDOUT_FILENO);
 	free(path);
 }

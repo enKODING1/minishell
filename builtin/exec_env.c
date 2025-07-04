@@ -32,13 +32,13 @@ void	exec_env(char **argv, char **envp_list)
 
 	i = 0;
 	if(argv[0] != NULL)
-		exec_error_handler(2, "env", NULL, "INVALID ARG");
+		exec_error_handler(STDERR_FILENO, "env", NULL, "INVALID ARG");
 	while (envp_list[i])
 	{
 		if (has_equal(envp_list[i]) == 1)
 		{
-			ft_putstr_fd(envp_list[i], 1);
-			ft_putstr_fd("\n", 1);
+			ft_putstr_fd(envp_list[i], STDOUT_FILENO);
+			ft_putstr_fd("\n", STDOUT_FILENO);
 		}
 		i++;
 	}

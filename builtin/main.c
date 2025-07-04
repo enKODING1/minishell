@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "builtin.h"
-#include "../exec/exec.h"
 #include "libft.h"
 #include <readline/readline.h>   // readline 사용을 위해 추가
 #include <readline/history.h>   // add_history 사용을 위해 추가

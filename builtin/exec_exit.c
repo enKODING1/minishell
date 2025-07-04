@@ -38,17 +38,17 @@ void	exec_exit(char **argv)
 	i = 0;
 	if (ft_arglen(argv) == 0)
 	{
-		ft_putendl_fd("exit", 1);
+		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(0);
 	}
 	if (ft_arglen(argv) > 1)
 	{
-		exec_error_handler(2, "exit", NULL, "TOO MANY ARG");
+		exec_error_handler(STDERR_FILENO, "exit", NULL, "TOO MANY ARG");
 		return ;
 	}
 	if (ft_check(argv[i]))
 	{
-		exec_error_handler(2, "exit", NULL, "INVALID ARG");
+		exec_error_handler(STDERR_FILENO, "exit", NULL, "INVALID ARG");
 		exit(0);
 	}
 	exit_num = ft_atoi(argv[0]);

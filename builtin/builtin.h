@@ -20,7 +20,6 @@
 
 # include <unistd.h>
 # include "libft.h"
-# include "exec.h"
 # include<signal.h>
 
 char	**get_envp_list(char **envp_list);

@@ -46,7 +46,7 @@ void	exec_pwd(char **argv, char **envp_list)
 	if (option_check(argv))
 	{
 		str = option_check(argv);
-		exec_error_handler(2, "pwd", str, " BAD OPTION \n");
+		exec_error_handler(STDERR_FILENO, "pwd", str, " BAD OPTION");
 		free(str);
 		return ;
 	}
@@ -57,7 +57,7 @@ void	exec_pwd(char **argv, char **envp_list)
 		i++;
 	}
 	if (!str)
-		exec_error_handler(2, "pwd", NULL, " HOME NOT SET \n");
+		exec_error_handler(STDERR_FILENO, "pwd", NULL, " HOME NOT SET");
 	else
-		echo_pwd(str, 1);
+		echo_pwd(str, STDOUT_FILENO);
 }

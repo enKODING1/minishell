@@ -14,7 +14,7 @@ VPATH = ./executor ./builtin ./lexer ./parser
            ./lexer/utils/free.c 
 
 # parser test
-SOURCES = ./lexer/lexer.c \
+# SOURCES = ./lexer/lexer.c \
 			    ./lexer/utils/utils.c \
           ./lexer/utils/token_handler.c \
           ./lexer/utils/redirection_handler.c \
@@ -29,9 +29,29 @@ SOURCES = ./lexer/lexer.c \
           ./parser/parse/redirection.c 
 
 # executor test
-# SOURCES = ./executor/executor.c \
-#         ./lexer/utils.c \
-#         ./parser/utils.c ./parser/ast_utils.c
+SOURCES = ./lexer/lexer.c \
+			    ./lexer/utils/utils.c \
+          ./lexer/utils/token_handler.c \
+          ./lexer/utils/redirection_handler.c \
+          ./lexer/utils/read.c \
+          ./lexer/utils/free.c \
+          ./parser/utils/token_to_list.c \
+          ./parser/utils/print_ast.c \
+          ./parser/utils/ast_utils.c \
+          ./parser/parse/cmd.c \
+          ./parser/parse/pipe.c \
+          ./parser/parse/redirection.c \
+          ./executor/executor.c \
+          ./builtin/builtin_util.c \
+          ./builtin/exec_cd.c \
+          ./builtin/exec_echo.c \
+          ./builtin/exec_env.c \
+          ./builtin/exec_error.c \
+          ./builtin/exec_exit.c \
+          ./builtin/exec_export.c \
+          ./builtin/exec_pwd.c \
+          ./builtin/exec_unset.c 
+
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft/
@@ -40,6 +60,7 @@ TOKEN_DIR = ./token/
 PARSER_DIR = ./parser/
 BUILTIN_DIR = ./builtin/
 EXEC_TESTER_DIR = ./exec/
+
 
 LIBFT_LIB = ${LIBFT_DIR}/libft.a
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/03 17:05:52 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/05 00:15:59 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <unistd.h>
 # include "libft.h"
 # include<signal.h>
+#include "parser.h"
 
 char	**get_envp_list(char **envp_list);
 char	*search_envp(char *target, char **envp_list);
@@ -38,5 +39,6 @@ void	exec_pwd(char **argv, char **envp_list);
 void	exec_unset(char **argv, char ***envp_list);
 void	free_envp(char **envp_list);
 int		ft_arglen(char **argv);
-
+int is_builtint(t_cmd_node *cmd);
+void builtin_handler(t_cmd_node *cmd, char **envp);
 #	endif

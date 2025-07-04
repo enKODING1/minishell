@@ -1,7 +1,8 @@
 #include "parser.h"
 #include <stdio.h>
 #include "builtin.h"
-#include <sys/wait.h>
+#include <wait.h>
+#include <fcntl.h>
 
 static void	free_matrix(char **matrix)
 {
@@ -146,7 +147,6 @@ void external_command(t_cmd_node *cmd_node, char **envp)
 	int pid;
 	char *cmd;
 	pid = fork();
-
 	if (pid == -1)
 		printf("error run: %s\n", cmd_node->cmd);
 	if (pid == 0)
@@ -209,7 +209,14 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp)
 				execute_pipe((t_pipe_node *)pipe_node->left, envp);
 			}else if (pipe_node->left->type == NODE_CMD)
 			{
-				execute_pipe_command((t_cmd_node *)pipe_node->left, envp);
+				if (is_builtint((t_cmd_node *)pipe_node->left))
+				{
+					redirection_handler((t_cmd_node *)pipe_node->left);
+					builtin_handler((t_cmd_node *)pipe_node->left, envp);
+					exit(0);
+				}
+				else
+					execute_pipe_command((t_cmd_node *)pipe_node->left, envp);
 			}
 			exit(0);
 		}
@@ -230,7 +237,14 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp)
 				execute_pipe((t_pipe_node *)pipe_node->right, envp);
 			}else if (pipe_node->right->type == NODE_CMD)
 			{
-				execute_pipe_command((t_cmd_node *)pipe_node->right, envp);
+				if (is_builtint((t_cmd_node *)pipe_node->right))
+				{
+					redirection_handler((t_cmd_node *)pipe_node->right);
+					builtin_handler((t_cmd_node *)pipe_node->right, envp);
+					exit(0);
+				}
+				else
+					execute_pipe_command((t_cmd_node *)pipe_node->right, envp);
 			}
 			exit(0);
 		}
@@ -258,17 +272,34 @@ void execute(t_node *node, char **envp)
         */
 	    t_cmd_node *cmd = (t_cmd_node *)node;
 		
-		
+		if (is_builtint((t_cmd_node *)cmd))	
+		{
+			redirection_handler(cmd);
+			builtin_handler(cmd, envp);
+			return;
+		}
+		else
 		external_command(cmd, envp);
     }
 }
-
+// char **main_init(int argc, char **argv, char **envp)
+// {
+//     if(argc != 2)
+//         (void) argc;
+//     (void) argv;
+//     // print_edge_shell_banner_with_style();
+//     return (init_envp(envp));
+// }
 int main(int argc, char **argv, char **envp)
 {
     // char *input = "< EOF cat -e | cat -e | cat -e | cat -e | cat >> outfile";
     // char *input = "export a= 'hello world' ";
 	// char *input = "cat -e outifle";
 	// char *input = "echo 'hello world' > cat -e | cat -e | cat -e > outfile";
+	// char **envp_list;
+	// envp_list = main_init(argc,argv,envp);
+	// set_sig();
+	// set_printf_off();
 	char input[255];
     while(1)
     {

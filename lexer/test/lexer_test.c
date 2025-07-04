@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "libft.h"
 #include "lexer.h"
 
 // void test_next_token()

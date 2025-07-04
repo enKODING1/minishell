@@ -3,6 +3,8 @@
 
 #include "token.h"
 #include "stdlib.h"
+#include "libft.h"
+#include <stdio.h>
 
 typedef struct s_lexer{
     char * input; // 입력
@@ -34,5 +36,12 @@ t_lexer *new(char *input);
 int is_letter(int c);
 void free_lexer(t_lexer *lexer);
 void free_token(t_token_type *tok);
+
+t_token_type *handle_pipe(t_lexer *self);
+t_token_type *handle_in(t_lexer *self);
+t_token_type *handle_out(t_lexer *self);
+t_token_type *handle_quote(t_lexer *self);
+t_token_type *handle_end(t_lexer *self);
+t_token_type *handle_word_or_single(t_lexer *self);
 
 #endif

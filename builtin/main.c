@@ -40,10 +40,7 @@ static char **init_envp(char **envp)
     i = 0;
     while (envp[i])
     {
-        if(ft_strncmp("SHLVL=", envp[i], 6) != 0)
-            envp_list[i] = ft_strdup(envp[i]);
-        else
-            envp_list[i] = shell_lv_up(envp);
+        envp_list[i] = ft_strdup(envp[i]);
         if (!envp_list[i])
         {
             while (i > 0)
@@ -119,18 +116,15 @@ int main(int argc, char **argv, char **envp)
 {
     char **envp_list = NULL;
     char *line;
-    char **args;
-    int fd[3];
-
-    fd[0] = STDIN_FILENO;
-    fd[1] = STDOUT_FILENO;
-    fd[2] = STDERR_FILENO;
+    char **args;     // parse_input으로 전체 라인을 자른 배열
+    char *cmd;       // 명령어(첫 번째 토큰)를 저장할 변수
+    char **cmd_args; // 명령어를 제외한 나머지 인자들을 가리킬 포인터
 
     (void)argc;
     (void)argv;
     print_edge_shell_banner_with_style();
     envp_list = init_envp(envp);
-    set_sig();
+
     while (1)
     {
         line = readline("edgeshell> ");
@@ -141,29 +135,43 @@ int main(int argc, char **argv, char **envp)
         }
         if (*line)
             add_history(line);
+
+        // 1. 기존 파서로 라인을 공백 기준 분리 (예: "cd /tmp" -> {"cd", "/tmp", NULL})
         args = parse_input(line);
+
+        // 빈 라인 입력 시 건너뛰기
         if (args[0] == NULL)
         {
             free_argv(args);
             free(line);
             continue;
         }
-        if (ft_strncmp(args[0], "echo",4) == 0)
-            exec_echo(fd, args);
-        else if (ft_strncmp(args[0], "cd",2) == 0)
-            exec_cd(fd, args, envp_list);
-        else if (ft_strncmp(args[0], "pwd",3) == 0)
-            exec_pwd(fd, args, envp_list);
-        else if (ft_strncmp(args[0], "export",6) == 0)
-            exec_export(fd, args, &envp_list);
-        else if (ft_strncmp(args[0], "unset",5) == 0)
-            exec_unset(fd, args, &envp_list);
-        else if (ft_strncmp(args[0], "env",3) == 0)
-            exec_env(fd, envp_list);
-        else if (ft_strncmp(args[0], "exit",4) == 0)
-            exec_exit(fd, args);
-        else if (args[0])
-            printf("edgeshell: command not found: %s\n", args[0]);
+
+        // 2. 첫 번째 토큰을 cmd 변수에 저장
+        cmd = args[0];
+        
+        // 3. 두 번째 토큰부터의 주소를 cmd_args에 저장 (이것이 exec 함수들로 넘어갈 인자)
+        cmd_args = &args[1];
+
+        // 4. cmd 변수를 기준으로 분기하고, exec 함수에는 cmd_args를 전달
+        if (ft_strncmp(cmd, "echo", 5) == 0)
+            exec_echo(cmd_args);
+        else if (ft_strncmp(cmd, "cd", 3) == 0)
+            exec_cd(cmd_args, envp_list);
+        else if (ft_strncmp(cmd, "pwd", 4) == 0)
+            exec_pwd(cmd_args, envp_list);
+        else if (ft_strncmp(cmd, "export", 7) == 0)
+            exec_export(cmd_args, &envp_list);
+        else if (ft_strncmp(cmd, "unset", 6) == 0)
+            exec_unset(cmd_args, &envp_list);
+        else if (ft_strncmp(cmd, "env", 4) == 0)
+            exec_env(cmd_args, envp_list);
+        else if (ft_strncmp(cmd, "exit", 5) == 0)
+            exec_exit(cmd_args);
+        else if (cmd)
+            printf("edgeshell: command not found: %s\n", cmd);
+        
+        // 5. 메모리 해제 (전체 배열인 args를 해제해야 함)
         free_argv(args);
         free(line);
     }

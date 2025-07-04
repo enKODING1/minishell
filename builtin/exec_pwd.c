@@ -22,18 +22,32 @@ static void	echo_pwd(char *str, int fd)
 	free(tmp);
 }
 
-void	exec_pwd(int *fd,
-		char **argv,
-		char **envp_list)
+char *option_check(char **argv)
+{
+	int i;
+	
+	i = 0;
+	while (argv[i])
+	{
+		if (argv[i][0] == '-')
+			return ft_substr(argv[i],0,1);
+		i++;	
+	}
+	return (NULL);
+}
+
+void	exec_pwd(char **argv, char **envp_list)
 {
 	char	*str;
 	int		i;
 
 	i = 0;
 	str = NULL;
-	if (argv[1])
+	if (option_check(argv))
 	{
-		exec_error_handler(fd[2], "pwd", NULL, " TOO MANY ARG \n");
+		str = option_check(argv);
+		exec_error_handler(2, "pwd", str, " BAD OPTION \n");
+		free(str);
 		return ;
 	}
 	while (envp_list[i])
@@ -43,10 +57,7 @@ void	exec_pwd(int *fd,
 		i++;
 	}
 	if (!str)
-	{
-		exec_error_handler(fd[2], "pwd", NULL, " HOME NOT SET \n");
-		return ;
-	}
+		exec_error_handler(2, "pwd", NULL, " HOME NOT SET \n");
 	else
-		echo_pwd(str, fd[1]);
+		echo_pwd(str, 1);
 }

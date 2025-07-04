@@ -17,6 +17,10 @@ static int	ft_check(char *str)
 	int	i;
 
 	i = 0;
+	if(str[i] == '-' || str[i] == '+')
+		i++;
+	if(str[i] == '\0')
+		return 1;
 	while (str[i])
 	{
 		if (!('0' <= str[i] && str[i] <= '9'))
@@ -26,29 +30,27 @@ static int	ft_check(char *str)
 	return (0);
 }
 
-void	exec_exit(int *fd, char **argv)
+void	exec_exit(char **argv)
 {
 	int	i;
 	int	exit_num;
 
-	i = 1;
-	ft_putendl_fd("exit", fd[1]);
-	if (argv[1] == NULL)
-		exit(0);
-	if (ft_arglen(argv) > 2)
+	i = 0;
+	if (ft_arglen(argv) == 0)
 	{
-		exec_error_handler(fd[2], "exit", NULL, "TOO MANY ARG");
+		ft_putendl_fd("exit", 1);
+		exit(0);
+	}
+	if (ft_arglen(argv) > 1)
+	{
+		exec_error_handler(2, "exit", NULL, "TOO MANY ARG");
 		return ;
 	}
-	while (argv[i])
+	if (ft_check(argv[i]))
 	{
-		if (ft_check(argv[i]))
-		{
-			exec_error_handler(fd[2], "exit", NULL, "INVALID ARG");
-			exit(0);
-		}
-		i++;
+		exec_error_handler(2, "exit", NULL, "INVALID ARG");
+		exit(0);
 	}
-	exit_num = ft_atoi(argv[1]);
+	exit_num = ft_atoi(argv[0]);
 	exit(exit_num % 256);
 }

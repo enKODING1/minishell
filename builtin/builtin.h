@@ -30,13 +30,13 @@ void	exec_error_handler(int fd,
 			char *command,
 			char *target,
 			char *error_message);
-void	exec_cd(int *fd, char **argv, char **envp_list);
-void	exec_env(int *fd, char **envp_list);
-void	exec_echo(int *fd, char **argv);
-void	exec_exit(int *fd, char **argv);
-void	exec_export(int *fd, char **argv, char ***envp_list);
-void	exec_pwd(int *fd, char **argv, char **envp_list);
-void	exec_unset(int *fd, char **argv, char ***envp_list);
+void	exec_cd(char **argv, char **envp_list);
+void	exec_env(char **argv, char **envp_list);
+void	exec_echo(char **argv);
+void	exec_exit(char **argv);
+void	exec_export(char **argv, char ***envp_list);
+void	exec_pwd(char **argv, char **envp_list);
+void	exec_unset(char **argv, char ***envp_list);
 void	free_envp(char **envp_list);
 int		ft_arglen(char **argv);
 

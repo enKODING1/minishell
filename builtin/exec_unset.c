@@ -39,14 +39,13 @@ static void	ft_pull(int i, char **envp_list)
 	envp_list[i] = NULL;
 }
 
-void	exec_unset(int *fd, char **argv, char ***envp_list)
+void	exec_unset(char **argv, char ***envp_list)
 {
 	size_t	key_len;
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	fd[2] += 1;
 	while (argv[i])
 	{
 		j = 0;

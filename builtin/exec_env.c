@@ -26,17 +26,19 @@ int	has_equal(char *str)
 	return (0);
 }
 
-void	exec_env(int *fd, char **envp_list)
+void	exec_env(char **argv, char **envp_list)
 {
 	int	i;
 
 	i = 0;
+	if(argv[0] != NULL)
+		exec_error_handler(2, "env", NULL, "INVALID ARG");
 	while (envp_list[i])
 	{
 		if (has_equal(envp_list[i]) == 1)
 		{
-			ft_putstr_fd(envp_list[i], fd[1]);
-			ft_putstr_fd("\n", fd[1]);
+			ft_putstr_fd(envp_list[i], 1);
+			ft_putstr_fd("\n", 1);
 		}
 		i++;
 	}

@@ -87,7 +87,7 @@ void	echo_export(char **envp_list, int fd)
 	free_envp(tmp_list);
 }
 
-void	exec_export(int *fd, char **argv, char ***envp_list)
+void	exec_export(char **argv, char ***envp_list)
 {
 	char	**tmp_list;
 	int		i;
@@ -96,17 +96,17 @@ void	exec_export(int *fd, char **argv, char ***envp_list)
 	j = 0;
 	i = 0;
 	tmp_list = NULL;
-	if (argv[0][0] == '=')
-	{
-		exec_error_handler(fd[2], "export", NULL, EXPORT_DOSE_NOT_EQUAL);
-		free_envp(tmp_list);
-		return ;
-	}
-	if (ft_arglen(argv) == 1)
-		echo_export(*envp_list, fd[1]);
+
+	// if (argv[0][0] == '=')
+	// {
+	// 	exec_error_handler(2, "export", NULL, EXPORT_DOSE_NOT_EQUAL);
+	// 	free_envp(tmp_list);
+	// }
+	if (ft_arglen(argv) == 0)
+		echo_export(*envp_list, 1);
 	else
 	{
-		tmp_list = add_envp(argv[1], *envp_list);
+		tmp_list = add_envp(argv[0], *envp_list);
 		free_envp(*envp_list);
 		*envp_list = tmp_list;
 	}

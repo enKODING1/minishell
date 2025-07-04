@@ -17,6 +17,8 @@ int	ft_arglen(char **argv)
 	int	i;
 
 	i = 0;
+	if (argv[0] == NULL)
+		return (0);
 	while (argv[i] != NULL)
 		i++;
 	return (i);

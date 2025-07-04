@@ -3,7 +3,6 @@
 
 #include "libft.h"
 #include "lexer.h"
-#include <stdio.h>
 
 typedef struct s_token_node{
     t_token_type *token;
@@ -58,7 +57,7 @@ void print_ast(t_node *node, int indent);
 /* token list */
 t_token_node *create_token_list(t_lexer *lexer);
 t_token_node *create_token_node(t_token_type *tok);
-int add_token_node(t_token_node **head, t_token_node *tok);
+int add_token_node(t_token_node **head, t_token_node *new_node);
 void print_token_list(t_token_node *head);
 
 #endif

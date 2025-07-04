@@ -3,16 +3,33 @@ CC = cc -g
 NAME = test
 
 # lexer test
-# SOURCES = ./lexer/lexer_test.c ./lexer/utils.c 
+# SOURCES = ./lexer/test/lexer_test.c \
+           ./lexer/lexer.c \
+           ./lexer/utils/token_handler.c \
+           ./lexer/utils/redirection_handler.c \
+           ./lexer/utils/read.c \
+           ./lexer/utils/utils.c \
+           ./lexer/utils/free.c 
 
 # parser test
-SOURCES = ./lexer/utils.c \
-		  ./parser/parser_test.c ./parser/utils.c ./parser/ast_utils.c
+SOURCES = ./lexer/lexer.c \
+			    ./lexer/utils/utils.c \
+          ./lexer/utils/token_handler.c \
+          ./lexer/utils/redirection_handler.c \
+          ./lexer/utils/read.c \
+          ./lexer/utils/free.c \
+          ./parser/test/parser_test.c \
+          ./parser/utils/token_to_list.c \
+          ./parser/utils/print_ast.c \
+          ./parser/utils/ast_utils.c \
+          ./parser/parse/cmd.c \
+          ./parser/parse/pipe.c \
+          ./parser/parse/redirection.c 
 
 # executor test
 # SOURCES = ./executor/executor.c \
-		  ./lexer/utils.c \
-		  ./parser/utils.c ./parser/ast_utils.c
+#         ./lexer/utils.c \
+#         ./parser/utils.c ./parser/ast_utils.c
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft/

@@ -1,5 +1,4 @@
 #include "parser.h"
-#include <stdio.h>
 
 void print_token_list(t_token_node *head)
 {

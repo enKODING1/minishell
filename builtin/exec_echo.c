@@ -1,35 +1,47 @@
-#include "builtin.h"
-// echo -nasdf 이렇게 해버리면 -nasdf 그대로 출력 됨
-int find_message(char **argv)
-{
-    int i;
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_echo.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/02 20:00:35 by jinwpark          #+#    #+#             */
+/*   Updated: 2025/07/02 20:02:27 by jinwpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-    i = 1;
-    while (argv[i] && ft_strncmp(argv[i],"-n", 3) == 0) // -e 같은 옵션이 들어오면 어떻게 처리해야하나...
-        i++;
-    return i;
+#include "builtin.h"
+
+int	find_message(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i] && ft_strncmp(argv[i], "-n", 3) == 0)
+		i++;
+	return (i);
 }
 
-void exec_echo(int *fd, char **argv)
+void	exec_echo(char **argv)
 {
-    int option;
-    int i;
-    // 환경 변수에 대해서도 처리해야함 
-    i = find_message(argv);
-    option = (i > 1);
-    if (argv[i] == NULL)
-    {
-        if (option == 0)
-            ft_putstr_fd("\n", fd[1]);
-        return ;
-    }
-    while (argv[i])
-    {
-        ft_putstr_fd(argv[i], fd[1]);
-        if (argv[i + 1] != NULL)
-            ft_putstr_fd(" ", fd[1]);
-        i++;
-    }
-    if (option == 0)
-        ft_putstr_fd("\n", fd[1]);
+	int	option;
+	int	i;
+
+	i = find_message(argv);
+	option = (i > 0);
+	if (argv[i] == NULL)
+	{
+		if (option == 0)
+			ft_putstr_fd("\n", STDOUT_FILENO);
+		return ;
+	}
+	while (argv[i])
+	{
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
+		if (argv[i + 1] != NULL)
+			ft_putstr_fd(" ", STDOUT_FILENO);
+		i++;
+	}
+	if (option == 0)
+		ft_putstr_fd("\n", STDOUT_FILENO);
 }

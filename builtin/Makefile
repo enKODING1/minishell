@@ -18,7 +18,7 @@ SRCS =  main.c \
         exec_export.c \
         exec_pwd.c \
         exec_unset.c \
-        sig.c
+        main_util.c
 
 OBJS = $(SRCS:.c=.o)
 

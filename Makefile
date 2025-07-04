@@ -2,6 +2,8 @@ CC = cc -g
 # CFLAG = -Wall -Wextra -Werror
 NAME = test
 
+VPATH = ./executor ./builtin ./lexer ./parser
+
 # lexer test
 # SOURCES = ./lexer/test/lexer_test.c \
            ./lexer/lexer.c \
@@ -46,7 +48,7 @@ all:$(NAME)
 $(NAME): $(LIBFT_LIB) $(OBJECTS) 
 	$(CC) $(CFLAG) -o $(NAME) $(OBJECTS) \
 	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} \
-	-L${LIBFT_DIR} -lft
+	-L${LIBFT_DIR} -lft -lreadline
 
 $(LIBFT_LIB):
 	make -C $(LIBFT_DIR)

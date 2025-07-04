@@ -2,7 +2,7 @@
 
 t_lexer *new(char *input)
 {
-    t_lexer *lexer = (t_lexer *)malloc(sizeof(t_lexer));
+    t_lexer *lexer = (t_lexer *)ft_calloc(sizeof(t_lexer),1);
     lexer->input = ft_strdup(input);
     lexer->read_char = read_char;
     lexer->next_token = next_token;

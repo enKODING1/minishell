@@ -2,6 +2,7 @@
 #define EXECUTOR_H
 
 #include "parser.h"
+#include <wait.h>
 
 // 환경 변수 관련
 char **init_envp(char **envp);

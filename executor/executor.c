@@ -1,8 +1,72 @@
-#include "parser.h"
 #include <stdio.h>
-#include "builtin.h"
 #include <wait.h>
 #include <fcntl.h>
+#include <termios.h>
+#include <wait.h>
+#include <string.h>
+#include <stdlib.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include "builtin.h"
+#include "parser.h"
+
+char **init_envp(char **envp)
+{
+    char **envp_list;
+    int i = 0;
+    while (envp[i])
+        i++;
+
+    envp_list = (char **)malloc(sizeof(char *) * (i + 1));
+    if (!envp_list)
+        exit(1);
+    i = 0;
+    while (envp[i])
+    {
+        if(ft_strncmp("SHLVL=", envp[i], 6) != 0)
+            envp_list[i] = ft_strdup(envp[i]);
+        else
+            envp_list[i] = shell_lv_up(envp);
+        if (!envp_list[i])
+        {
+            while (i > 0)
+                free(envp_list[--i]);
+            free(envp_list);
+            exit(1);
+        }
+        i++;
+    }
+    envp_list[i] = NULL;
+    return envp_list;
+}
+
+void free_envp_tmp(char **envp_list)
+{
+    int i;
+    
+    i = 0;
+    while (envp_list && envp_list[i])
+    {
+        free(envp_list[i]);
+        i++;
+    }
+    free(envp_list);
+}
+
+char	*shell_lv_up(char **envp_list)
+{
+	char	*target;
+	char	*lv_str;
+	int		level;
+
+	target = search_envp("SHLVL", envp_list);
+	level = ft_atoi(target);
+	level++;
+	lv_str = ft_itoa(level);
+	target = ft_strjoin("SHLVL=", lv_str);
+	free(lv_str);
+	return (target);
+}
 
 static void	free_matrix(char **matrix)
 {
@@ -180,6 +244,7 @@ void execute_pipe_command(t_cmd_node *cmd_node, char **envp)
 		}
 		redirection_handler(cmd_node);
 		run_command(cmd_node, cmd, envp);
+		
 		free(cmd);
 }
 
@@ -274,65 +339,113 @@ void execute(t_node *node, char **envp)
 		
 		if (is_builtint((t_cmd_node *)cmd))	
 		{
+			int stdout_fd;
+			int stdin_fd;
+
+			stdout_fd = dup(STDOUT_FILENO);
+			stdin_fd = dup(STDIN_FILENO);
 			redirection_handler(cmd);
 			builtin_handler(cmd, envp);
+			dup2(stdout_fd, STDOUT_FILENO);
+			dup2(stdin_fd, STDIN_FILENO);
+			close(stdout_fd);
+			close(stdin_fd);
 			return;
 		}
 		else
 		external_command(cmd, envp);
     }
 }
-// char **main_init(int argc, char **argv, char **envp)
+
+char **main_init(int argc, char **argv, char **envp)
+{
+    if(argc != 2)
+        (void) argc;
+    (void) argv;
+    // print_edge_shell_banner_with_style();
+    return (init_envp(envp));
+}
+
+void	sig_c(int sig)
+{
+	(void) sig;
+	ft_putstr_fd("\n", 2);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+
+// void	sig_c_fork(int sig)
 // {
-//     if(argc != 2)
-//         (void) argc;
-//     (void) argv;
-//     // print_edge_shell_banner_with_style();
-//     return (init_envp(envp));
+// 	(void) sig;
+// 	ft_putstr_fd("\n", 2);
+// 	rl_on_new_line();
+// 	rl_replace_line("", 0);
+// 	rl_redisplay();
 // }
+
+void	sig_back(int sig)
+{
+	(void) sig;
+}
+
+void	set_printf_off(void)
+{
+	struct termios	term;
+
+	tcgetattr(1, &term);
+	term.c_lflag &= ~(ECHOCTL);
+	tcsetattr(1, 0, &term);
+}
+
+// void set_sig_fork(void)
+// {
+// 	signal(SIGINT, sig_c_fork);
+// 	signal(SIGQUIT, sig_back);
+// }
+
+void	set_sig(void)
+{
+	set_printf_off();
+	signal(SIGINT, sig_c);
+	signal(SIGQUIT, sig_back);
+}
+
+
 int main(int argc, char **argv, char **envp)
 {
-    // char *input = "< EOF cat -e | cat -e | cat -e | cat -e | cat >> outfile";
-    // char *input = "export a= 'hello world' ";
-	// char *input = "cat -e outifle";
-	// char *input = "echo 'hello world' > cat -e | cat -e | cat -e > outfile";
-	// char **envp_list;
-	// envp_list = main_init(argc,argv,envp);
-	// set_sig();
-	// set_printf_off();
-	char input[255];
-    while(1)
-    {
-    
-    printf("minishell> ");
-    fgets(input, sizeof(input), stdin);
-    if (ft_strncmp(input, "exit", 4))
-    {
-        t_lexer *lexer = new(input);
-        t_token_node *tok_head = create_token_list(lexer);
+	t_lexer *lexer;
+    t_token_node *tok_head;
+    t_parser parser;
+    t_node *ast_root;    
+    char **envp_list;
+    char *line;
+    int is_parser_error;
 
-        t_parser parser;
+    envp_list = main_init(argc,argv,envp);
+    set_sig();
+    // set_printf_off();
+    while (1)
+    {
+        is_parser_error = 0;
+        line = readline("minishell> ");
+        if (line == NULL)
+        {
+            ft_putendl_fd("exit", STDOUT_FILENO);
+            break;
+        }
+        if (*line)
+            add_history(line);
+        lexer = new(line);
+        tok_head = create_token_list(lexer);
         parser_init(&parser, tok_head);
-        // print_token_list(tok_head);
-        // printf("--- 파싱 시작 ---\n");
-        t_node *ast_root = parse_pipe(&parser);
-
-        if (parser.has_error)
-        {
-            printf("--- 문법 에러 ---\n");
-            // free_ast(ast_root);
-        }
-        else
-        {
-            // printf("--- 파싱 완료 ---\n\n");
-            // print_ast(ast_root, 0);
-            // free_ast(ast_root);
-			execute(ast_root, envp);
-        }
+        ast_root = parse_pipe(&parser);
+        execute(ast_root, envp_list);
+        free(line);
         free_token_list(tok_head);
         free_lexer(lexer);
     }
-	}
-    return 0;
-
+    free_envp_tmp(envp_list);
+    return (0);
 }

@@ -20,7 +20,7 @@ static int	ft_check(char *str)
 	if(str[i] == '-' || str[i] == '+')
 		i++;
 	if(str[i] == '\0')
-		return 1;
+		return (1);
 	while (str[i])
 	{
 		if (!('0' <= str[i] && str[i] <= '9'))

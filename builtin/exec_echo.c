@@ -15,18 +15,33 @@
 int	find_message(char **argv)
 {
 	int	i;
+	int j;
 
 	i = 0;
-	while (argv[i] && ft_strncmp(argv[i], "-n", 3) == 0)
+	while (argv[i] && ft_strncmp(argv[i], "-n", 2) == 0)
+	{
+		j = 1;
+		while (argv[i][j])
+		{
+			if (argv[i][j] != 'n')
+				return (i);
+			j++;
+		}
 		i++;
+	}
 	return (i);
 }
+// 일단 해야할거
+// 환경변수 처리
+// 쌍따옴표 처리
 
-void	exec_echo(char **argv)
+void	exec_echo(char **argv,char **envp_list)
 {
+	char **argv_list;
 	int	option;
 	int	i;
 
+	// argv_list = ft_argv_filter(argv);
 	i = find_message(argv);
 	option = (i > 0);
 	if (argv[i] == NULL)

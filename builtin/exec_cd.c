@@ -63,8 +63,13 @@ char	*set_path(char **argv, int fd, int *is_minus, char **envp_list)
 		exec_error_handler(fd, "cd", NULL, CD_ARG_ERROR);
 		return (NULL);
 	}
-	if (argv[0] == NULL || argv[0][0] == '\0' || argv[0][0] == '~')
+	else if (argv[0] == NULL || argv[0][0] == '\0' || (argv[0][0] == '~' && argv[0][1] == '\0'))
 		path = get_path_from_env("HOME", envp_list, fd);
+	else if (ft_strncmp(argv[0], "~/", 2) == 0) {
+		path = get_path_from_env("HOME", envp_list, fd);
+		chdir(path);
+		return (ft_substr(argv[0], 2, ft_strlen(argv[0])));
+	}
 	else if (argv[0][0] == '-' && argv[0][1] == '\0')
 	{
 		path = get_path_from_env("OLDPWD", envp_list, fd);

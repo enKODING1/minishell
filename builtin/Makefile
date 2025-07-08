@@ -11,6 +11,8 @@ INCLUDES = -I$(LIBFT_DIR) -I$(EXEC_DIR) -I.
 SRCS =  main.c \
         builtin_util.c \
         exec_cd.c \
+        echo_util.c \
+        string_builder.c \
         exec_echo.c \
         exec_env.c \
         exec_error.c \
@@ -18,7 +20,7 @@ SRCS =  main.c \
         exec_export.c \
         exec_pwd.c \
         exec_unset.c \
-        main_util.c
+        main_util.c \
 
 OBJS = $(SRCS:.c=.o)
 

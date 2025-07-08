@@ -92,7 +92,7 @@ int is_builtint(t_cmd_node *cmd)
 void builtin_handler(t_cmd_node *cmd, char **envp)
 {
     if (!ft_strncmp(cmd->cmd, "echo", 4))
-        exec_echo(cmd->args);
+        exec_echo(cmd->args, envp);
     else if (!ft_strncmp(cmd->cmd, "pwd", 3))
         exec_pwd(cmd->args, envp);
     else if (!ft_strncmp(cmd->cmd, "cd", 2)) // cd home/minishell

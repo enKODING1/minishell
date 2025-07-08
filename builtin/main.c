@@ -154,7 +154,7 @@ int main(int argc, char **argv, char **envp)
 
         // 4. cmd 변수를 기준으로 분기하고, exec 함수에는 cmd_args를 전달
         if (ft_strncmp(cmd, "echo", 5) == 0)
-            exec_echo(cmd_args);
+            exec_echo(cmd_args,envp_list);
         else if (ft_strncmp(cmd, "cd", 3) == 0)
             exec_cd(cmd_args, envp_list);
         else if (ft_strncmp(cmd, "pwd", 4) == 0)

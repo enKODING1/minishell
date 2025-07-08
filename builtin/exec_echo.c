@@ -31,9 +31,6 @@ int	find_message(char **argv)
 	}
 	return (i);
 }
-// 일단 해야할거
-// 환경변수 처리
-// 쌍따옴표 처리
 
 void	exec_echo(char **argv,char **envp_list)
 {
@@ -41,19 +38,19 @@ void	exec_echo(char **argv,char **envp_list)
 	int	option;
 	int	i;
 
-	// argv_list = ft_argv_filter(argv);
-	i = find_message(argv);
+	argv_list = ft_argv_filter(argv, envp_list);
+	i = find_message(argv_list);
 	option = (i > 0);
-	if (argv[i] == NULL)
+	if (argv_list[i] == NULL)
 	{
 		if (option == 0)
 			ft_putstr_fd("\n", STDOUT_FILENO);
 		return ;
 	}
-	while (argv[i])
+	while (argv_list[i])
 	{
-		ft_putstr_fd(argv[i], STDOUT_FILENO);
-		if (argv[i + 1] != NULL)
+		ft_putstr_fd(argv_list[i], STDOUT_FILENO);
+		if (argv_list[i + 1] != NULL)
 			ft_putstr_fd(" ", STDOUT_FILENO);
 		i++;
 	}

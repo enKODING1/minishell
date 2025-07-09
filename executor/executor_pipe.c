@@ -36,7 +36,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
         execute_pipe((t_pipe_node *)pipe_node->right, envp);
     } else if (pipe_node->right->type == NODE_CMD)
     {
-        if (is_builtint((t_cmd_node *)pipe_node->right))
+        if (((t_cmd_node *)pipe_node)->cmd && is_builtint((t_cmd_node *)pipe_node->right))
         {
             redirection_handler((t_cmd_node *)pipe_node->right);
             builtin_handler((t_cmd_node *)pipe_node->right, envp);
@@ -93,7 +93,8 @@ void execute(t_node *node, char **envp)
     else if(node->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)node;
-        if (is_builtint((t_cmd_node *)cmd))
+        
+        if (cmd->cmd && is_builtint((t_cmd_node *)cmd))
         {
             int stdout_fd;
             int stdin_fd;

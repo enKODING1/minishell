@@ -100,7 +100,7 @@ void external_command(t_cmd_node *cmd_node, char **envp)
     if (pid == 0)
     {
         cmd = get_cmd_path(cmd_node->cmd, envp);
-        if (cmd == NULL)
+        if (cmd_node->cmd != NULL && cmd == NULL)
         {
             printf("not found command\n");
             return;
@@ -117,7 +117,7 @@ void execute_pipe_command(t_cmd_node *cmd_node, char **envp)
 {
     char *cmd;
     cmd = get_cmd_path(cmd_node->cmd, envp);
-    if (cmd == NULL)
+    if (cmd_node->cmd != NULL && cmd == NULL)
     {
         printf("not found command\n");
         return ;

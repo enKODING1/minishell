@@ -56,6 +56,7 @@ char	**add_envp(char *arg, char **envp_list)
 	char	**tmp_list;
 	char *update_arg;
 	char *key;
+	char *old_key;
 
 	key = ft_find_key(arg);
 	update_arg = ft_update(arg);
@@ -66,9 +67,11 @@ char	**add_envp(char *arg, char **envp_list)
 		return (NULL);
 	while (i < ft_arglen(envp_list))
 	{
-		if (ft_strcmp(key, ft_find_key(envp_list[i])) == 0)
+		old_key = ft_find_key(envp_list[i]);
+		if (ft_strcmp(key, old_key) == 0)
 			j = i;
 		tmp_list[i] = ft_strdup(envp_list[i]);
+		free(old_key);
 		i++;
 	}
 	if (j != -1)

@@ -30,7 +30,7 @@ int main(int argc, char **argv, char **envp)
 		tok_head = create_token_list(lexer);
 		parser_init(&parser, tok_head);
 		ast_root = parse_pipe(&parser);
-		execute(ast_root, envp_list);
+		execute(ast_root, &envp_list);
 		free(line);
 		free_token_list(tok_head);
 		free_lexer(lexer);

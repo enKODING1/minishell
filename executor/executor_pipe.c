@@ -17,7 +17,7 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
         if (is_builtint((t_cmd_node *)pipe_node->left))
         {
             redirection_handler((t_cmd_node *)pipe_node->left);
-            builtin_handler((t_cmd_node *)pipe_node->left, envp);
+            builtin_handler((t_cmd_node *)pipe_node->left, &envp);
             exit(0);
         }
         else
@@ -39,7 +39,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
         if (((t_cmd_node *)pipe_node)->cmd && is_builtint((t_cmd_node *)pipe_node->right))
         {
             redirection_handler((t_cmd_node *)pipe_node->right);
-            builtin_handler((t_cmd_node *)pipe_node->right, envp);
+            builtin_handler((t_cmd_node *)pipe_node->right, &envp);
             exit(0);
         }
         else
@@ -82,12 +82,12 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp)
     waitpid(right_pid, NULL, 0);
 }
 
-void execute(t_node *node, char **envp)
+void execute(t_node *node, char ***envp)
 {
     if (!node) return;
     if (node->type == PIPE)
     {
-        execute_pipe((t_pipe_node *)node, envp);
+        execute_pipe((t_pipe_node *)node, *envp);
         return;
     }
     else if(node->type == NODE_CMD)
@@ -108,6 +108,6 @@ void execute(t_node *node, char **envp)
             close(stdin_fd);
             return;
         }
-        external_command(cmd, envp);
+        external_command(cmd, *envp);
     }
 } 

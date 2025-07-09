@@ -55,7 +55,10 @@ SOURCES = ./lexer/lexer.c \
           ./builtin/exec_exit.c \
           ./builtin/exec_export.c \
           ./builtin/exec_pwd.c \
-          ./builtin/exec_unset.c 
+          ./builtin/exec_unset.c \
+          ./builtin/echo_util.c \
+          ./builtin/exec_export2.c \
+          ./builtin/string_builder.c \
 
 OBJECTS = $(SOURCES:.c=.o)
 

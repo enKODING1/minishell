@@ -89,20 +89,20 @@ int is_builtint(t_cmd_node *cmd)
     else
         return (0);
 }
-void builtin_handler(t_cmd_node *cmd, char **envp)
+void builtin_handler(t_cmd_node *cmd, char ***envp)
 {
     if (!ft_strncmp(cmd->cmd, "echo", 4))
-        exec_echo(cmd->args, envp);
+        exec_echo(cmd->args, *envp);
     else if (!ft_strncmp(cmd->cmd, "pwd", 3))
-        exec_pwd(cmd->args, envp);
-    else if (!ft_strncmp(cmd->cmd, "cd", 2)) // cd home/minishell
+        exec_pwd(cmd->args, *envp);
+    else if (!ft_strncmp(cmd->cmd, "cd", 2))
         exec_cd( cmd->args, envp);
     else if (!ft_strncmp(cmd->cmd, "export", 6))
-        exec_export(cmd->args, &envp);
+        exec_export(cmd->args, envp);
     else if (!ft_strncmp(cmd->cmd, "unset", 5))
-        exec_unset(cmd->args, &envp);
+        exec_unset(cmd->args, envp);
     else if (!ft_strncmp(cmd->cmd, "env", 3))
-        exec_env(cmd->args, envp);
+        exec_env(cmd->args, *envp);
     else if (!ft_strncmp(cmd->cmd, "exit", 4))
         exec_exit(cmd->args);
 }

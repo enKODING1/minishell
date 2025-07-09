@@ -36,7 +36,7 @@ char				*search_envp(char *target, char **envp_list);
 char				*shell_lv_up(char **envp_list);
 void				exec_error_handler(int fd, char *command, char *target,
 						char *error_message);
-void				exec_cd(char **argv, char **envp_list);
+void				exec_cd(char **argv, char ***envp_list);
 void				exec_env(char **argv, char **envp_list);
 void				exec_echo(char **argv, char **envp_list);
 void				exec_exit(char **argv);
@@ -44,7 +44,7 @@ void				exec_export(char **argv, char ***envp_list);
 void				exec_pwd(char **argv, char **envp_list);
 void				exec_unset(char **argv, char ***envp_list);
 void				free_envp(char **envp_list);
-void				builtin_handler(t_cmd_node *cmd, char **envp);
+void				builtin_handler(t_cmd_node *cmd, char ***envp);
 int					ft_arglen(char **argv);
 int					is_builtint(t_cmd_node *cmd);
 int					expand_env(char *str, char **envp_list,

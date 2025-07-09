@@ -12,7 +12,7 @@
 
 #include "builtin.h"
 
-void	set_env(char *key, char *value, char **envp_list)
+void	set_env(char *key, char *value, char ***envp_list)
 {
 	size_t	key_len;
 	char	*key_eq;
@@ -24,13 +24,13 @@ void	set_env(char *key, char *value, char **envp_list)
 	free(key_eq);
 	i = 0;
 	key_len = ft_strlen(key);
-	while (envp_list && envp_list[i])
+	while (*envp_list && (*envp_list)[i])
 	{
-		if (ft_strncmp(envp_list[i], key, key_len) == 0
-			&& envp_list[i][key_len] == '=')
+		if (ft_strncmp((*envp_list)[i], key, key_len) == 0
+			&& (*envp_list)[i][key_len] == '=')
 		{
-			free(envp_list[i]);
-			envp_list[i] = new_entry;
+			free((*envp_list)[i]);
+			(*envp_list)[i] = new_entry;
 			return ;
 		}
 		i++;
@@ -80,16 +80,16 @@ char	*set_path(char **argv, int fd, int *is_minus, char **envp_list)
 	return (path);
 }
 
-void	exec_cd(char **argv, char **envp_list)
+void	exec_cd(char **argv, char ***envp_list)
 {
 	char	*path;
 	char	*old_path;
 	int		num;
 	int		is_minus;
 
-	old_path = search_envp("PWD", envp_list);
+	old_path = search_envp("PWD", *envp_list);
 	is_minus = 0;
-	path = set_path(argv, STDERR_FILENO, &is_minus, envp_list);
+	path = set_path(argv, STDERR_FILENO, &is_minus, *envp_list);
 	if (!path)
 		return ;
 	num = chdir(path);

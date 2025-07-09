@@ -21,7 +21,7 @@ void redirection_handler(t_cmd_node *cmd_node);
 
 // 파이프 및 실행
 void execute_pipe(t_pipe_node *pipe_node, char **envp);
-void execute(t_node *node, char **envp);
+void execute(t_node *node, char ***envp);
 
 // 시그널 및 터미널
 void sig_c(int sig);

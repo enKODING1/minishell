@@ -36,8 +36,8 @@ char * read_string(t_lexer *self)
     char quote;
 
     quote = self->ch;
+    position = self->position; // 시작 따옴표 시작지점
     self->read_char(self);
-    position = self->position;
     while(self->ch != quote)
     {
         if (self->ch == '\0')
@@ -47,12 +47,14 @@ char * read_string(t_lexer *self)
         }
         self->read_char(self);
     }
+    if (self->ch == quote)
+        self->read_char(self);
     return ft_substr(self->input, position, self->position - position);
 }
 
 int is_letter(int c)
 {
-    if (ft_isalpha(c) || c == '_' || c == '-' || c == '.' || c == '/')
+    if (c >= 33 && c <= 126)
         return 1;
     return 0;
 }

@@ -41,6 +41,11 @@ SOURCES = ./lexer/lexer.c \
           ./parser/parse/cmd.c \
           ./parser/parse/pipe.c \
           ./parser/parse/redirection.c \
+          ./executor/executor_env.c \
+          ./executor/executor_cmd.c \
+          ./executor/executor_redir.c \
+          ./executor/executor_pipe.c \
+          ./executor/executor_signal.c \
           ./executor/executor.c \
           ./builtin/builtin_util.c \
           ./builtin/exec_cd.c \

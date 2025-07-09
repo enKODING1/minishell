@@ -1,33 +1,32 @@
-# ifndef EXECUTOR_H
-# define EXECUTOR_H
+#ifndef EXECUTOR_H
+#define EXECUTOR_H
 
 #include "parser.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include "builtin.h"
-#include "libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <wait.h>
-#include <termios.h>
 
-#define TEXT_COLOR "\033[38;2;0;255;150m"
-#define BORDER_COLOR "\033[38;2;255;0;140m"
-#define RESET_COLOR "\033[0m"
-
-void print_edge_shell_banner_with_style(void);
+// 환경 변수 관련
+char **init_envp(char **envp);
 void free_envp_tmp(char **envp_list);
-void free_argv(char **argv);
-void	free_matrix(char **matrix);
+char *shell_lv_up(char **envp_list);
+char **main_init(int argc, char **argv, char **envp);
+
+// 명령어 실행 및 경로
+char *get_cmd_path(char *cmd, char **envp);
 void run_command(t_cmd_node *cmd_node, char *cmd_path, char **envp);
 void external_command(t_cmd_node *cmd_node, char **envp);
+void execute_pipe_command(t_cmd_node *cmd_node, char **envp);
+
+// 리다이렉션
+void redirection_handler(t_cmd_node *cmd_node);
+
+// 파이프 및 실행
+void execute_pipe(t_pipe_node *pipe_node, char **envp);
 void execute(t_node *node, char **envp);
-void	set_sig(void);
-void set_sig_fork(void);
-char *get_cmd_path(char *cmd, char **envp);
-char **init_envp(char **envp);
 
+// 시그널 및 터미널
+void sig_c(int sig);
+void sig_back(int sig);
+void set_printf_off(void);
+void set_sig(void);
 
-# endif
+#endif 

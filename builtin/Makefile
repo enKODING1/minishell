@@ -18,6 +18,7 @@ SRCS =  main.c \
         exec_error.c \
         exec_exit.c \
         exec_export.c \
+        exec_export2.c \
         exec_pwd.c \
         exec_unset.c \
         main_util.c \

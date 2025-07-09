@@ -18,7 +18,7 @@
 # define CD_DOES_NOT_EXIT_ERROR "그런 파일이나 디렉터리가 없습니다"
 # define EXPORT_DOSE_NOT_EQUAL "= 이외의 다른 문자가 들어왔습니다"
 
-# include "../parser/parser.h"
+# include "parser.h"
 # include "libft.h"
 # include <signal.h>
 # include <stdlib.h>
@@ -56,5 +56,7 @@ void				append_char(t_string_builder *sb, char c);
 void				append_str(t_string_builder *sb, char *str);
 void free_builder(t_string_builder *sb);
 char *free_return_str(t_string_builder *sb);
+char *ft_update(char *arg);
+char *ft_find_key(char *arg);
 
 #endif

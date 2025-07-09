@@ -51,22 +51,39 @@ void	sort_envp(char **envp)
 
 char	**add_envp(char *arg, char **envp_list)
 {
-	size_t	i;
-	size_t	len;
+	int	i;
+	int 	j;
 	char	**tmp_list;
+	char *update_arg;
+	char *key;
 
+	key = ft_find_key(arg);
+	update_arg = ft_update(arg);
 	i = 0;
-	len = ft_arglen(envp_list);
-	tmp_list = malloc(sizeof(char *) * (len + 2));
+	j = -1;
+	tmp_list = malloc(sizeof(char *) * (ft_arglen(envp_list) + 2));
 	if (!envp_list)
 		return (NULL);
-	while (i < len)
+	while (i < ft_arglen(envp_list))
 	{
+		if (ft_strcmp(key, ft_find_key(envp_list[i])) == 0)
+			j = i;
 		tmp_list[i] = ft_strdup(envp_list[i]);
 		i++;
 	}
-	tmp_list[len] = ft_strdup(arg);
-	tmp_list[len + 1] = NULL;
+	if (j != -1)
+	{
+		free(tmp_list[j]);
+		tmp_list[j] = ft_strdup(update_arg);
+		tmp_list[i] = NULL;
+	}
+	else
+	{
+		tmp_list[i] = ft_strdup(update_arg);
+		tmp_list[i + 1] = NULL;
+	}
+	free(key);
+	free(update_arg);
 	return (tmp_list);
 }
 
@@ -91,23 +108,19 @@ void	exec_export(char **argv, char ***envp_list)
 {
 	char	**tmp_list;
 	int		i;
-	int		j;
 
-	j = 0;
 	i = 0;
 	tmp_list = NULL;
-
-	// if (argv[0][0] == '=')
-	// {
-	// 	exec_error_handler(2, "export", NULL, EXPORT_DOSE_NOT_EQUAL);
-	// 	free_envp(tmp_list);
-	// }
 	if (ft_arglen(argv) == 0)
 		echo_export(*envp_list, STDOUT_FILENO);
 	else
 	{
-		tmp_list = add_envp(argv[0], *envp_list);
-		free_envp(*envp_list);
-		*envp_list = tmp_list;
+		while (argv[i])
+		{
+			tmp_list = add_envp(argv[i], *envp_list);
+			free_envp(*envp_list);
+			*envp_list = tmp_list;
+			i++;
+		}
 	}
 }

@@ -5,6 +5,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "builtin.h"
+#include "get_next_line.h"
 
 static void handle_in_redir(const char *filename)
 {
@@ -100,7 +101,15 @@ static void handle_heredoc(const char *limiter, char **envp)
         
         while(1)
         {
-            line = readline("> ");
+            // line = readline("> ");
+            ft_putstr_fd("> ", STDERR_FILENO);
+            //get_next_line buffer 비워주기 
+            line = get_next_line(STDIN_FILENO);
+            int i;
+            i=0;
+            while(line[i] != '\n')
+                i++;
+            line[i] = '\0';
             if (line == NULL)
             {
                 ft_putendl_fd("error heredoc", STDERR_FILENO);
@@ -108,6 +117,7 @@ static void handle_heredoc(const char *limiter, char **envp)
             }
             
             diff = ft_strncmp(line, limiter, ft_strlen(limiter));
+            
             if (diff == 0 && ft_strlen(line) == ft_strlen(limiter))
             {
                 free(line);

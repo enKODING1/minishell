@@ -71,6 +71,7 @@ void expand_and_write_line(int fd, char *line, char **envp)
 				write(fd, var_value, strlen(var_value));
 			
 			free(var_name);
+            free(var_value);
 			start = i + 1;
 		}
 		i++;

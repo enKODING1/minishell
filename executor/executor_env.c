@@ -7,11 +7,9 @@
 char **init_envp(char **envp)
 {
     char **envp_list;
-    int i = 0;
-    while (envp[i])
-        i++;
+    int i;
 
-    envp_list = (char **)malloc(sizeof(char *) * (i + 1));
+    envp_list = (char **)malloc(sizeof(char *) * (ft_arglen(envp) + 1));
     if (!envp_list)
         exit(1);
     i = 0;

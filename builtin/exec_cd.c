@@ -107,4 +107,5 @@ void	exec_cd(char **argv, char ***envp_list)
 	if (is_minus)
 		ft_putendl_fd(path, STDOUT_FILENO);
 	free(path);
+	free(old_path);
 }

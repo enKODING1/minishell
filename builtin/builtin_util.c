@@ -58,7 +58,7 @@ char	*search_envp(char *target, char **envp_list)
 	{
 		if (ft_strncmp(envp_list[i], target, len) == 0
 			&& envp_list[i][len] == '=')
-			return (envp_list[i] + len + 1);
+			return (ft_strdup(envp_list[i] + len + 1));
 		i++;
 	}
 	return (NULL);

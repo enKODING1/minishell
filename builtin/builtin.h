@@ -33,7 +33,6 @@ typedef struct s_string_builder
 
 char				**get_envp_list(char **envp_list);
 char				*search_envp(char *target, char **envp_list);
-char				*shell_lv_up(char **envp_list);
 void				exec_error_handler(int fd, char *command, char *target,
 						char *error_message);
 void				exec_cd(char **argv, char ***envp_list);

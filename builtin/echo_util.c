@@ -37,6 +37,7 @@ int	expand_env(char *str, char **envp_list, t_string_builder *list)
 		append_str(list, env_val);
 	len = ft_strlen(env_name);
 	free(env_name);
+	free(env_val);
 	return (len);
 }
 

@@ -17,7 +17,7 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
         if (is_builtint((t_cmd_node *)pipe_node->left))
         {
             redirection_handler((t_cmd_node *)pipe_node->left, envp);
-            builtin_handler((t_cmd_node *)pipe_node->left, envp);
+            builtin_handler((t_cmd_node *)pipe_node->left, &envp);
             exit(0);
         }
         else
@@ -43,7 +43,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
             // stdout_fd = dup(STDOUT_FILENO);
             // stdin_fd = dup(STDIN_FILENO);
             redirection_handler((t_cmd_node *)pipe_node->right, envp);
-            builtin_handler((t_cmd_node *)pipe_node->right, envp);
+            builtin_handler((t_cmd_node *)pipe_node->right, &envp);
             // dup2(stdout_fd, STDOUT_FILENO);
             // dup2(stdin_fd, STDIN_FILENO);
             // close(stdout_fd);
@@ -108,7 +108,7 @@ void execute(t_node *node, char ***envp)
             int stdin_fd;
             stdout_fd = dup(STDOUT_FILENO);
             stdin_fd = dup(STDIN_FILENO);
-            redirection_handler(cmd, envp);
+            redirection_handler(cmd, *envp);
             builtin_handler(cmd, envp);
             dup2(stdout_fd, STDOUT_FILENO);
             dup2(stdin_fd, STDIN_FILENO);

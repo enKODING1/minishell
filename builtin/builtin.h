@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/09 00:18:37 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/12 00:10:40 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # define CD_DOES_NOT_EXIT_ERROR "그런 파일이나 디렉터리가 없습니다"
 # define EXPORT_DOSE_NOT_EQUAL "= 이외의 다른 문자가 들어왔습니다"
 
-# include "parser.h"
 # include "libft.h"
+# include "parser.h"
 # include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -54,9 +54,17 @@ char				**ft_argv_filter(char **argv, char **envp_list);
 t_string_builder	*builder_init(void);
 void				append_char(t_string_builder *sb, char c);
 void				append_str(t_string_builder *sb, char *str);
-void free_builder(t_string_builder *sb);
-char *free_return_str(t_string_builder *sb);
-char *ft_update(char *arg);
-char *ft_find_key(char *arg);
+void				free_builder(t_string_builder *sb);
+char				*free_return_str(t_string_builder *sb);
+char				*ft_update(char *arg);
+char				*ft_find_key(char *arg);
+int					handle_double_quote(char **str, char **envp_list,
+						t_string_builder *list);
+int					handle_single_quote(char **str, t_string_builder *list);
+int					ft_strcmp(char *str1, char *str2);
+int					find_key_and_copy(char *key, char **envp_list,
+						char **tmp_list);
+void				update_or_add_entry(int j, char **tmp_list,
+						char *update_arg, int list_len);
 
 #endif

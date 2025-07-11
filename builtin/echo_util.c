@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 00:17:19 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/09 00:17:48 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/11 23:41:26 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,45 +43,16 @@ int	expand_env(char *str, char **envp_list, t_string_builder *list)
 char	*ft_advanced_substr(char *str, char **envp_list)
 {
 	t_string_builder	*list;
+	int					error_check;
 
 	list = builder_init();
-	while (*str)
+	error_check = 0;
+	while (*str && !error_check)
 	{
 		if (*str == '\'')
-		{
-			str++;
-			while (*str && *str != '\'')
-			{
-				append_char(list, *str);
-				str++;
-			}
-			if (!*str)
-            {
-                exec_error_handler(STDERR_FILENO, "syntax error", NULL, "unclosed quote");
-                free_builder(list);
-                return (NULL);
-            }
-            str++;
-		}
+			error_check = handle_single_quote(&str, list);
 		else if (*str == '"')
-		{
-			str++;
-			while (*str && *str != '"')
-			{
-				if (*str == '$')
-					str += expand_env(str + 1, envp_list, list);
-				else
-					append_char(list, *str);
-				str++;
-			}
-			if (!*str)
-            {
-                exec_error_handler(STDERR_FILENO, "syntax error", NULL, "unclosed double quote");
-                free_builder(list);
-                return (NULL);
-            }
-				str++;
-		}
+			error_check = handle_double_quote(&str, envp_list, list);
 		else if (*str == '$')
 			str += expand_env(str + 1, envp_list, list) + 1;
 		else
@@ -89,6 +60,11 @@ char	*ft_advanced_substr(char *str, char **envp_list)
 			append_char(list, *str);
 			str++;
 		}
+	}
+	if (error_check)
+	{
+		free_builder(list);
+		return (NULL);
 	}
 	return (free_return_str(list));
 }

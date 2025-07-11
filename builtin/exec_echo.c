@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:00:35 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/02 20:02:27 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/11 23:33:02 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	find_message(char **argv)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 0;
 	while (argv[i] && ft_strncmp(argv[i], "-n", 2) == 0)
@@ -32,11 +32,11 @@ int	find_message(char **argv)
 	return (i);
 }
 
-void	exec_echo(char **argv,char **envp_list)
+void	exec_echo(char **argv, char **envp_list)
 {
-	char **argv_list;
-	int	option;
-	int	i;
+	char	**argv_list;
+	int		option;
+	int		i;
 
 	argv_list = ft_argv_filter(argv, envp_list);
 	i = find_message(argv_list);

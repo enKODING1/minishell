@@ -48,6 +48,7 @@ SOURCES = ./lexer/lexer.c \
           ./executor/executor_signal.c \
           ./executor/executor.c \
           ./builtin/builtin_util.c \
+          ./builtin/builtin_util2.c \
           ./builtin/exec_cd.c \
           ./builtin/exec_echo.c \
           ./builtin/exec_env.c \
@@ -55,12 +56,14 @@ SOURCES = ./lexer/lexer.c \
           ./builtin/exec_exit.c \
           ./builtin/exec_export.c \
           ./builtin/exec_export2.c \
+          ./builtin/exec_export3.c \
           ./builtin/exec_pwd.c \
           ./builtin/exec_unset.c \
           ./lib/readline/get_next_line.c \
           ./lib/readline/get_next_line_utils.c \
           ./builtin/echo_util.c \
-          ./builtin/string_builder.c
+          ./builtin/echo_util2.c \
+          ./builtin/string_builder.c 
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft/

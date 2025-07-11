@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:33:03 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/02 20:51:32 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/11 23:51:07 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,40 +51,20 @@ void	sort_envp(char **envp)
 
 char	**add_envp(char *arg, char **envp_list)
 {
-	int	i;
-	int 	j;
+	int		found_idx;
+	int		len;
 	char	**tmp_list;
-	char *update_arg;
-	char *key;
-	char *old_key;
+	char	*update_arg;
+	char	*key;
 
 	key = ft_find_key(arg);
 	update_arg = ft_update(arg);
-	i = 0;
-	j = -1;
-	tmp_list = malloc(sizeof(char *) * (ft_arglen(envp_list) + 2));
-	if (!envp_list)
+	len = ft_arglen(envp_list);
+	tmp_list = malloc(sizeof(char *) * (len + 2));
+	if (!envp_list || !tmp_list)
 		return (NULL);
-	while (i < ft_arglen(envp_list))
-	{
-		old_key = ft_find_key(envp_list[i]);
-		if (ft_strcmp(key, old_key) == 0)
-			j = i;
-		tmp_list[i] = ft_strdup(envp_list[i]);
-		free(old_key);
-		i++;
-	}
-	if (j != -1)
-	{
-		free(tmp_list[j]);
-		tmp_list[j] = ft_strdup(update_arg);
-		tmp_list[i] = NULL;
-	}
-	else
-	{
-		tmp_list[i] = ft_strdup(update_arg);
-		tmp_list[i + 1] = NULL;
-	}
+	found_idx = find_key_and_copy(key, envp_list, tmp_list);
+	update_or_add_entry(found_idx, tmp_list, update_arg, len);
 	free(key);
 	free(update_arg);
 	return (tmp_list);
@@ -114,20 +94,23 @@ void	exec_export(char **argv, char ***envp_list)
 
 	i = 0;
 	tmp_list = NULL;
-	if (argv[0][0] == '=')
-	{
-		exec_error_handler(STDERR_FILENO, "export", NULL, "NOT A VALID IDENTIFIER");
-		return ;
-	}
 	if (ft_arglen(argv) == 0)
 		echo_export(*envp_list, STDOUT_FILENO);
 	else
 	{
 		while (argv[i])
 		{
-			tmp_list = add_envp(argv[i], *envp_list);
-			free_envp(*envp_list);
-			*envp_list = tmp_list;
+			if (argv[i][0] == '=')
+			{
+				exec_error_handler(STDERR_FILENO, "export", argv[i],
+				"NOT A VALID IDENTIFIER");
+			}
+			else
+			{
+				tmp_list = add_envp(argv[i], *envp_list);
+				free_envp(*envp_list);
+				*envp_list = tmp_list;
+			}
 			i++;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:08:36 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/02 20:11:23 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/11 23:32:20 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static int	ft_check(char *str)
 	int	i;
 
 	i = 0;
-	if(str[i] == '-' || str[i] == '+')
+	if (str[i] == '-' || str[i] == '+')
 		i++;
-	if(str[i] == '\0')
+	if (str[i] == '\0')
 		return (1);
 	while (str[i])
 	{

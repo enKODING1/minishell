@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:33:03 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/12 01:05:54 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/12 01:33:39 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	**add_envp(char *arg, char **envp_list)
 	char	*key;
 
 	key = ft_find_key(arg);
-	update_arg = ft_update(arg);
+	update_arg = ft_strdup(arg);
 	len = ft_arglen(envp_list);
 	tmp_list = malloc(sizeof(char *) * (len + 2));
 	if (!envp_list || !tmp_list)
@@ -64,6 +64,8 @@ void	echo_export(char **envp_list, int fd)
 {
 	size_t	j;
 	char	**tmp_list;
+	char	*key;
+	char	*value;
 
 	j = 0;
 	tmp_list = get_envp_list(envp_list);
@@ -71,8 +73,18 @@ void	echo_export(char **envp_list, int fd)
 	while (tmp_list[j])
 	{
 		ft_putstr_fd("declare -x ", fd);
-		ft_putendl_fd(tmp_list[j], fd);
-		j++;
+		ft_key_value(tmp_list[j++], &key, &value);
+		ft_putstr_fd(key, fd);
+		if (value != NULL)
+		{
+			ft_putstr_fd("=", fd);
+			ft_putstr_fd("\"", fd);
+			ft_putstr_fd(value, fd);
+			ft_putstr_fd("\"", fd);
+		}
+		ft_putstr_fd("\n", fd);
+		free(key);
+		free(value);
 	}
 	free_envp(tmp_list);
 }

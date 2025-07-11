@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 23:50:56 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/11 23:51:02 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/12 01:05:49 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,14 @@ void	update_or_add_entry(int j, char **tmp_list, char *update_arg,
 		tmp_list[list_len] = ft_strdup(update_arg);
 		tmp_list[list_len + 1] = NULL;
 	}
+}
+
+int	ft_strcmp(char *str1, char *str2)
+{
+	int	i;
+
+	i = 0;
+	while (str1[i] && (str1[i] == str2[i]))
+		i++;
+	return (str1[i] - str2[i]);
 }

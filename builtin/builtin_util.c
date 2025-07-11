@@ -84,7 +84,7 @@ void	builtin_handler(t_cmd_node *cmd, char ***envp)
 	else if (!ft_strncmp(cmd->cmd, "cd", 2))
 		exec_cd(cmd->args, envp);
 	else if (!ft_strncmp(cmd->cmd, "export", 6))
-		exec_export(cmd->args, envp);
+		exec_export(NULL, cmd->args, envp);
 	else if (!ft_strncmp(cmd->cmd, "unset", 5))
 		exec_unset(cmd->args, envp);
 	else if (!ft_strncmp(cmd->cmd, "env", 3))

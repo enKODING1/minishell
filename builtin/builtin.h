@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/12 00:10:40 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/12 01:06:56 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void				exec_cd(char **argv, char ***envp_list);
 void				exec_env(char **argv, char **envp_list);
 void				exec_echo(char **argv, char **envp_list);
 void				exec_exit(char **argv);
-void				exec_export(char **argv, char ***envp_list);
+void				exec_export(char *env_vaiable, char **argv,
+						char ***envp_list);
 void				exec_pwd(char **argv, char **envp_list);
 void				exec_unset(char **argv, char ***envp_list);
 void				free_envp(char **envp_list);

@@ -6,21 +6,11 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:33:03 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/11 23:51:07 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/12 01:05:54 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-
-int	ft_strcmp(char *str1, char *str2)
-{
-	int	i;
-
-	i = 0;
-	while (str1[i] && (str1[i] == str2[i]))
-		i++;
-	return (str1[i] - str2[i]);
-}
 
 void	sort_envp(char **envp)
 {
@@ -87,31 +77,53 @@ void	echo_export(char **envp_list, int fd)
 	free_envp(tmp_list);
 }
 
-void	exec_export(char **argv, char ***envp_list)
+void	process_export_args(char **argv, char ***envp_list)
+{
+	char	**tmp_list;
+	int		i;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (argv[i][0] == '=')
+		{
+			exec_error_handler(STDERR_FILENO, "export", argv[i],
+				"NOT A VALID IDENTIFIER");
+		}
+		else
+		{
+			tmp_list = add_envp(argv[i], *envp_list);
+			free_envp(*envp_list);
+			*envp_list = tmp_list;
+		}
+		i++;
+	}
+}
+
+void	exec_export(char *env_vaiable, char **argv, char ***envp_list)
 {
 	char	**tmp_list;
 	int		i;
 
 	i = 0;
 	tmp_list = NULL;
-	if (ft_arglen(argv) == 0)
-		echo_export(*envp_list, STDOUT_FILENO);
+	if (env_vaiable != NULL)
+	{
+		if (env_vaiable[0] == '=')
+		{
+			exec_error_handler(STDERR_FILENO, "export", env_vaiable,
+				"NOT A VALID IDENTIFIER");
+			return ;
+		}
+		tmp_list = add_envp(env_vaiable, *envp_list);
+		free_envp(*envp_list);
+		*envp_list = tmp_list;
+	}
 	else
 	{
-		while (argv[i])
-		{
-			if (argv[i][0] == '=')
-			{
-				exec_error_handler(STDERR_FILENO, "export", argv[i],
-				"NOT A VALID IDENTIFIER");
-			}
-			else
-			{
-				tmp_list = add_envp(argv[i], *envp_list);
-				free_envp(*envp_list);
-				*envp_list = tmp_list;
-			}
-			i++;
-		}
+		if (ft_arglen(argv) == 0)
+			echo_export(*envp_list, STDOUT_FILENO);
+		else
+			process_export_args(argv, envp_list);
 	}
 }

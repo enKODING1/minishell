@@ -114,6 +114,11 @@ void	exec_export(char **argv, char ***envp_list)
 
 	i = 0;
 	tmp_list = NULL;
+	if (argv[0][0] == '=')
+	{
+		exec_error_handler(STDERR_FILENO, "export", NULL, "NOT A VALID IDENTIFIER");
+		return ;
+	}
 	if (ft_arglen(argv) == 0)
 		echo_export(*envp_list, STDOUT_FILENO);
 	else

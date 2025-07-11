@@ -17,7 +17,7 @@ void external_command(t_cmd_node *cmd_node, char **envp);
 void execute_pipe_command(t_cmd_node *cmd_node, char **envp);
 
 // 리다이렉션
-void redirection_handler(t_cmd_node *cmd_node);
+void redirection_handler(t_cmd_node *cmd_node, char **envp);
 
 // 파이프 및 실행
 void execute_pipe(t_pipe_node *pipe_node, char **envp);

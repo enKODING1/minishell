@@ -105,7 +105,7 @@ void external_command(t_cmd_node *cmd_node, char **envp)
             printf("not found command\n");
             return;
         }
-        redirection_handler(cmd_node);
+        redirection_handler(cmd_node, envp);
         run_command(cmd_node, cmd, envp);
         free(cmd);
         exit(0);
@@ -122,7 +122,7 @@ void execute_pipe_command(t_cmd_node *cmd_node, char **envp)
         printf("not found command\n");
         return ;
     }
-    redirection_handler(cmd_node);
+    redirection_handler(cmd_node, envp);
     run_command(cmd_node, cmd, envp);
     free(cmd);
 } 

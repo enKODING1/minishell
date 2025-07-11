@@ -56,9 +56,8 @@ SOURCES = ./lexer/lexer.c \
           ./builtin/exec_export.c \
           ./builtin/exec_pwd.c \
           ./builtin/exec_unset.c \
-          ./builtin/echo_util.c \
-          ./builtin/exec_export2.c \
-          ./builtin/string_builder.c \
+          ./lib/readline/get_next_line.c \
+          ./lib/readline/get_next_line_utils.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
@@ -68,6 +67,7 @@ TOKEN_DIR = ./token/
 PARSER_DIR = ./parser/
 BUILTIN_DIR = ./builtin/
 EXEC_TESTER_DIR = ./exec/
+GNL_DIR = ./lib/readline/
 
 
 LIBFT_LIB = ${LIBFT_DIR}/libft.a
@@ -76,7 +76,7 @@ all:$(NAME)
 
 $(NAME): $(LIBFT_LIB) $(OBJECTS) 
 	$(CC) $(CFLAG) -o $(NAME) $(OBJECTS) \
-	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} \
+	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} -I${GNL_DIR} \
 	-L${LIBFT_DIR} -lft -lreadline
 
 $(LIBFT_LIB):
@@ -85,7 +85,7 @@ $(LIBFT_LIB):
 
 %.o: %.c
 	$(CC) $(CFLAG)  -c $< -o $@ \
-	-I${LIBFT_DIR} -I${LEXER_DIR} -I${TOKEN_DIR}  -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR}
+	-I${LIBFT_DIR} -I${LEXER_DIR} -I${TOKEN_DIR}  -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} -I${GNL_DIR}
 	
 clean:
 	make clean -C $(LIBFT_DIR)

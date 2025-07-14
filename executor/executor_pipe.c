@@ -61,7 +61,7 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
         if (cmd->cmd && is_builtint(cmd))
         {
             redirection_handler(cmd, envp);
-            builtin_handler(cmd, envp, status);
+            builtin_handler(cmd, &envp, status);
             exit(0);
         }
         else
@@ -104,7 +104,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
         if (cmd->cmd && is_builtint(cmd))
         {
             redirection_handler(cmd, envp);
-            builtin_handler(cmd, envp, status);
+            builtin_handler(cmd, &envp, status);
             exit(0);
         }
         else

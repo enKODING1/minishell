@@ -114,7 +114,7 @@ void external_command(t_cmd_node *cmd_node, char **envp, int *status)
         free(cmd);
         exit(0);
     }
-    waitpid(pid, &status, 0);
+    waitpid(pid, status, 0);
     if((*status & 0x7F) == SIGINT)
         ft_putstr_fd("^C\n", STDERR_FILENO);
     else if((*status & 0x7F) == SIGQUIT)

@@ -13,11 +13,6 @@ void sig_c(int sig)
     rl_redisplay();
 }
 
-void sig_back(int sig)
-{
-    (void) sig;
-}
-
 void set_printf_off(void)
 {
     struct termios term;
@@ -30,5 +25,5 @@ void set_sig(void)
 {
     set_printf_off();
     signal(SIGINT, sig_c);
-    signal(SIGQUIT, sig_back);
+    signal(SIGQUIT, SIG_IGN);
 } 

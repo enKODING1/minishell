@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include "libft.h"
+#include "builtin.h"
 
 static void free_matrix(char **matrix)
 {
@@ -95,8 +96,7 @@ void external_command(t_cmd_node *cmd_node, char **envp)
     int pid;
     char *cmd;
     int status;
-    signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
+
     pid = fork();
     if (pid == -1)
         printf("error run: %s\n", cmd_node->cmd);
@@ -116,10 +116,12 @@ void external_command(t_cmd_node *cmd_node, char **envp)
         exit(0);
     }
     waitpid(pid, &status, 0);
-    if((status & 0xFF) == SIGINT)
+    if((status & 0x7F) == SIGINT)
         ft_putstr_fd("\n", STDERR_FILENO);
+    else if((status & 0x7F) == SIGQUIT)
+        ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
     signal(SIGINT, sig_c);
-    signal(SIGQUIT, sig_back);
+    signal(SIGQUIT, SIG_IGN);        
 }
 
 void execute_pipe_command(t_cmd_node *cmd_node, char **envp)

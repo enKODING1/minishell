@@ -27,7 +27,6 @@ void execute(t_node *node, char ***envp);
 
 // 시그널 및 터미널
 void sig_c(int sig);
-void sig_back(int sig);
 void set_printf_off(void);
 void set_sig(void);
 

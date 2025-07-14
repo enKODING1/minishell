@@ -56,4 +56,5 @@ void	exec_echo(char **argv, char **envp_list, int *status)
 	}
 	if (option == 0)
 		ft_putstr_fd("\n", STDOUT_FILENO);
+	*status = 0;
 }

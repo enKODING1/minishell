@@ -117,9 +117,9 @@ void external_command(t_cmd_node *cmd_node, char **envp)
     }
     waitpid(pid, &status, 0);
     if((status & 0x7F) == SIGINT)
-        ft_putstr_fd("\n", STDERR_FILENO);
+        ft_putstr_fd("^C\n", STDERR_FILENO);
     else if((status & 0x7F) == SIGQUIT)
-        ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
+        ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
     signal(SIGINT, sig_c);
     signal(SIGQUIT, SIG_IGN);        
 }

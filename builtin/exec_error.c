@@ -17,7 +17,7 @@ void	exec_error_handler(int fd,
 		char *target,
 		char *error_message)
 {
-	ft_putstr_fd("edgeshell: ", fd);
+	ft_putstr_fd("minishell: ", fd);
 	ft_putstr_fd(command, fd);
 	ft_putstr_fd(" : ", fd);
 	ft_putstr_fd(error_message, fd);

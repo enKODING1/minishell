@@ -21,6 +21,15 @@ void set_printf_off(void)
     tcsetattr(1, 0, &term);
 }
 
+void set_printf_on(void)
+{
+    struct termios term;
+
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag |= ECHOCTL;
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
 void set_sig(void)
 {
     set_printf_off();

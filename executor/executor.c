@@ -11,13 +11,11 @@ int main(int argc, char **argv, char **envp)
 	t_node *ast_root;
 	char **envp_list;
 	char *line;
-	int is_parser_error;
 
 	envp_list = main_init(argc,argv,envp);
 	set_sig();
 	while (1)
 	{
-		is_parser_error = 0;
 		line = readline("minishell> ");
 		if (line == NULL)
 		{
@@ -36,5 +34,6 @@ int main(int argc, char **argv, char **envp)
 		free_lexer(lexer);
 	}
 	free_envp_tmp(envp_list);
+	set_printf_on();
 	return (0);
 }

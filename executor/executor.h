@@ -29,5 +29,5 @@ void execute(t_node *node, char ***envp);
 void sig_c(int sig);
 void set_printf_off(void);
 void set_sig(void);
-
+void set_printf_on(void);
 #endif 

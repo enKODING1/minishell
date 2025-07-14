@@ -6,6 +6,8 @@
 
 static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pipefd)
 {
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
     close(pipefd[0]);
     dup2(pipefd[1], STDOUT_FILENO);
     close(pipefd[1]);
@@ -28,6 +30,8 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
 
 static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *pipefd)
 {
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
     close(pipefd[1]);
     dup2(pipefd[0], STDIN_FILENO);
     close(pipefd[0]);
@@ -59,6 +63,10 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
 void execute_pipe(t_pipe_node *pipe_node, char **envp)
 {
     int pipefd[2];
+    int left_status;
+    int right_status;
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
     if(pipe(pipefd) == -1)
     {
         printf("pipe error\n");
@@ -86,8 +94,12 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp)
     }
     close(pipefd[0]);
     close(pipefd[1]);
-    waitpid(left_pid, NULL, 0);
-    waitpid(right_pid, NULL, 0);
+    waitpid(left_pid, &left_status, 0);
+    waitpid(right_pid, &right_status, 0);
+    if((right_status & 0xFF) == SIGINT || (left_status & 0xFF) == SIGINT)
+        ft_putstr_fd("\n", STDERR_FILENO);
+    signal(SIGINT, sig_c);
+    signal(SIGQUIT, sig_back);
 }
 
 void execute(t_node *node, char ***envp)

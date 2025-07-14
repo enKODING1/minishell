@@ -94,11 +94,16 @@ void external_command(t_cmd_node *cmd_node, char **envp)
 {
     int pid;
     char *cmd;
+    int status;
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
     pid = fork();
     if (pid == -1)
         printf("error run: %s\n", cmd_node->cmd);
     if (pid == 0)
     {
+        signal(SIGINT, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
         cmd = get_cmd_path(cmd_node->cmd, envp);
         if (cmd_node->cmd != NULL && cmd == NULL)
         {
@@ -110,7 +115,11 @@ void external_command(t_cmd_node *cmd_node, char **envp)
         free(cmd);
         exit(0);
     }
-    waitpid(pid, NULL, 0);
+    waitpid(pid, &status, 0);
+    if((status & 0xFF) == SIGINT)
+        ft_putstr_fd("\n", STDERR_FILENO);
+    signal(SIGINT, sig_c);
+    signal(SIGQUIT, sig_back);
 }
 
 void execute_pipe_command(t_cmd_node *cmd_node, char **envp)

@@ -3,6 +3,8 @@
 
 #include "parser.h"
 #include <wait.h>
+#include <signal.h>
+#include <termios.h>
 
 // 환경 변수 관련
 char **init_envp(char **envp);

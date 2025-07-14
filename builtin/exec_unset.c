@@ -74,7 +74,7 @@ void	exec_unset(char **argv, char ***envp_list, int *status)
 	size_t	j;
 
 	i = 0;
-	if (ft_option_check(argv[0], status))
+	if (ft_option_check(argv[0], status, "unset"))
 		return ;
 	process_unset(argv, envp_list, 0, 0);
 	*status = 0;

@@ -27,7 +27,7 @@ char * remove_quote(char *str)
     return (ft_substr(str, 1, current_position - 1));
 }
 
-static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pipefd)
+static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pipefd, int *status)
 {
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);
@@ -36,7 +36,7 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
     close(pipefd[1]);
     if (pipe_node->left->type == NODE_PIPE)
     {
-        execute_pipe((t_pipe_node *)pipe_node->left, envp);
+        execute_pipe((t_pipe_node *)pipe_node->left, envp, status);
     } else if (pipe_node->left->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->left;
@@ -61,7 +61,7 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
         if (cmd->cmd && is_builtint(cmd))
         {
             redirection_handler(cmd, envp);
-            builtin_handler(cmd, envp);
+            builtin_handler(cmd, envp, status);
             exit(0);
         }
         else
@@ -70,7 +70,7 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
     exit(0);
 }
 
-static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *pipefd)
+static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *pipefd, int *status)
 {
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);
@@ -79,7 +79,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
     close(pipefd[0]);
     if (pipe_node->right->type == NODE_PIPE)
     {
-        execute_pipe((t_pipe_node *)pipe_node->right, envp);
+        execute_pipe((t_pipe_node *)pipe_node->right, envp, status);
     } else if (pipe_node->right->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->right;
@@ -104,7 +104,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
         if (cmd->cmd && is_builtint(cmd))
         {
             redirection_handler(cmd, envp);
-            builtin_handler(cmd, envp);
+            builtin_handler(cmd, envp, status);
             exit(0);
         }
         else
@@ -113,7 +113,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
     exit(0);
 }
 
-void execute_pipe(t_pipe_node *pipe_node, char **envp)
+void execute_pipe(t_pipe_node *pipe_node, char **envp, int *status)
 {
     int pipefd[2];
     int left_status;
@@ -131,7 +131,7 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp)
     }
     if(left_pid == 0)
     {
-        execute_pipe_left_child(pipe_node, envp, pipefd);
+        execute_pipe_left_child(pipe_node, envp, pipefd, status);
     }
     int right_pid = fork();
     if(right_pid == -1)
@@ -141,28 +141,46 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp)
     }
     if(right_pid == 0)
     {
-        execute_pipe_right_child(pipe_node, envp, pipefd);
+        execute_pipe_right_child(pipe_node, envp, pipefd, status);
     }
     close(pipefd[0]);
     close(pipefd[1]);
     waitpid(left_pid, &left_status, 0);
     waitpid(right_pid, &right_status, 0);
-    if((right_status & 0x7F) == SIGINT || (left_status & 0x7F) == SIGINT)
+    if((left_status & 0x7F) == SIGINT)
+    {
         ft_putstr_fd("^C\n", STDERR_FILENO);
-    else if((right_status & 0x7F) == SIGQUIT || (left_status & 0x7F) == SIGQUIT)
+        *status = left_status;
+        return ;
+    }
+    else if((left_status & 0x7F) == SIGQUIT)
+    {
         ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
+        *status = left_status;
+        return ;
+    }    
+    if((right_status & 0x7F) == SIGINT)
+    {
+        ft_putstr_fd("^C\n", STDERR_FILENO);
+        *status = right_status;
+    }
+    else if((right_status & 0x7F) == SIGQUIT)
+    {
+        ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
+        *status = right_status;
+    }
     signal(SIGINT, sig_c);
     signal(SIGQUIT, SIG_IGN);        
 }
 
-void execute(t_node *node, char ***envp)
+void execute(t_node *node, char ***envp, int *status)
 {
     if (!node) return;
     signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
     if (node->type == PIPE)
     {
-        execute_pipe((t_pipe_node *)node, *envp);    
+        execute_pipe((t_pipe_node *)node, *envp, status);    
         return;
     }
     else if(node->type == NODE_CMD)
@@ -195,7 +213,7 @@ void execute(t_node *node, char ***envp)
             stdout_fd = dup(STDOUT_FILENO);
             stdin_fd = dup(STDIN_FILENO);
             redirection_handler(cmd, *envp);
-            builtin_handler(cmd, envp);
+            builtin_handler(cmd, envp, status);
             dup2(stdout_fd, STDOUT_FILENO);
             dup2(stdin_fd, STDIN_FILENO);
             close(stdout_fd);
@@ -204,6 +222,6 @@ void execute(t_node *node, char ***envp)
             signal(SIGQUIT, SIG_IGN);    
             return;
         }
-        external_command(cmd, *envp);
+        external_command(cmd, *envp, status);
     }
 } 

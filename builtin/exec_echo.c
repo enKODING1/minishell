@@ -32,13 +32,13 @@ int	find_message(char **argv)
 	return (i);
 }
 
-void	exec_echo(char **argv, char **envp_list)
+void	exec_echo(char **argv, char **envp_list, int *status)
 {
 	char	**argv_list;
 	int		option;
 	int		i;
 
-	argv_list = ft_argv_filter(argv, envp_list);
+	argv_list = ft_argv_filter(argv, envp_list, status);
 	i = find_message(argv_list);
 	option = (i > 0);
 	if (argv_list[i] == NULL)

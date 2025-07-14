@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:20:54 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/02 20:25:58 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/15 06:13:08 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	ft_pull(int i, char **envp_list)
 	envp_list[i] = NULL;
 }
 
-void	exec_unset(char **argv, char ***envp_list)
+void	exec_unset(char **argv, char ***envp_list, int *status)
 {
 	size_t	key_len;
 	size_t	i;
@@ -54,8 +54,8 @@ void	exec_unset(char **argv, char ***envp_list)
 		key_len = ft_strlen(argv[i]);
 		while ((*envp_list)[j])
 		{
-			if (ft_strncmp(argv[i], (*envp_list)[j], key_len) == 0 &&
-					(*envp_list)[j][key_len] == '=')
+			if (ft_strncmp(argv[i], (*envp_list)[j], key_len) == 0
+				&& (*envp_list)[j][key_len] == '=')
 			{
 				ft_pull(j, *envp_list);
 				continue ;
@@ -64,4 +64,5 @@ void	exec_unset(char **argv, char ***envp_list)
 		}
 		i++;
 	}
+	*status = 0;
 }

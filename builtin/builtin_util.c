@@ -75,20 +75,20 @@ int	is_builtint(t_cmd_node *cmd)
 		return (0);
 }
 
-void	builtin_handler(t_cmd_node *cmd, char ***envp)
+void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 {
 	if (!ft_strncmp(cmd->cmd, "echo", 4))
-		exec_echo(cmd->args, *envp);
+		exec_echo(cmd->args, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "pwd", 3))
-		exec_pwd(cmd->args, *envp);
+		exec_pwd(cmd->args, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "cd", 2))
-		exec_cd(cmd->args, envp);
+		exec_cd(cmd->args, envp, status);
 	else if (!ft_strncmp(cmd->cmd, "export", 6))
-		exec_export(NULL, cmd->args, envp);
+		exec_export(NULL, cmd->args, envp, status);
 	else if (!ft_strncmp(cmd->cmd, "unset", 5))
-		exec_unset(cmd->args, envp);
+		exec_unset(cmd->args, envp, status);
 	else if (!ft_strncmp(cmd->cmd, "env", 3))
-		exec_env(cmd->args, *envp);
+		exec_env(cmd->args, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "exit", 4))
-		exec_exit(cmd->args);
+		exec_exit(cmd->args, status);
 }

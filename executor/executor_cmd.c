@@ -91,11 +91,10 @@ void run_command(t_cmd_node *cmd_node, char *cmd_path, char **envp)
     }
 }
 
-void external_command(t_cmd_node *cmd_node, char **envp)
+void external_command(t_cmd_node *cmd_node, char **envp, int *status)
 {
     int pid;
     char *cmd;
-    int status;
 
     pid = fork();
     if (pid == -1)
@@ -116,9 +115,9 @@ void external_command(t_cmd_node *cmd_node, char **envp)
         exit(0);
     }
     waitpid(pid, &status, 0);
-    if((status & 0x7F) == SIGINT)
+    if((*status & 0x7F) == SIGINT)
         ft_putstr_fd("^C\n", STDERR_FILENO);
-    else if((status & 0x7F) == SIGQUIT)
+    else if((*status & 0x7F) == SIGQUIT)
         ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
     signal(SIGINT, sig_c);
     signal(SIGQUIT, SIG_IGN);        

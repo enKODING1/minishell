@@ -11,7 +11,9 @@ int main(int argc, char **argv, char **envp)
 	t_node *ast_root;
 	char **envp_list;
 	char *line;
+	int status;
 
+	status = 0;
 	envp_list = main_init(argc,argv,envp);
 	set_sig();
 	while (1)
@@ -28,7 +30,7 @@ int main(int argc, char **argv, char **envp)
 		tok_head = create_token_list(lexer);
 		parser_init(&parser, tok_head);
 		ast_root = parse_pipe(&parser);
-		execute(ast_root, &envp_list);
+		execute(ast_root, &envp_list, &status);
 		free(line);
 		free_token_list(tok_head);
 		free_lexer(lexer);

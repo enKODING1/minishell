@@ -26,13 +26,17 @@ int	has_equal(char *str)
 	return (0);
 }
 
-void	exec_env(char **argv, char **envp_list)
+void	exec_env(char **argv, char **envp_list, int *status)
 {
 	int	i;
 
 	i = 0;
 	if (argv[0] != NULL)
+	{
 		exec_error_handler(STDERR_FILENO, "env", NULL, "INVALID ARG");
+		*status = 1;
+		return ;
+	}
 	while (envp_list[i])
 	{
 		if (has_equal(envp_list[i]) == 1)
@@ -42,4 +46,5 @@ void	exec_env(char **argv, char **envp_list)
 		}
 		i++;
 	}
+	*status = 0;
 }

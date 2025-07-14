@@ -30,7 +30,7 @@ static int	ft_check(char *str)
 	return (0);
 }
 
-void	exec_exit(char **argv)
+void	exec_exit(char **argv, int *status)
 {
 	int	i;
 	int	exit_num;
@@ -39,18 +39,22 @@ void	exec_exit(char **argv)
 	if (ft_arglen(argv) == 0)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
+		*status = 1;
 		exit(0);
 	}
 	if (ft_arglen(argv) > 1)
 	{
 		exec_error_handler(STDERR_FILENO, "exit", NULL, "TOO MANY ARG");
-		return ;
+		*status = 1;
+		exit(1);
 	}
 	if (ft_check(argv[i]))
 	{
 		exec_error_handler(STDERR_FILENO, "exit", NULL, "INVALID ARG");
-		exit(0);
+		*status = 1;
+		exit(1);
 	}
+	*status = 0;
 	exit_num = ft_atoi(argv[0]);
 	exit(exit_num % 256);
 }

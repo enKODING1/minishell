@@ -52,6 +52,8 @@ char *shell_lv_up(char **envp_list)
 
     target = search_envp("SHLVL", envp_list);
     level = ft_atoi(target);
+    free(target);
+    target = NULL;
     level++;
     lv_str = ft_itoa(level);
     target = ft_strjoin("SHLVL=", lv_str);

@@ -12,6 +12,22 @@
 
 #include "builtin.h"
 
+static void free_matrix(char **matrix)
+{
+    int i;
+    if (!matrix)
+        return;
+    i = 0;
+    while (matrix[i])
+    {
+        free(matrix[i]);
+        matrix[i] = NULL;
+        i++;
+    }
+    free(matrix);
+    matrix = NULL;
+}
+
 int	find_message(char **argv)
 {
 	int	i;
@@ -56,5 +72,6 @@ void	exec_echo(char **argv, char **envp_list, int *status)
 	}
 	if (option == 0)
 		ft_putstr_fd("\n", STDOUT_FILENO);
+	free_matrix(argv_list);
 	*status = 0;
 }

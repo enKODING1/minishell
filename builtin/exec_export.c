@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:33:03 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/15 06:12:49 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/15 07:06:49 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void	process_export_args(char **argv, char ***envp_list, int *status)
 	int		i;
 
 	i = 0;
+	if (ft_option_check(argv[0], status, "export"))
+		return ;
 	while (argv[i])
 	{
 		if (argv[i][0] == '=')

@@ -59,6 +59,7 @@ SOURCES = ./lexer/lexer.c \
           ./builtin/exec_export3.c \
           ./builtin/exec_pwd.c \
           ./builtin/exec_unset.c \
+          ./builtin/exec_unset2.c \
           ./lib/readline/get_next_line.c \
           ./lib/readline/get_next_line_utils.c \
           ./builtin/echo_util.c \

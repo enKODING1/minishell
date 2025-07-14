@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/15 06:12:38 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/15 07:02:17 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ int					find_key_and_copy(char *key, char **envp_list,
 void				update_or_add_entry(int j, char **tmp_list,
 						char *update_arg, int list_len);
 void				ft_key_value(char *arg, char **key, char **value);
+int					ft_option_check(char *argv, int *status);
 
 #endif

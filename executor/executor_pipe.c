@@ -145,8 +145,14 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp)
     }
     close(pipefd[0]);
     close(pipefd[1]);
-    waitpid(left_pid, NULL, 0);
-    waitpid(right_pid, NULL, 0);
+    waitpid(left_pid, &left_status, 0);
+    waitpid(right_pid, &right_status, 0);
+    if((right_status & 0x7F) == SIGINT || (left_status & 0x7F) == SIGINT)
+        ft_putstr_fd("^C\n", STDERR_FILENO);
+    else if((right_status & 0x7F) == SIGQUIT || (left_status & 0x7F) == SIGQUIT)
+        ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
+    signal(SIGINT, sig_c);
+    signal(SIGQUIT, SIG_IGN);        
 }
 
 void execute(t_node *node, char ***envp)

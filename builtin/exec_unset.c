@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:20:54 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/02 20:25:58 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/15 07:02:06 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,29 +39,43 @@ static void	ft_pull(int i, char **envp_list)
 	envp_list[i] = NULL;
 }
 
-void	exec_unset(char **argv, char ***envp_list)
+void	process_unset(char **argv, char ***envp_list, size_t i, size_t j)
+{
+	size_t	key_len;
+
+	while (argv[i])
+	{
+		j = 0;
+		if (!ft_check(argv[i]))
+		{
+			i++;
+			continue ;
+		}
+		key_len = ft_strlen(argv[i]);
+		while ((*envp_list)[j])
+		{
+			if (ft_strncmp(argv[i], (*envp_list)[j], key_len) == 0
+				&& ((*envp_list)[j][key_len] == '='
+					|| (*envp_list)[j][key_len] == '\0'))
+			{
+				ft_pull(j, *envp_list);
+				break ;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void	exec_unset(char **argv, char ***envp_list, int *status)
 {
 	size_t	key_len;
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	while (argv[i])
-	{
-		j = 0;
-		if (!ft_check(argv[i]))
-			continue ;
-		key_len = ft_strlen(argv[i]);
-		while ((*envp_list)[j])
-		{
-			if (ft_strncmp(argv[i], (*envp_list)[j], key_len) == 0 &&
-					(*envp_list)[j][key_len] == '=')
-			{
-				ft_pull(j, *envp_list);
-				continue ;
-			}
-			j++;
-		}
-		i++;
-	}
+	if (ft_option_check(argv[0], status, "unset"))
+		return ;
+	process_unset(argv, envp_list, 0, 0);
+	*status = 0;
 }

@@ -11,13 +11,13 @@ int main(int argc, char **argv, char **envp)
 	t_node *ast_root;
 	char **envp_list;
 	char *line;
-	int is_parser_error;
+	int status;
 
+	status = 0;
 	envp_list = main_init(argc,argv,envp);
 	set_sig();
 	while (1)
 	{
-		is_parser_error = 0;
 		line = readline("minishell> ");
 		if (line == NULL)
 		{
@@ -30,12 +30,13 @@ int main(int argc, char **argv, char **envp)
 		tok_head = create_token_list(lexer);
 		parser_init(&parser, tok_head);
 		ast_root = parse_pipe(&parser);
-		execute(ast_root, envp_list);
+		execute(ast_root, &envp_list, &status);
 		free(line);
 		free_ast(ast_root);
 		free_token_list(tok_head);
 		free_lexer(lexer);
 	}
 	free_envp_tmp(envp_list);
+	set_printf_on();
 	return (0);
 }

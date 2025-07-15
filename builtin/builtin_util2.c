@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_error.c                                       :+:      :+:    :+:   */
+/*   builtin_util2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/02 20:04:57 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/02 20:07:58 by jinwpark         ###   ########.fr       */
+/*   Created: 2025/07/11 23:53:54 by jinwpark          #+#    #+#             */
+/*   Updated: 2025/07/11 23:54:00 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	exec_error_handler(int fd,
-		char *command,
-		char *target,
-		char *error_message)
+int	ft_arglen(char **argv)
 {
-	ft_putstr_fd("minishell: ", fd);
-	ft_putstr_fd(command, fd);
-	ft_putstr_fd(" : ", fd);
-	ft_putstr_fd(error_message, fd);
-	if (target)
-	{
-		ft_putstr_fd(" : ", fd);
-		ft_putstr_fd(target, fd);
-	}
-	ft_putstr_fd("\n", fd);
+	int	i;
+
+	i = 0;
+	if (argv[0] == NULL)
+		return (0);
+	while (argv[i] != NULL)
+		i++;
+	return (i);
 }

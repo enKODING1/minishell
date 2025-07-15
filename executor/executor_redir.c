@@ -71,6 +71,7 @@ void expand_and_write_line(int fd, char *line, char **envp)
 				write(fd, var_value, strlen(var_value));
 			
 			free(var_name);
+            free(var_value);
 			start = i + 1;
 		}
 		i++;
@@ -94,28 +95,28 @@ static void handle_heredoc(const char *limiter, char **envp)
     temp_fd = open("/tmp/heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
     
     pid = fork();
+    signal(SIGQUIT, SIG_IGN);
     if (pid == 0) // 자식 프로세스  
     {
         close(temp_fd);
         temp_fd = open("/tmp/heredoc_tmp", O_WRONLY | O_APPEND);
-        
         while(1)
         {
             // line = readline("> ");
             ft_putstr_fd("> ", STDERR_FILENO);
             //get_next_line buffer 비워주기 
             line = get_next_line(STDIN_FILENO);
+            if (line == NULL)
+            {
+                ft_putendl_fd("\n error heredoc", STDERR_FILENO);
+                exit(1);
+            }
             int i;
             i=0;
             while(line[i] != '\n')
                 i++;
             line[i] = '\0';
-            if (line == NULL)
-            {
-                ft_putendl_fd("error heredoc", STDERR_FILENO);
-                exit(1);
-            }
-            
+
             diff = ft_strncmp(line, limiter, ft_strlen(limiter));
             
             if (diff == 0 && ft_strlen(line) == ft_strlen(limiter))

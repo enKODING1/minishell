@@ -1,5 +1,3 @@
-#include <signal.h>
-#include <termios.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -15,11 +13,6 @@ void sig_c(int sig)
     rl_redisplay();
 }
 
-void sig_back(int sig)
-{
-    (void) sig;
-}
-
 void set_printf_off(void)
 {
     struct termios term;
@@ -28,9 +21,18 @@ void set_printf_off(void)
     tcsetattr(1, 0, &term);
 }
 
+void set_printf_on(void)
+{
+    struct termios term;
+
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag |= ECHOCTL;
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
 void set_sig(void)
 {
     set_printf_off();
     signal(SIGINT, sig_c);
-    signal(SIGQUIT, sig_back);
+    signal(SIGQUIT, SIG_IGN);
 } 

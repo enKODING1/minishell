@@ -6,24 +6,11 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:39:29 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/05 00:12:12 by skang            ###   ########.fr       */
+/*   Updated: 2025/07/11 23:54:22 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-#include "parser.h"
-
-int	ft_arglen(char **argv)
-{
-	int	i;
-
-	i = 0;
-	if (argv[0] == NULL)
-		return (0);
-	while (argv[i] != NULL)
-		i++;
-	return (i);
-}
 
 char	**get_envp_list(char **envp_list)
 {
@@ -77,39 +64,37 @@ char	*search_envp(char *target, char **envp_list)
 	{
 		if (ft_strncmp(envp_list[i], target, len) == 0
 			&& envp_list[i][len] == '=')
-			return (envp_list[i] + len + 1);
+			return (ft_strdup(envp_list[i] + len + 1));
 		i++;
 	}
 	return (NULL);
 }
 
-int is_builtint(t_cmd_node *cmd)
+int	is_builtint(t_cmd_node *cmd)
 {
-    if (!ft_strncmp(cmd->cmd, "echo", 4)
-    || !ft_strncmp(cmd->cmd, "pwd", 3)
-    || !ft_strncmp(cmd->cmd, "cd", 2)
-    || !ft_strncmp(cmd->cmd, "export", 6)
-    || !ft_strncmp(cmd->cmd, "unset", 5)
-    || !ft_strncmp(cmd->cmd, "env", 3)
-    || !ft_strncmp(cmd->cmd, "exit", 4))
-        return (1);
-    else
-        return (0);
+	if (!ft_strncmp(cmd->cmd, "echo", 4) || !ft_strncmp(cmd->cmd, "pwd", 3)
+		|| !ft_strncmp(cmd->cmd, "cd", 2) || !ft_strncmp(cmd->cmd, "export", 6)
+		|| !ft_strncmp(cmd->cmd, "unset", 5) || !ft_strncmp(cmd->cmd, "env", 3)
+		|| !ft_strncmp(cmd->cmd, "exit", 4))
+		return (1);
+	else
+		return (0);
 }
-void builtin_handler(t_cmd_node *cmd, char **envp)
+
+void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 {
-    if (!ft_strncmp(cmd->cmd, "echo", 4))
-        exec_echo(cmd->args);
-    else if (!ft_strncmp(cmd->cmd, "pwd", 3))
-        exec_pwd(cmd->args, envp);
-    else if (!ft_strncmp(cmd->cmd, "cd", 2)) // cd home/minishell
-        exec_cd( cmd->args, envp);
-    else if (!ft_strncmp(cmd->cmd, "export", 6))
-        exec_export(cmd->args, &envp);
-    else if (!ft_strncmp(cmd->cmd, "unset", 5))
-        exec_unset(cmd->args, &envp);
-    else if (!ft_strncmp(cmd->cmd, "env", 3))
-        exec_env(cmd->args, envp);
-    else if (!ft_strncmp(cmd->cmd, "exit", 4))
-        exec_exit(cmd->args);
+	if (!ft_strncmp(cmd->cmd, "echo", 4))
+		exec_echo(cmd->args, *envp, status);
+	else if (!ft_strncmp(cmd->cmd, "pwd", 3))
+		exec_pwd(cmd->args, *envp, status);
+	else if (!ft_strncmp(cmd->cmd, "cd", 2))
+		exec_cd(cmd->args, envp, status);
+	else if (!ft_strncmp(cmd->cmd, "export", 6))
+		exec_export(NULL, cmd->args, envp, status);
+	else if (!ft_strncmp(cmd->cmd, "unset", 5))
+		exec_unset(cmd->args, envp, status);
+	else if (!ft_strncmp(cmd->cmd, "env", 3))
+		exec_env(cmd->args, *envp, status);
+	else if (!ft_strncmp(cmd->cmd, "exit", 4))
+		exec_exit(cmd->args, status);
 }

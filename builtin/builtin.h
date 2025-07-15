@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 00:54:58 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 01:04:02 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void				update_or_add_entry(int j, char **tmp_list,
 						char *update_arg, int list_len);
 void				ft_key_value(char *arg, char **key, char **value);
 int					ft_option_check(char *argv, int *status, char *cmd);
-void two_free(char *str1, char *str2);
-void free_matrix_str(char **matrix);
+void				two_free(char *str1, char *str2);
+void				free_matrix_str(char **matrix);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 23:53:54 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/11 23:54:00 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 01:04:23 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int	ft_arglen(char **argv)
 	return (i);
 }
 
-void two_free(char *str1, char *str2)
+void	two_free(char *str1, char *str2)
 {
-	if(str1)
+	if (str1)
 		free(str1);
-	if(str2)
+	if (str2)
 		free(str2);
 }

@@ -6,11 +6,13 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:39:29 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 00:55:06 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 01:04:14 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+
+char	*remove_quote(char *str);
 
 char	**get_envp_list(char **envp_list)
 {
@@ -54,6 +56,8 @@ char	*search_envp(char *target, char **envp_list)
 {
 	size_t	len;
 	int		i;
+	char	*value;
+	char	*removed;
 
 	if (!target || !envp_list)
 		return (NULL);
@@ -64,16 +68,16 @@ char	*search_envp(char *target, char **envp_list)
 		if (ft_strncmp(envp_list[i], target, len) == 0
 			&& envp_list[i][len] == '=')
 		{
-			char *value = ft_strdup(envp_list[i] + len + 1);
+			value = ft_strdup(envp_list[i] + len + 1);
 			if (!value)
-				return NULL;
-			char *removed = remove_quote(value);
+				return (NULL);
+			removed = remove_quote(value);
 			if (removed != value)
 			{
 				free(value);
 				value = removed;
 			}
-			return value;
+			return (value);
 		}
 		i++;
 	}
@@ -93,8 +97,8 @@ int	is_builtint(t_cmd_node *cmd)
 
 void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 {
-	char **argv;
-	
+	char	**argv;
+
 	argv = ft_argv_filter(cmd->args, *envp, status);
 	if (!ft_strncmp(cmd->cmd, "echo", 4))
 		exec_echo(argv, *envp, status);

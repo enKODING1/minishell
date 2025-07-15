@@ -7,12 +7,10 @@ t_token_type *handle_in(t_lexer *self) {
         str[0] = '<';
         str[1] = '<';
         str[2] = '\0';
-        self->read_char(self); // 두 번째 '<' 다음으로 이동
         return new_token(HEREDOC, str);
     } else {
         str[0] = self->ch;
         str[1] = '\0';
-        self->read_char(self); // 다음 문자로 이동
         return new_token(IN, str);
     }
 }
@@ -24,12 +22,10 @@ t_token_type *handle_out(t_lexer *self) {
         str[0] = '>';
         str[1] = '>';
         str[2] = '\0';
-        self->read_char(self); // 두 번째 '>' 다음으로 이동
         return new_token(APPEND, str);
     } else {
         str[0] = self->ch;
         str[1] = '\0';
-        self->read_char(self); // 다음 문자로 이동
         return new_token(OUT, str);
     }
 } 

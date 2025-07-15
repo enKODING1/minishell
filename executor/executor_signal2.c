@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:17:25 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/15 20:19:55 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/15 22:48:37 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	pipe_signal(int left_status, int right_status, int *status)
 	}
 	else if ((left_status & 0x7F) == SIGQUIT)
 	{
-		ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
+		ft_putendl_fd("^\\Quit", STDERR_FILENO);
 		*status = left_status;
 		return ;
 	}
@@ -33,7 +33,7 @@ void	pipe_signal(int left_status, int right_status, int *status)
 	}
 	else if ((right_status & 0x7F) == SIGQUIT)
 	{
-		ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
+		ft_putendl_fd("^\\Quit", STDERR_FILENO);
 		*status = right_status;
 	}
 	signal(SIGINT, sig_c);
@@ -45,7 +45,7 @@ void external_signal(int *status)
     if((*status & 0x7F) == SIGINT)
         ft_putstr_fd("^C\n", STDERR_FILENO);
     else if((*status & 0x7F) == SIGQUIT)
-        ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
+        ft_putendl_fd("^\\Quit", STDERR_FILENO);
     signal(SIGINT, sig_c);
     signal(SIGQUIT, SIG_IGN);      
 }

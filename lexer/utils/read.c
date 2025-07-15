@@ -30,26 +30,19 @@ char * read_identifier(t_lexer *self)
     return ft_substr(self->input, position, self->position - position);
 }
 
-char * read_string(t_lexer *self)
+char *read_string(t_lexer *self)
 {
-    int position;
-    char quote;
+	int		start_pos;
+	char	quote_type;
 
-    quote = self->ch;
-    position = self->position; // 시작 따옴표 시작지점
-    self->read_char(self);
-    while(self->ch != quote)
-    {
-        if (self->ch == '\0')
-        {
-            // 닫히지 않은 따옴표 처리
-            break;
-        }
-        self->read_char(self);
-    }
-    if (self->ch == quote)
-        self->read_char(self);
-    return ft_substr(self->input, position, self->position - position);
+	quote_type = self->ch;
+	start_pos = self->position; // 여는 따옴표 위치에서 시작
+	read_char(self); // 여는 따옴표 소비
+	while (self->ch != quote_type && self->ch != '\0')
+		read_char(self);
+	if (self->ch == quote_type)
+		read_char(self); // 닫는 따옴표 소비
+	return (ft_substr(self->input, start_pos, self->position - start_pos));
 }
 
 int is_letter(int c)

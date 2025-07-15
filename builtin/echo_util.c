@@ -17,7 +17,7 @@ char	*find_name(char *str)
 	int	i;
 
 	i = 0;
-	if (ft_strlen(str) == 1 && ft_strcmp(str, "?") == 0)
+	if (str[0] == '?')
 		return (ft_substr(str, 0, 1));
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;

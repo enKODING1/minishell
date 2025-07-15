@@ -23,3 +23,11 @@ int	ft_arglen(char **argv)
 		i++;
 	return (i);
 }
+
+void two_free(char *str1, char *str2)
+{
+	if(str1)
+		free(str1);
+	if(str2)
+		free(str2);
+}

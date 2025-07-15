@@ -42,10 +42,9 @@ void	exec_pwd(char **argv, char **envp_list, int *status)
 	int		i;
 
 	i = -1;
-	str = NULL;
-	if (option_check(argv))
+	str = option_check(argv);
+	if (str)
 	{
-		str = option_check(argv);
 		exec_error_handler(STDERR_FILENO, "pwd", argv[0], " BAD OPTION");
 		free(str);
 		*status = 1;
@@ -61,4 +60,5 @@ void	exec_pwd(char **argv, char **envp_list, int *status)
 	}
 	else
 		echo_pwd(str, STDOUT_FILENO);
+	*status = 0;
 }

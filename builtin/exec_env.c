@@ -31,6 +31,8 @@ void	exec_env(char **argv, char **envp_list, int *status)
 	int	i;
 
 	i = 0;
+	if (ft_option_check(argv[0], status, "env"))
+		return ;
 	if (argv[0] != NULL)
 	{
 		exec_error_handler(STDERR_FILENO, "env", NULL, "INVALID ARG");

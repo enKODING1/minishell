@@ -39,10 +39,12 @@ int	handle_double_quote(char **str, char **envp_list, t_string_builder *list,
 	while (**str && **str != '"')
 	{
 		if (**str == '$')
-			*str += expand_env(*str + 1, envp_list, list, status);
+			*str += expand_env(*str + 1, envp_list, list, status) + 1;
 		else
+		{
 			append_char(list, **str);
-		(*str)++;
+			(*str)++;
+		}
 	}
 	if (!**str)
 	{

@@ -70,5 +70,6 @@ void				update_or_add_entry(int j, char **tmp_list,
 						char *update_arg, int list_len);
 void				ft_key_value(char *arg, char **key, char **value);
 int					ft_option_check(char *argv, int *status, char *cmd);
+void two_free(char *str1, char *str2);
 
 #endif

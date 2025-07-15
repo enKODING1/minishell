@@ -71,6 +71,7 @@ char	*set_path(char **argv, int *status, int *is_minus, char **envp_list)
 	{
 		path = get_path_from_env("HOME", envp_list, STDERR_FILENO, status);
 		chdir(path);
+		free(path);
 		return (ft_substr(argv[0], 2, ft_strlen(argv[0])));
 	}
 	else if (argv[0][0] == '-' && argv[0][1] == '\0')
@@ -79,7 +80,7 @@ char	*set_path(char **argv, int *status, int *is_minus, char **envp_list)
 		*is_minus = 1;
 	}
 	else
-		path = argv[0];
+		path = ft_strdup(argv[0]);
 	return (path);
 }
 
@@ -87,7 +88,6 @@ void	exec_cd(char **argv, char ***envp_list, int *status)
 {
 	char	*path;
 	char	*old_path;
-	int		num;
 	int		is_minus;
 
 	old_path = search_envp("PWD", *envp_list);
@@ -95,19 +95,19 @@ void	exec_cd(char **argv, char ***envp_list, int *status)
 	path = set_path(argv, status, &is_minus, *envp_list);
 	if (!path)
 		return ;
-	num = chdir(path);
-	if (num < 0)
+	if (chdir(path) < 0)
 	{
-		free(old_path);
 		*status = 1;
 		exec_error_handler(STDERR_FILENO, "cd", path, CD_DOES_NOT_EXIT_ERROR);
+		two_free(old_path, path);
 		return ;
 	}
 	set_env("OLDPWD", old_path, envp_list);
+	free(path);
 	path = getcwd(NULL, 0);
 	set_env("PWD", path, envp_list);
 	if (is_minus)
 		ft_putendl_fd(path, STDOUT_FILENO);
-	free(path);
-	free(old_path);
+	two_free(old_path, path);
+	*status = 0;
 }

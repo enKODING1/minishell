@@ -91,7 +91,7 @@ void run_command(t_cmd_node *cmd_node, char *cmd_path, char **envp)
     }
 }
 
-void external_command(t_cmd_node *cmd_node, char **envp, int *status)
+void external_command(t_cmd_node *cmd_node, t_minishell *shell_info)
 {
     int pid;
     char *cmd;
@@ -103,31 +103,33 @@ void external_command(t_cmd_node *cmd_node, char **envp, int *status)
     {
         signal(SIGINT, SIG_DFL);
         signal(SIGQUIT, SIG_DFL);
-        cmd = get_cmd_path(cmd_node->cmd, envp);
+        cmd = get_cmd_path(cmd_node->cmd, shell_info->envp);
         if (cmd_node->cmd != NULL && cmd == NULL)
         {
             printf("not found command\n");
+            shell_info->status = NOT_FOUND_CMD;
             return;
         }
-        redirection_handler(cmd_node, envp);
-        run_command(cmd_node, cmd, envp);
+        redirection_handler(cmd_node, shell_info);
+        run_command(cmd_node, cmd, shell_info->envp);
         free(cmd);
         exit(0);
     }
-    waitpid(pid, status, 0);
-    external_signal(status);
+    waitpid(pid, &shell_info->status, 0);
+    external_signal(&shell_info->status);   
 }
 
-void execute_pipe_command(t_cmd_node *cmd_node, char **envp)
+void execute_pipe_command(t_cmd_node *cmd_node, t_minishell *shell_info)
 {
     char *cmd;
-    cmd = get_cmd_path(cmd_node->cmd, envp);
+    cmd = get_cmd_path(cmd_node->cmd, shell_info->envp);
     if (cmd_node->cmd != NULL && cmd == NULL)
     {
         printf("not found command\n");
+        shell_info->status = NOT_FOUND_CMD;
         return ;
     }
-    redirection_handler(cmd_node, envp);
-    run_command(cmd_node, cmd, envp);
+    redirection_handler(cmd_node, shell_info);
+    run_command(cmd_node, cmd, shell_info->envp);
     free(cmd);
 } 

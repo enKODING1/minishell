@@ -27,7 +27,32 @@ char * remove_quote(char *str)
     return (ft_substr(str, 1, current_position - 1));
 }
 
-static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pipefd, int *status)
+char *remove_quote_equal(char *str)
+{
+    char *eq = ft_strchr(str, '=');
+    if (!eq)
+        return remove_quote(str); // 기존 방식
+    if (*(eq + 1) == '\"' || *(eq + 1) == '\'')
+    {
+        char quote = *(eq + 1);
+        char *last_quote = ft_strrchr(eq + 2, quote);
+        if (last_quote)
+        {
+            // 앞부분(a=) + 중간(hello) + 끝('\0')
+            int prefix_len = eq - str + 1;
+            int value_len = last_quote - (eq + 2);
+            char *result = malloc(prefix_len + value_len + 1);
+            if (!result) return NULL;
+            ft_memcpy(result, str, prefix_len); // a=
+            ft_memcpy(result + prefix_len, eq + 2, value_len); // hello
+            result[prefix_len + value_len] = '\0';
+            return result;
+        }
+    }
+    return remove_quote(str); // 기존 방식
+}
+
+static void execute_pipe_left_child(t_pipe_node *pipe_node, t_minishell *shell_info, int *pipefd)
 {
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);
@@ -36,7 +61,7 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
     close(pipefd[1]);
     if (pipe_node->left->type == NODE_PIPE)
     {
-        execute_pipe((t_pipe_node *)pipe_node->left, envp, status);
+        execute_pipe((t_pipe_node *)pipe_node->left, shell_info);
     } else if (pipe_node->left->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->left;
@@ -46,32 +71,29 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
         {
         while(cmd->args[i])
         {
-            if (cmd->args[i][0] == '\"' || cmd->args[i][0] == '\'')
-            {
                 char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote(cmd->args[i]);
+                char *removed_quote = remove_quote_equal(cmd->args[i]);
                 if (prev_quote != removed_quote)
                 {
                     free(prev_quote);
                     cmd->args[i] = removed_quote;
                 } 
-            }
             i++;
         }
         }
         if (cmd->cmd && is_builtint(cmd))
         {
-            redirection_handler(cmd, envp);
-            builtin_handler(cmd, &envp, status);
+            redirection_handler(cmd, shell_info);
+            builtin_handler(cmd, &shell_info->envp, &shell_info->status);
             exit(0);
         }
         else
-            execute_pipe_command((t_cmd_node *)pipe_node->left, envp);
+            execute_pipe_command((t_cmd_node *)pipe_node->left, shell_info);
     }
     exit(0);
 }
 
-static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *pipefd, int *status)
+static void execute_pipe_right_child(t_pipe_node *pipe_node, t_minishell *shell_info, int *pipefd)
 {
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);
@@ -80,7 +102,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
     close(pipefd[0]);
     if (pipe_node->right->type == NODE_PIPE)
     {
-        execute_pipe((t_pipe_node *)pipe_node->right, envp, status);
+        execute_pipe((t_pipe_node *)pipe_node->right, shell_info);
     } else if (pipe_node->right->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->right;
@@ -90,32 +112,29 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
         {
         while(cmd->args[i])
         {
-            if (cmd->args[i][0] == '\"' || cmd->args[i][0] == '\'')
-            {
                 char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote(cmd->args[i]);
+                char *removed_quote = remove_quote_equal(cmd->args[i]);
                 if (prev_quote != removed_quote)
                 {
                     free(prev_quote);
                     cmd->args[i] = removed_quote;
                 } 
-            }
             i++;
         }
         }
         if (cmd->cmd && is_builtint(cmd))
         {
-            redirection_handler(cmd, envp);
-            builtin_handler(cmd, &envp, status);
+            redirection_handler(cmd, shell_info);
+            builtin_handler(cmd, &shell_info->envp, &shell_info->status);
             exit(0);
         }
         else
-            execute_pipe_command((t_cmd_node *)pipe_node->right, envp);
+            execute_pipe_command((t_cmd_node *)pipe_node->right, shell_info);
     }
     exit(0);
 }
 
-void execute_pipe(t_pipe_node *pipe_node, char **envp, int *status)
+void execute_pipe(t_pipe_node *pipe_node, t_minishell *shell_info)
 {
     int pipefd[2];
     int left_status;
@@ -133,7 +152,7 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp, int *status)
     }
     if(left_pid == 0)
     {
-        execute_pipe_left_child(pipe_node, envp, pipefd, status);
+        execute_pipe_left_child(pipe_node, shell_info, pipefd);
     }
     int right_pid = fork();
     if(right_pid == -1)
@@ -143,56 +162,53 @@ void execute_pipe(t_pipe_node *pipe_node, char **envp, int *status)
     }
     if(right_pid == 0)
     {
-        execute_pipe_right_child(pipe_node, envp, pipefd, status);
+        execute_pipe_right_child(pipe_node, shell_info, pipefd);
     }
     close(pipefd[0]);
     close(pipefd[1]);
     waitpid(left_pid, &left_status, 0);
     waitpid(right_pid, &right_status, 0);
-    pipe_signal(left_status, right_status, status);
+    pipe_signal(left_status, right_status, &shell_info->status);     
 }
 
-void execute(t_node *node, char ***envp, int *status)
+void execute(t_node *node, t_minishell *shell_info)
 {
     if (!node) return;
     signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
     if (node->type == PIPE)
     {
-        execute_pipe((t_pipe_node *)node, *envp, status);    
+        execute_pipe((t_pipe_node *)node, shell_info);
         return;
     }
     else if(node->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)node;
-        
         int i = 0;
         if (ft_strncmp(cmd->cmd, "echo", 4) != 0)
         {
         while(cmd->args[i])
         {
-            if (cmd->args[i][0] == '\"' || cmd->args[i][0] == '\'')
-            {
                 char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote(cmd->args[i]);
+                char *removed_quote = remove_quote_equal(cmd->args[i]);
+                // printf("removed_quote: %s\n", removed_quote);
                 if (prev_quote != removed_quote)
                 {
                     // free(prev_quote);
                     cmd->args[i] = removed_quote;
                 } 
-            }
+            
             i++;
         }
         }
-
         if (cmd->cmd && is_builtint((t_cmd_node *)cmd))
         {
             int stdout_fd;
             int stdin_fd;
             stdout_fd = dup(STDOUT_FILENO);
             stdin_fd = dup(STDIN_FILENO);
-            redirection_handler(cmd, *envp);
-            builtin_handler(cmd, envp, status);
+            redirection_handler(cmd, shell_info);
+            builtin_handler(cmd, &shell_info->envp, &shell_info->status);
             dup2(stdout_fd, STDOUT_FILENO);
             dup2(stdin_fd, STDIN_FILENO);
             close(stdout_fd);
@@ -201,6 +217,6 @@ void execute(t_node *node, char ***envp, int *status)
             signal(SIGQUIT, SIG_IGN);    
             return;
         }
-        external_command(cmd, *envp, status);
+        external_command(cmd, shell_info);
     }
 } 

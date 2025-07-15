@@ -6,6 +6,8 @@
 #include <signal.h>
 #include <termios.h>
 
+#define NOT_FOUND_CMD 127
+
 typedef struct s_minishell{
   char **envp;
   int status;

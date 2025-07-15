@@ -107,6 +107,7 @@ void external_command(t_cmd_node *cmd_node, t_minishell *shell_info)
         if (cmd_node->cmd != NULL && cmd == NULL)
         {
             printf("not found command\n");
+            shell_info->status = NOT_FOUND_CMD;
             return;
         }
         redirection_handler(cmd_node, shell_info);
@@ -131,6 +132,7 @@ void execute_pipe_command(t_cmd_node *cmd_node, t_minishell *shell_info)
     if (cmd_node->cmd != NULL && cmd == NULL)
     {
         printf("not found command\n");
+        shell_info->status = NOT_FOUND_CMD;
         return ;
     }
     redirection_handler(cmd_node, shell_info);

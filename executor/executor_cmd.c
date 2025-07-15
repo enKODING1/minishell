@@ -108,7 +108,7 @@ void external_command(t_cmd_node *cmd_node, t_minishell *shell_info)
         {
             printf("not found command\n");
             shell_info->status = NOT_FOUND_CMD;
-            return;
+            exit(NOT_FOUND_CMD);
         }
         redirection_handler(cmd_node, shell_info);
         run_command(cmd_node, cmd, shell_info->envp);
@@ -133,7 +133,7 @@ void execute_pipe_command(t_cmd_node *cmd_node, t_minishell *shell_info)
     {
         printf("not found command\n");
         shell_info->status = NOT_FOUND_CMD;
-        return ;
+        exit(NOT_FOUND_CMD);
     }
     redirection_handler(cmd_node, shell_info);
     run_command(cmd_node, cmd, shell_info->envp);

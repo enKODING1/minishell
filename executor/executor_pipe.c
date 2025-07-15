@@ -40,6 +40,7 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, char **envp, int *pi
     } else if (pipe_node->left->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->left;
+        if (!cmd || !cmd->cmd) exit(0);
         int i = 0;
         if (ft_strncmp(cmd->cmd, "echo", 4) != 0)
         {
@@ -83,6 +84,7 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, char **envp, int *p
     } else if (pipe_node->right->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->right;
+        if (!cmd || !cmd->cmd) exit(0);
         int i = 0;
         if (ft_strncmp(cmd->cmd, "echo", 4) != 0)
         {

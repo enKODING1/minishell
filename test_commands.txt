@@ -1,0 +1,42 @@
+# 빌트인 명령어 테스트
+echo hello world
+echo -n no_newline
+env
+pwd
+export TESTVAR=42
+env | grep TESTVAR
+unset TESTVAR
+env | grep TESTVAR
+cd /
+pwd
+cd /tmp
+pwd
+cd
+pwd
+exit
+
+# 파이프 테스트
+echo hello | cat
+echo first | echo second | cat
+echo test | grep test | wc -l
+
+# 리다이렉션 테스트
+echo filetest > testfile.txt
+cat < testfile.txt
+echo append >> testfile.txt
+cat < testfile.txt
+rm testfile.txt
+
+# 파이프+리다이렉션 복합
+echo combo | tee combo.txt | cat > combo_out.txt
+cat combo_out.txt
+rm combo.txt combo_out.txt
+
+# 에러 상황
+echo | | cat
+ls | | | grep foo
+echo >
+cat <
+
+# 종료
+exit 

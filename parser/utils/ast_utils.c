@@ -64,8 +64,14 @@ void free_cmd_node(t_cmd_node *cmd_node)
         return;
     
     // cmd와 args의 각 원소는 토큰에서 관리하므로 해제하지 않음
-    if (cmd_node->args)
+    if (cmd_node->args) {
+        i = 0;
+        while (cmd_node->args[i]) {
+            free(cmd_node->args[i]);
+            i++;
+        }
         free(cmd_node->args);
+    }
     
     if (cmd_node->redirs)
         free_redir_list(cmd_node->redirs);

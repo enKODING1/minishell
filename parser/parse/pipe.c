@@ -21,7 +21,11 @@ t_node *parse_pipe(t_parser *parser)
 		pipe->type = NODE_PIPE;
 		pipe->left = node;
 		pipe->right = parse_pipe(parser);
-		if (parser->has_error) return NULL;
+		if (parser->has_error) {
+            free_ast((t_node *)pipe->left);
+            free(pipe);
+            return NULL;
+        }
 		return (t_node *)pipe;
 	}
 	return node;

@@ -30,4 +30,6 @@ void sig_c(int sig);
 void set_printf_off(void);
 void set_sig(void);
 void set_printf_on(void);
+void pipe_signal(int left_status, int right_status, int *status);
+void external_signal(int *status);
 #endif 

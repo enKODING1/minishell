@@ -46,6 +46,7 @@ SOURCES = ./lexer/lexer.c \
           ./executor/executor_redir.c \
           ./executor/executor_pipe.c \
           ./executor/executor_signal.c \
+          ./executor/executor_signal2.c \
           ./executor/executor.c \
           ./builtin/builtin_util.c \
           ./builtin/builtin_util2.c \

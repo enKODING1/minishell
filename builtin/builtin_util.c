@@ -6,13 +6,11 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:39:29 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 00:26:58 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:55:06 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-
-char * remove_quote(char *str);
 
 char	**get_envp_list(char **envp_list)
 {
@@ -28,7 +26,6 @@ char	**get_envp_list(char **envp_list)
 		tmp_list[i] = ft_strdup(envp_list[i]);
 		if (!tmp_list[i])
 		{
-			// 메모리 할당 실패 시 이전에 할당된 메모리 해제
 			while (i > 0)
 				free(tmp_list[--i]);
 			free(tmp_list);
@@ -113,4 +110,5 @@ void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 		exec_env(argv, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "exit", 4))
 		exec_exit(argv, status);
+	free_matrix_str(argv);
 }

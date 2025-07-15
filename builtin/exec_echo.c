@@ -6,13 +6,13 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:00:35 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 00:20:18 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:54:47 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-static void free_matrix(char **matrix)
+void free_matrix_str(char **matrix)
 {
     int i;
     if (!matrix)
@@ -70,6 +70,6 @@ void	exec_echo(char **argv, char **envp_list, int *status)
 	}
 	if (option == 0)
 		ft_putstr_fd("\n", STDOUT_FILENO);
-	free_matrix(argv);
+	free_matrix_str(argv);
 	*status = 0;
 }

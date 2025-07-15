@@ -73,7 +73,7 @@ void expand_and_write_line(int fd, char *line, t_minishell *shell_info)
             }
 
             start = i + 1;
-            while (line[i + 1] && (isalnum(line[i + 1]) || line[i + 1] == '_'))
+            while (line[i + 1] && (ft_isalnum(line[i + 1]) || line[i + 1] == '_'))
                 i++;
 
             var_name = ft_substr(line, start, i - start + 1);
@@ -81,7 +81,7 @@ void expand_and_write_line(int fd, char *line, t_minishell *shell_info)
 
             var_value = search_envp(var_name, shell_info->envp);
             if (var_value)
-                write(fd, var_value, strlen(var_value));
+                write(fd, var_value, ft_strlen(var_value));
 
             free(var_name);
             free(var_value);

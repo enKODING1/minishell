@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/15 07:06:38 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:37:36 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-# define CD_OPTION_ERROR "부적절한 옵션 \n cd: 사용법: cd [-L|[-P [-e]] [-@]] [<디렉터리>]"
-# define CD_ARG_ERROR "인자가 너무 많음"
-# define CD_DOES_NOT_EXIT_ERROR "그런 파일이나 디렉터리가 없습니다"
-# define EXPORT_DOSE_NOT_EQUAL "= 이외의 다른 문자가 들어왔습니다"
+# define CD_OPTION_ERROR "bad option"
+# define CD_ARG_ERROR "too many arg"
+# define CD_DOES_NOT_EXIT_ERROR "no such file or directory"
+# define EXPORT_DOSE_NOT_EQUAL "Invalid characters were entered"
 
 # include "libft.h"
 # include "parser.h"

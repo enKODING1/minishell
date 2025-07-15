@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_echo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:00:35 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/11 23:33:02 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:20:18 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,28 +50,26 @@ int	find_message(char **argv)
 
 void	exec_echo(char **argv, char **envp_list, int *status)
 {
-	char	**argv_list;
 	int		option;
 	int		i;
 
-	argv_list = ft_argv_filter(argv, envp_list, status);
-	i = find_message(argv_list);
+	i = find_message(argv);
 	option = (i > 0);
-	if (argv_list[i] == NULL)
+	if (argv[i] == NULL)
 	{
 		if (option == 0)
 			ft_putstr_fd("\n", STDOUT_FILENO);
 		return ;
 	}
-	while (argv_list[i])
+	while (argv[i])
 	{
-		ft_putstr_fd(argv_list[i], STDOUT_FILENO);
-		if (argv_list[i + 1] != NULL)
+		ft_putstr_fd(argv[i], STDOUT_FILENO);
+		if (argv[i + 1] != NULL)
 			ft_putstr_fd(" ", STDOUT_FILENO);
 		i++;
 	}
 	if (option == 0)
 		ft_putstr_fd("\n", STDOUT_FILENO);
-	free_matrix(argv_list);
+	free_matrix(argv);
 	*status = 0;
 }

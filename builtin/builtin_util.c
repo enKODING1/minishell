@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_util.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:39:29 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/11 23:54:22 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:26:58 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,18 +96,21 @@ int	is_builtint(t_cmd_node *cmd)
 
 void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 {
+	char **argv;
+	
+	argv = ft_argv_filter(cmd->args, *envp, status);
 	if (!ft_strncmp(cmd->cmd, "echo", 4))
-		exec_echo(cmd->args, *envp, status);
+		exec_echo(argv, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "pwd", 3))
-		exec_pwd(cmd->args, *envp, status);
+		exec_pwd(argv, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "cd", 2))
-		exec_cd(cmd->args, envp, status);
+		exec_cd(argv, envp, status);
 	else if (!ft_strncmp(cmd->cmd, "export", 6))
-		exec_export(NULL, cmd->args, envp, status);
+		exec_export(NULL, argv, envp, status);
 	else if (!ft_strncmp(cmd->cmd, "unset", 5))
-		exec_unset(cmd->args, envp, status);
+		exec_unset(argv, envp, status);
 	else if (!ft_strncmp(cmd->cmd, "env", 3))
-		exec_env(cmd->args, *envp, status);
+		exec_env(argv, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "exit", 4))
-		exec_exit(cmd->args, status);
+		exec_exit(argv, status);
 }

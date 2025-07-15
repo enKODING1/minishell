@@ -111,7 +111,8 @@ void external_command(t_cmd_node *cmd_node, t_minishell *shell_info)
             exit(NOT_FOUND_CMD);
         }
         redirection_handler(cmd_node, shell_info);
-        run_command(cmd_node, cmd, shell_info->envp);
+        if (cmd_node->cmd)
+            run_command(cmd_node, cmd, shell_info->envp);
         free(cmd);
         exit(0);
     }
@@ -136,6 +137,7 @@ void execute_pipe_command(t_cmd_node *cmd_node, t_minishell *shell_info)
         exit(NOT_FOUND_CMD);
     }
     redirection_handler(cmd_node, shell_info);
-    run_command(cmd_node, cmd, shell_info->envp);
+    if (cmd_node->cmd)
+        run_command(cmd_node, cmd, shell_info->envp);
     free(cmd);
 } 

@@ -27,6 +27,31 @@ char * remove_quote(char *str)
     return (ft_substr(str, 1, current_position - 1));
 }
 
+char *remove_quote_equal(char *str)
+{
+    char *eq = ft_strchr(str, '=');
+    if (!eq)
+        return remove_quote(str); // 기존 방식
+    if (*(eq + 1) == '\"' || *(eq + 1) == '\'')
+    {
+        char quote = *(eq + 1);
+        char *last_quote = ft_strrchr(eq + 2, quote);
+        if (last_quote)
+        {
+            // 앞부분(a=) + 중간(hello) + 끝('\0')
+            int prefix_len = eq - str + 1;
+            int value_len = last_quote - (eq + 2);
+            char *result = malloc(prefix_len + value_len + 1);
+            if (!result) return NULL;
+            ft_memcpy(result, str, prefix_len); // a=
+            ft_memcpy(result + prefix_len, eq + 2, value_len); // hello
+            result[prefix_len + value_len] = '\0';
+            return result;
+        }
+    }
+    return remove_quote(str); // 기존 방식
+}
+
 static void execute_pipe_left_child(t_pipe_node *pipe_node, t_minishell *shell_info, int *pipefd)
 {
     signal(SIGINT, SIG_DFL);
@@ -46,16 +71,13 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, t_minishell *shell_i
         {
         while(cmd->args[i])
         {
-            if (cmd->args[i][0] == '"' || cmd->args[i][0] == '\'')
-            {
                 char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote(cmd->args[i]);
+                char *removed_quote = remove_quote_equal(cmd->args[i]);
                 if (prev_quote != removed_quote)
                 {
                     free(prev_quote);
                     cmd->args[i] = removed_quote;
                 } 
-            }
             i++;
         }
         }
@@ -90,16 +112,13 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, t_minishell *shell_
         {
         while(cmd->args[i])
         {
-            if (cmd->args[i][0] == '"' || cmd->args[i][0] == '\'')
-            {
                 char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote(cmd->args[i]);
+                char *removed_quote = remove_quote_equal(cmd->args[i]);
                 if (prev_quote != removed_quote)
                 {
                     free(prev_quote);
                     cmd->args[i] = removed_quote;
                 } 
-            }
             i++;
         }
         }
@@ -193,16 +212,15 @@ void execute(t_node *node, t_minishell *shell_info)
         {
         while(cmd->args[i])
         {
-            if (cmd->args[i][0] == '"' || cmd->args[i][0] == '\'')
-            {
                 char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote(cmd->args[i]);
+                char *removed_quote = remove_quote_equal(cmd->args[i]);
+                printf("removed_quote: %s\n", removed_quote);
                 if (prev_quote != removed_quote)
                 {
                     // free(prev_quote);
                     cmd->args[i] = removed_quote;
                 } 
-            }
+            
             i++;
         }
         }

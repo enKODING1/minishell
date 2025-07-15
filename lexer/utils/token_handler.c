@@ -20,7 +20,23 @@ t_token_type *handle_end(t_lexer *self) {
 
 t_token_type *handle_word_or_single(t_lexer *self) {
     if (is_letter(self->ch)) {
-        char* ident = self->read_identifier(self);
+        int start = self->position;
+        while (is_letter(self->ch) || self->ch == '=') {
+            // 등호(=) 뒤에 따옴표가 오면 전체를 하나의 토큰으로 읽음
+            if (self->ch == '=' && (self->peek_char(self) == '\'' || self->peek_char(self) == '"')) {
+                self->read_char(self); // '='
+                char quote = self->ch;
+                self->read_char(self); // 따옴표
+                while (self->ch != quote && self->ch != '\0') {
+                    self->read_char(self);
+                }
+                if (self->ch == quote)
+                    self->read_char(self);
+                break;
+            }
+            self->read_char(self);
+        }
+        char *ident = ft_substr(self->input, start, self->position - start);
         t_token_type *tok = new_token(WORD, ident);
         free(ident);
         return tok;

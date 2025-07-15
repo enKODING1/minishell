@@ -12,6 +12,8 @@
 
 #include "builtin.h"
 
+char * remove_quote(char *str);
+
 char	**get_envp_list(char **envp_list)
 {
 	char	**tmp_list;
@@ -64,7 +66,18 @@ char	*search_envp(char *target, char **envp_list)
 	{
 		if (ft_strncmp(envp_list[i], target, len) == 0
 			&& envp_list[i][len] == '=')
-			return (ft_strdup(envp_list[i] + len + 1));
+		{
+			char *value = ft_strdup(envp_list[i] + len + 1);
+			if (!value)
+				return NULL;
+			char *removed = remove_quote(value);
+			if (removed != value)
+			{
+				free(value);
+				value = removed;
+			}
+			return value;
+		}
 		i++;
 	}
 	return (NULL);

@@ -54,7 +54,7 @@ char * read_string(t_lexer *self)
 
 int is_letter(int c)
 {
-    if (c >= 33 && c <= 126)
+    if ((c >= 33 && c <= 126) || (c >= 9 && c <= 13))
         return 1;
     return 0;
 }

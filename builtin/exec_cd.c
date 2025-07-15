@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 21:04:47 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/11 23:31:58 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:32:19 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,14 @@ char	*set_path(char **argv, int *status, int *is_minus, char **envp_list)
 	if (ft_arglen(argv) > 1)
 	{
 		exec_error_handler(STDERR_FILENO, "cd", NULL, CD_ARG_ERROR);
+		*status = 1;
 		return (NULL);
 	}
 	else if (argv[0] == NULL || argv[0][0] == '\0' || (argv[0][0] == '~'
-			&& argv[0][1] == '\0'))
+			&& argv[0][1] == '\0') || (ft_strlen(argv[0]) == 2
+			&& ft_strncmp(argv[0], "~/", 2) == 0))
 		path = get_path_from_env("HOME", envp_list, STDERR_FILENO, status);
-	else if (ft_strncmp(argv[0], "~/", 2) == 0)
+	else if (ft_strlen(argv[0]) != 2 && ft_strncmp(argv[0], "~/", 2) == 0)
 	{
 		path = get_path_from_env("HOME", envp_list, STDERR_FILENO, status);
 		chdir(path);

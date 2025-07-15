@@ -99,10 +99,23 @@ char **parse_input(char *line)
     while (token != NULL)
     {
         tokens[position] = ft_strdup(token);
+        if (!tokens[position])
+        {
+            // 메모리 할당 실패 시 이전에 할당된 메모리 해제
+            while (position > 0)
+                free(tokens[--position]);
+            free(tokens);
+            perror("malloc");
+            exit(1);
+        }
         position++;
         if (position >= bufsize)
         {
             fprintf(stderr, "minishell: too many arguments\n");
+            // 메모리 해제 후 종료
+            while (position > 0)
+                free(tokens[--position]);
+            free(tokens);
             exit(1);
         }
         token = strtok(NULL, " ");

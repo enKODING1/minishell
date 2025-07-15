@@ -29,16 +29,22 @@ char	**get_envp_list(char **envp_list)
 {
 	char	**tmp_list;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	tmp_list = malloc(sizeof(char *) * (ft_arglen(envp_list) + 1));
-	if (!envp_list)
+	if (!tmp_list)
 		return (NULL);
 	while (envp_list[i])
 	{
 		tmp_list[i] = ft_strdup(envp_list[i]);
+		if (!tmp_list[i])
+		{
+			// 메모리 할당 실패 시 이전에 할당된 메모리 해제
+			while (i > 0)
+				free(tmp_list[--i]);
+			free(tmp_list);
+			return (NULL);
+		}
 		i++;
 	}
 	tmp_list[i] = NULL;

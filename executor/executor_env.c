@@ -50,15 +50,19 @@ char *shell_lv_up(char **envp_list)
 {
     char *target;
     char *lv_str;
+    char *result;
     int level;
 
     target = search_envp("SHLVL", envp_list);
+    if (!target)
+        return ft_strdup("SHLVL=1");
+    
     level = ft_atoi(target);
     level++;
     lv_str = ft_itoa(level);
-    target = ft_strjoin("SHLVL=", lv_str);
+    result = ft_strjoin("SHLVL=", lv_str);
     free(lv_str);
-    return (target);
+    return (result);
 }
 
 char **main_init(int argc, char **argv, char **envp)

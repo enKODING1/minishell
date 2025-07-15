@@ -32,6 +32,7 @@ int main(int argc, char **argv, char **envp)
 		ast_root = parse_pipe(&parser);
 		execute(ast_root, envp_list);
 		free(line);
+		free_ast(ast_root);
 		free_token_list(tok_head);
 		free_lexer(lexer);
 	}

@@ -18,11 +18,11 @@ static void parse_and_print(char *input) {
     t_node *ast_root = parse_pipe(&parser);
     if (parser.has_error) {
         handle_parse_error();
-        // free_ast(ast_root);
+        free_ast(ast_root);
     } else {
         printf("--- 파싱 완료 ---\n\n");
         print_ast(ast_root, 0);
-        // free_ast(ast_root);
+        free_ast(ast_root);
     }
     free_token_list(tok_head);
     free_lexer(lexer);

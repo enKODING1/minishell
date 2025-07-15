@@ -22,6 +22,12 @@ t_token_type *new_token(t_token token_type, char *ch)
     /*token_type, ch 별도의 메모리 공간에 할당하기 ft_strdup */
     tok->type = token_type;
     tok->value = ft_strdup(ch);
+    if (!tok->value)
+    {
+        free(tok);
+        tok->value = NULL;
+        return NULL;
+    }
     return tok;
 }
 

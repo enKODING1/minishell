@@ -98,9 +98,30 @@ void free_ast(t_node *node)
 {
     if (!node)
         return;
-    
-    if (node->type == NODE_PIPE)
-        free_pipe_node((t_pipe_node *)node);
-    else if (node->type == NODE_CMD)
-        free_cmd_node((t_cmd_node *)node);
+
+    if (node->type == NODE_PIPE) {
+        t_pipe_node *pipe_node = (t_pipe_node *)node;
+        if (pipe_node->left) {
+            free_ast(pipe_node->left);
+            pipe_node->left = NULL;
+        }
+        if (pipe_node->right) {
+            free_ast(pipe_node->right);
+            pipe_node->right = NULL;
+        }
+        free(pipe_node);
+    }
+    else if (node->type == NODE_CMD) {
+        t_cmd_node *cmd_node = (t_cmd_node *)node;
+        if (cmd_node->args) {
+            // value는 free하지 않음!
+            free(cmd_node->args);
+            cmd_node->args = NULL;
+        }
+        if (cmd_node->redirs) {
+            free_redir_list(cmd_node->redirs);
+            cmd_node->redirs = NULL;
+        }
+        free(cmd_node);
+    }
 }

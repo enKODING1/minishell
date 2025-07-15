@@ -12,9 +12,11 @@ int main(int argc, char **argv, char **envp)
 	char **envp_list;
 	char *line;
 	int status;
+	t_minishell shell_info;
 
-	status = 0;
 	envp_list = main_init(argc,argv,envp);
+	shell_info.envp = envp_list;
+	shell_info.status = 0;
 	set_sig();
 	while (1)
 	{
@@ -30,7 +32,7 @@ int main(int argc, char **argv, char **envp)
 		tok_head = create_token_list(lexer);
 		parser_init(&parser, tok_head);
 		ast_root = parse_pipe(&parser);
-		execute(ast_root, &envp_list, &status);
+		execute(ast_root, &shell_info);
 		free(line);
 		free_ast(ast_root);
 		free_token_list(tok_head);

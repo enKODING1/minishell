@@ -91,7 +91,7 @@ void run_command(t_cmd_node *cmd_node, char *cmd_path, char **envp)
     }
 }
 
-void external_command(t_cmd_node *cmd_node, char **envp, int *status)
+void external_command(t_cmd_node *cmd_node, t_minishell *shell_info)
 {
     int pid;
     char *cmd;
@@ -103,36 +103,37 @@ void external_command(t_cmd_node *cmd_node, char **envp, int *status)
     {
         signal(SIGINT, SIG_DFL);
         signal(SIGQUIT, SIG_DFL);
-        cmd = get_cmd_path(cmd_node->cmd, envp);
+        cmd = get_cmd_path(cmd_node->cmd, shell_info->envp);
         if (cmd_node->cmd != NULL && cmd == NULL)
         {
             printf("not found command\n");
             return;
         }
-        redirection_handler(cmd_node, envp);
-        run_command(cmd_node, cmd, envp);
+        redirection_handler(cmd_node, shell_info);
+        run_command(cmd_node, cmd, shell_info->envp);
         free(cmd);
         exit(0);
     }
-    waitpid(pid, status, 0);
-    if((*status & 0x7F) == SIGINT)
+    waitpid(pid, &shell_info->status, 0);
+    
+    if((shell_info->status & 0x7F) == SIGINT)
         ft_putstr_fd("^C\n", STDERR_FILENO);
-    else if((*status & 0x7F) == SIGQUIT)
+    else if((shell_info->status & 0x7F) == SIGQUIT)
         ft_putendl_fd("^\\Quit (core dumped)", STDERR_FILENO);
     signal(SIGINT, sig_c);
     signal(SIGQUIT, SIG_IGN);        
 }
 
-void execute_pipe_command(t_cmd_node *cmd_node, char **envp)
+void execute_pipe_command(t_cmd_node *cmd_node, t_minishell *shell_info)
 {
     char *cmd;
-    cmd = get_cmd_path(cmd_node->cmd, envp);
+    cmd = get_cmd_path(cmd_node->cmd, shell_info->envp);
     if (cmd_node->cmd != NULL && cmd == NULL)
     {
         printf("not found command\n");
         return ;
     }
-    redirection_handler(cmd_node, envp);
-    run_command(cmd_node, cmd, envp);
+    redirection_handler(cmd_node, shell_info);
+    run_command(cmd_node, cmd, shell_info->envp);
     free(cmd);
 } 

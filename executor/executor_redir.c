@@ -43,7 +43,7 @@ static void handle_append_redir(const char *filename)
     close(fd);
 }
 
-void expand_and_write_line(int fd, char *line, char **envp)
+void expand_and_write_line(int fd, char *line, t_minishell *shell_info)
 {
 	int		i;
 	int		start;
@@ -66,7 +66,7 @@ void expand_and_write_line(int fd, char *line, char **envp)
             var_name = ft_substr(line, start, i - start + 1);
             if (!var_name) return; 
 			
-			var_value = search_envp(var_name, envp);
+			var_value = search_envp(var_name, shell_info->envp);
 			if (var_value)
 				write(fd, var_value, strlen(var_value));
 			
@@ -84,7 +84,7 @@ void expand_and_write_line(int fd, char *line, char **envp)
 }
 
 
-static void handle_heredoc(const char *limiter, char **envp)
+static void handle_heredoc(const char *limiter, t_minishell *shell_info)
 {
     int temp_fd;
     char *line;
@@ -124,7 +124,7 @@ static void handle_heredoc(const char *limiter, char **envp)
                 free(line);
                 break;
             }
-            expand_and_write_line(temp_fd, line, envp);
+            expand_and_write_line(temp_fd, line, shell_info);
             free(line);
         }
         
@@ -145,7 +145,7 @@ static void handle_heredoc(const char *limiter, char **envp)
 }
 
 
-void redirection_handler(t_cmd_node *cmd_node, char **envp)
+void redirection_handler(t_cmd_node *cmd_node, t_minishell *shell_info)
 {
     t_redir *redir = cmd_node->redirs;
     while(redir)
@@ -157,7 +157,7 @@ void redirection_handler(t_cmd_node *cmd_node, char **envp)
         if (redir->type == APPEND)
             handle_append_redir(redir->filename);
         if (redir->type == HEREDOC)
-            handle_heredoc(redir->filename, envp);
+            handle_heredoc(redir->filename, shell_info);
         redir = redir->next;
     }
 } 

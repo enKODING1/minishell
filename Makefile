@@ -4,38 +4,31 @@ NAME = test
 
 VPATH = ./executor ./builtin ./lexer ./parser
 
-# lexer test
-# SOURCES = ./lexer/test/lexer_test.c \
-           ./lexer/lexer.c \
-           ./lexer/utils/token_handler.c \
-           ./lexer/utils/redirection_handler.c \
-           ./lexer/utils/read.c \
-           ./lexer/utils/utils.c \
-           ./lexer/utils/free.c 
-
-# parser test
-# SOURCES = ./lexer/lexer.c \
-			    ./lexer/utils/utils.c \
+# Common source files
+COMMON_SOURCES = ./lexer/lexer.c \
+          ./lexer/utils/utils.c \
           ./lexer/utils/token_handler.c \
+          ./lexer/utils/token_word_handler.c \
           ./lexer/utils/redirection_handler.c \
           ./lexer/utils/read.c \
-          ./lexer/utils/free.c \
+          ./lexer/utils/free.c
+
+# lexer test sources
+LEXER_SOURCES = $(COMMON_SOURCES) \
+          ./lexer/test/lexer_test.c
+
+# parser test sources  
+PARSER_SOURCES = $(COMMON_SOURCES) \
           ./parser/test/parser_test.c \
           ./parser/utils/token_to_list.c \
           ./parser/utils/print_ast.c \
           ./parser/utils/ast_utils.c \
           ./parser/parse/cmd.c \
           ./parser/parse/pipe.c \
-          ./parser/parse/redirection.c 
+          ./parser/parse/redirection.c
 
-# executor test
-SOURCES = ./lexer/lexer.c \
-			    ./lexer/utils/utils.c \
-          ./lexer/utils/token_handler.c \
-          ./lexer/utils/token_word_handler.c \
-          ./lexer/utils/redirection_handler.c \
-          ./lexer/utils/read.c \
-          ./lexer/utils/free.c \
+# executor test sources
+EXECUTOR_SOURCES = $(COMMON_SOURCES) \
           ./parser/utils/token_to_list.c \
           ./parser/utils/print_ast.c \
           ./parser/utils/ast_utils.c \
@@ -71,7 +64,10 @@ SOURCES = ./lexer/lexer.c \
           ./lib/readline/cm_readline_utils.c \
           ./builtin/echo_util.c \
           ./builtin/echo_util2.c \
-          ./builtin/string_builder.c 
+          ./builtin/string_builder.c
+
+# Default to executor sources
+SOURCES = $(EXECUTOR_SOURCES)
 OBJECTS = $(SOURCES:.c=.o)
 
 LIBFT_DIR = ./lib/libft/
@@ -85,10 +81,45 @@ GNL_DIR = ./lib/readline/
 
 LIBFT_LIB = ${LIBFT_DIR}/libft.a
 
-all:$(NAME)
+all: $(NAME)
 
-$(NAME): $(LIBFT_LIB) $(OBJECTS) 
-	$(CC) $(CFLAG) -o $(NAME) $(OBJECTS) \
+help:
+	@echo "Available targets:"
+	@echo "  all       - Build executor (default)"
+	@echo "  lexer     - Build lexer test program"
+	@echo "  parser    - Build parser test program"  
+	@echo "  executor  - Build executor (same as all)"
+	@echo "  clean     - Remove object files"
+	@echo "  fclean    - Remove object files and executables"
+	@echo "  re        - Rebuild all"
+	@echo "  help      - Show this help message"
+
+
+
+# Lexer test target
+lexer: 
+	$(MAKE) lexer_test
+
+lexer_test: $(LIBFT_LIB) $(LEXER_SOURCES:.c=.o)
+	$(CC) $(CFLAG) -o lexer_test $(LEXER_SOURCES:.c=.o) \
+	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} -I${GNL_DIR} \
+	-L${LIBFT_DIR} -lft -lreadline
+
+# Parser test target
+parser:
+	$(MAKE) parser_test
+
+parser_test: $(LIBFT_LIB) $(PARSER_SOURCES:.c=.o)
+	$(CC) $(CFLAG) -o parser_test $(PARSER_SOURCES:.c=.o) \
+	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} -I${GNL_DIR} \
+	-L${LIBFT_DIR} -lft -lreadline
+
+# Executor test target
+executor:
+	$(MAKE) $(NAME)
+
+$(NAME): $(LIBFT_LIB) $(EXECUTOR_SOURCES:.c=.o)
+	$(CC) $(CFLAG) -o $(NAME) $(EXECUTOR_SOURCES:.c=.o) \
 	-I${LIBFT_DIR} -I${TOKEN_DIR} -I${LEXER_DIR} -I${PARSER_DIR} -I${BUILTIN_DIR} -I${EXEC_TESTER_DIR} -I${GNL_DIR} \
 	-L${LIBFT_DIR} -lft -lreadline
 
@@ -106,8 +137,8 @@ clean:
 
 fclean: clean
 	make fclean -C $(LIBFT_DIR)
-	rm -f $(NAME)
+	rm -f $(NAME) lexer_test parser_test
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re lexer parser executor lexer_test parser_test help

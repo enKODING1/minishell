@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 21:04:47 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 00:32:19 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 17:14:40 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ char	*get_path_from_env(char *str, char **envp_list, int fd, int *status)
 	path = search_envp(str, envp_list);
 	if (!path)
 	{
-		error_msg = ft_strjoin(str, " NOT SET \n");
-		exec_error_handler(fd, "cd :", NULL, error_msg);
+		error_msg = ft_strjoin(str, " NOT SET");
+		exec_error_handler(fd, "cd ", NULL, error_msg);
 		free(error_msg);
 		*status = 1;
 		return (NULL);
@@ -86,6 +86,23 @@ char	*set_path(char **argv, int *status, int *is_minus, char **envp_list)
 	return (path);
 }
 
+int	handle_cd_execution(char *path, char *old_path, int *status)
+{
+	if (!path)
+	{
+		two_free(old_path, path);
+		return (-1);
+	}
+	if (chdir(path) < 0)
+	{
+		*status = 1;
+		exec_error_handler(STDERR_FILENO, "cd", path, CD_DOES_NOT_EXIT_ERROR);
+		two_free(old_path, path);
+		return (-1);
+	}
+	return (0);
+}
+
 void	exec_cd(char **argv, char ***envp_list, int *status)
 {
 	char	*path;
@@ -95,15 +112,8 @@ void	exec_cd(char **argv, char ***envp_list, int *status)
 	old_path = search_envp("PWD", *envp_list);
 	is_minus = 0;
 	path = set_path(argv, status, &is_minus, *envp_list);
-	if (!path)
+	if (handle_cd_execution(path, old_path, status) == -1)
 		return ;
-	if (chdir(path) < 0)
-	{
-		*status = 1;
-		exec_error_handler(STDERR_FILENO, "cd", path, CD_DOES_NOT_EXIT_ERROR);
-		two_free(old_path, path);
-		return ;
-	}
 	set_env("OLDPWD", old_path, envp_list);
 	free(path);
 	path = getcwd(NULL, 0);

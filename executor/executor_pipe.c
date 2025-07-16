@@ -184,22 +184,22 @@ void execute(t_node *node, t_minishell *shell_info)
     else if(node->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)node;
-        int i = 0;
-        if (cmd->cmd && ft_strncmp(cmd->cmd, "echo", 4) != 0)
-        {
-        while(cmd->args[i])
-        {
-                char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote_equal(cmd->args[i]);
-                if (prev_quote != removed_quote)
-                {
-                    // free(prev_quote);
-                    cmd->args[i] = removed_quote;
-                } 
+        // int i = 0;
+        // if (cmd->cmd && ft_strncmp(cmd->cmd, "echo", 4) != 0)
+        // {
+        // while(cmd->args[i])
+        // {
+        //         char *prev_quote = cmd->args[i];
+        //         char *removed_quote = remove_quote_equal(cmd->args[i]);
+        //         if (prev_quote != removed_quote)
+        //         {
+        //             // free(prev_quote);
+        //             cmd->args[i] = removed_quote;
+        //         } 
             
-            i++;
-        }
-        }
+        //     i++;
+        // }
+        // }
         if (cmd->cmd && is_builtint((t_cmd_node *)cmd))
         {
             int stdout_fd;

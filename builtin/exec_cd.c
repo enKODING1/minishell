@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 21:04:47 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 17:14:40 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:26:42 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,37 +52,6 @@ char	*get_path_from_env(char *str, char **envp_list, int fd, int *status)
 		*status = 1;
 		return (NULL);
 	}
-	return (path);
-}
-
-char	*set_path(char **argv, int *status, int *is_minus, char **envp_list)
-{
-	char	*path;
-
-	if (ft_arglen(argv) > 1)
-	{
-		exec_error_handler(STDERR_FILENO, "cd", NULL, CD_ARG_ERROR);
-		*status = 1;
-		return (NULL);
-	}
-	else if (argv[0] == NULL || argv[0][0] == '\0' || (argv[0][0] == '~'
-			&& argv[0][1] == '\0') || (ft_strlen(argv[0]) == 2
-			&& ft_strncmp(argv[0], "~/", 2) == 0))
-		path = get_path_from_env("HOME", envp_list, STDERR_FILENO, status);
-	else if (ft_strlen(argv[0]) != 2 && ft_strncmp(argv[0], "~/", 2) == 0)
-	{
-		path = get_path_from_env("HOME", envp_list, STDERR_FILENO, status);
-		chdir(path);
-		free(path);
-		return (ft_substr(argv[0], 2, ft_strlen(argv[0])));
-	}
-	else if (argv[0][0] == '-' && argv[0][1] == '\0')
-	{
-		path = get_path_from_env("OLDPWD", envp_list, STDERR_FILENO, status);
-		*is_minus = 1;
-	}
-	else
-		path = ft_strdup(argv[0]);
 	return (path);
 }
 

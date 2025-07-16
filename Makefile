@@ -23,6 +23,8 @@ PARSER_SOURCES = $(COMMON_SOURCES) \
           ./parser/utils/token_to_list.c \
           ./parser/utils/print_ast.c \
           ./parser/utils/ast_utils.c \
+          ./parser/utils/free_ast.c \
+          ./parser/utils/free.c \
           ./parser/parse/cmd.c \
           ./parser/parse/pipe.c \
           ./parser/parse/redirection.c
@@ -32,6 +34,8 @@ EXECUTOR_SOURCES = $(COMMON_SOURCES) \
           ./parser/utils/token_to_list.c \
           ./parser/utils/print_ast.c \
           ./parser/utils/ast_utils.c \
+          ./parser/utils/free_ast.c \
+          ./parser/utils/free.c \
           ./parser/parse/cmd.c \
           ./parser/parse/pipe.c \
           ./parser/parse/redirection.c \
@@ -50,6 +54,7 @@ EXECUTOR_SOURCES = $(COMMON_SOURCES) \
           ./builtin/builtin_util.c \
           ./builtin/builtin_util2.c \
           ./builtin/exec_cd.c \
+          ./builtin/exec_cd2.c \
           ./builtin/exec_echo.c \
           ./builtin/exec_env.c \
           ./builtin/exec_error.c \

@@ -1,137 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ast_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 22:56:58 by skang             #+#    #+#             */
+/*   Updated: 2025/07/16 23:14:07 by skang            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser.h"
 
-void parser_init(t_parser *parser, t_token_node *tok_head)
+void	parser_init(t_parser *parser, t_token_node *tok_head)
 {
-    parser->current_token = tok_head;
-    parser->has_error = 0;
+	parser->current_token = tok_head;
+	parser->has_error = 0;
 }
 
-t_token_type * peek_token(t_parser *parser)
+t_token_type	*peek_token(t_parser *parser)
 {
-    if (parser->current_token == NULL)
-        return NULL;
-    return parser->current_token->token;
+	if (parser->current_token == NULL)
+		return (NULL);
+	return (parser->current_token->token);
 }
 
-void consume_token(t_parser *parser)
+void	consume_token(t_parser *parser)
 {
-    if (parser->current_token == NULL)
-        return;
-    parser->current_token = parser->current_token->next;
-}
-
-void free_token_list(t_token_node *head)
-{
-    if (!head)
-        return ;
-    t_token_node *ptr;
-    ptr = head;
-
-    while(ptr)
-    {
-        head = ptr->next;    
-        free_token(ptr->token);
-        free(ptr);
-        ptr = head;
-    }
-}
-
-// 리다이렉션 구조체 해제 함수
-void free_redir_list(t_redir *redir)
-{
-    t_redir *current;
-    t_redir *next;
-    
-    if (!redir)
-        return;
-    
-    current = redir;
-    while (current)
-    {
-        next = current->next;
-        if (current->filename)
-            free(current->filename);
-        free(current);
-        current = next;
-    }
-}
-
-// cmd_node 해제 함수
-void free_cmd_node(t_cmd_node *cmd_node)
-{
-    int i;
-    
-    if (!cmd_node)
-        return;
-    
-    if (cmd_node->cmd) {
-        free(cmd_node->cmd);
-    }
-    if (cmd_node->args) {
-        i = 0;
-        while (cmd_node->args[i]) {
-            free(cmd_node->args[i]);
-            i++;
-        }
-        free(cmd_node->args);
-    }
-    
-    if (cmd_node->redirs)
-        free_redir_list(cmd_node->redirs);
-    
-    free(cmd_node);
-}
-
-// pipe_node 해제 함수
-void free_pipe_node(t_pipe_node *pipe_node)
-{
-    if (!pipe_node)
-        return;
-    
-    if (pipe_node->left)
-        free_ast(pipe_node->left);
-    if (pipe_node->right)
-        free_ast(pipe_node->right);
-    
-    free(pipe_node);
-}
-
-// AST 전체 해제 함수
-void free_ast(t_node *node)
-{
-    if (!node)
-        return;
-
-    if (node->type == NODE_PIPE) {
-        t_pipe_node *pipe_node = (t_pipe_node *)node;
-        if (pipe_node->left) {
-            free_ast(pipe_node->left);
-            pipe_node->left = NULL;
-        }
-        if (pipe_node->right) {
-            free_ast(pipe_node->right);
-            pipe_node->right = NULL;
-        }
-        free(pipe_node);
-    }
-    else if (node->type == NODE_CMD) {
-        t_cmd_node *cmd_node = (t_cmd_node *)node;
-        if (cmd_node->cmd) {
-            free(cmd_node->cmd);
-        }
-        if (cmd_node->args) {
-            int i = 0;
-            while (cmd_node->args[i]) {
-                free(cmd_node->args[i]);
-                i++;
-            }
-            free(cmd_node->args);
-            cmd_node->args = NULL;
-        }
-        if (cmd_node->redirs) {
-            free_redir_list(cmd_node->redirs);
-            cmd_node->redirs = NULL;
-        }
-        free(cmd_node);
-    }
+	if (parser->current_token == NULL)
+		return ;
+	parser->current_token = parser->current_token->next;
 }

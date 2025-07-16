@@ -6,7 +6,7 @@
 /*   By: skang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 22:12:20 by skang             #+#    #+#             */
-/*   Updated: 2025/07/16 22:15:52 by skang            ###   ########.fr       */
+/*   Updated: 2025/07/17 00:34:25 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_token_type		*handle_pipe(t_lexer *self);
 t_token_type		*handle_in(t_lexer *self);
 t_token_type		*handle_out(t_lexer *self);
 t_token_type		*handle_quote(t_lexer *self);
-t_token_type		*handle_end(t_lexer *self);
+t_token_type		*handle_end(void);
 t_token_type		*handle_word_or_single(t_lexer *self);
 
 #endif

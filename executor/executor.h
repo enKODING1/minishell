@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 23:41:50 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 23:41:50 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 00:36:02 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void		execute_pipe_command(t_cmd_node *cmd_node, t_minishell *shell_info);
 
 // 유틸리티 함수들
 void		free_cmd_args(char **args);
+void		free_matrix(char **matrix);
 char		**replace_cmd_args(t_cmd_node *cmd, t_minishell *shell_info);
 void		cleanup_resources(char *line, t_node *ast_root,
 				t_token_node *tok_head, t_lexer *lexer);
@@ -63,6 +64,7 @@ void		execute(t_node *node, t_minishell *shell_info);
 
 // 시그널 및 터미널
 void		sig_c(int sig);
+void		set_signal_dfl(void);
 void		set_printf_off(void);
 void		set_sig(void);
 void		set_printf_on(void);

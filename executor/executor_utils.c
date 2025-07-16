@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 23:42:01 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 23:42:08 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 00:35:40 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,21 @@ char	**replace_cmd_args(t_cmd_node *cmd, t_minishell *shell_info)
 	free_cmd_args(old_args);
 	cmd->args = new_args;
 	return (new_args);
+}
+
+void	free_matrix(char **matrix)
+{
+	int	i;
+
+	if (!matrix)
+		return ;
+	i = 0;
+	while (matrix[i])
+	{
+		free(matrix[i]);
+		matrix[i] = NULL;
+		i++;
+	}
+	free(matrix);
+	matrix = NULL;
 }

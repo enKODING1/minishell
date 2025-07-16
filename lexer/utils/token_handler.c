@@ -56,7 +56,7 @@ t_token_type	*handle_quote(t_lexer *self)
 	return (tok);
 }
 
-t_token_type	*handle_end(t_lexer *self)
+t_token_type	*handle_end(void)
 {
 	return (new_token(END, ""));
 }
@@ -75,7 +75,7 @@ t_token_type	*next_token(t_lexer *self)
 	else if (self->ch == '\'' || self->ch == '"')
 		tok = handle_quote(self);
 	else if (self->ch == '\0')
-		tok = handle_end(self);
+		tok = handle_end();
 	else
 		tok = handle_word_or_single(self);
 	return (tok);

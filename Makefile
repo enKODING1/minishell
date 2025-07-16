@@ -1,5 +1,5 @@
 CC = cc -g
-# CFLAG = -Wall -Wextra -Werror
+CFLAG = -Wall -Wextra -Werror
 NAME = test
 
 VPATH = ./executor ./builtin ./lexer ./parser
@@ -51,6 +51,8 @@ EXECUTOR_SOURCES = $(COMMON_SOURCES) \
           ./executor/executor_signal.c \
           ./executor/executor_signal2.c \
           ./executor/executor.c \
+          ./executor/get_cmd_path.c \
+          ./executor/run_command.c \
           ./builtin/builtin_util.c \
           ./builtin/builtin_util2.c \
           ./builtin/exec_cd.c \

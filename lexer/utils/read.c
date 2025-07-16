@@ -14,7 +14,7 @@
 
 void	read_char(t_lexer *self)
 {
-	if (self->read_position >= ft_strlen(self->input))
+	if (self->read_position >= (int)ft_strlen(self->input))
 		self->ch = 0;
 	else
 		self->ch = self->input[self->read_position];
@@ -24,7 +24,7 @@ void	read_char(t_lexer *self)
 
 char	peek_char(t_lexer *self)
 {
-	if (self->read_position >= ft_strlen(self->input))
+	if (self->read_position >= (int)ft_strlen(self->input))
 		return (0);
 	return (self->input[self->read_position]);
 }

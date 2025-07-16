@@ -42,7 +42,7 @@ static char	*read_heredoc_line(void)
 	line = cm_readline(STDIN_FILENO);
 	if (line == NULL)
 	{
-		ft_putendl_fd("\n error heredoc", STDERR_FILENO);
+		ft_putendl_fd("\nminishell: warning", STDERR_FILENO);
 		exit(1);
 	}
 	i = 0;

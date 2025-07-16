@@ -14,7 +14,7 @@ t_redir *parse_redirs(t_parser *parser)
         return NULL; 
     }
 
-    redir_head->filename = peek_token(parser)->value;
+    redir_head->filename = ft_strdup(peek_token(parser)->value);
     consume_token(parser);
     return redir_head;
 }

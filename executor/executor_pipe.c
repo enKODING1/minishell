@@ -27,31 +27,6 @@ char * remove_quote(char *str)
     return (ft_substr(str, 1, current_position - 1));
 }
 
-char *remove_quote_equal(char *str)
-{
-    char *eq = ft_strchr(str, '=');
-    if (!eq)
-        return remove_quote(str); // 기존 방식
-    if (*(eq + 1) == '\"' || *(eq + 1) == '\'')
-    {
-        char quote = *(eq + 1);
-        char *last_quote = ft_strrchr(eq + 2, quote);
-        if (last_quote)
-        {
-            // 앞부분(a=) + 중간(hello) + 끝('\0')
-            int prefix_len = eq - str + 1;
-            int value_len = last_quote - (eq + 2);
-            char *result = malloc(prefix_len + value_len + 1);
-            if (!result) return NULL;
-            ft_memcpy(result, str, prefix_len); // a=
-            ft_memcpy(result + prefix_len, eq + 2, value_len); // hello
-            result[prefix_len + value_len] = '\0';
-            return result;
-        }
-    }
-    return remove_quote(str); // 기존 방식
-}
-
 static void execute_pipe_left_child(t_pipe_node *pipe_node, t_minishell *shell_info, int *pipefd)
 {
     signal(SIGINT, SIG_DFL);
@@ -66,9 +41,26 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, t_minishell *shell_i
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->left;
         if (!cmd || !cmd->cmd) exit(0);
-        char **args;
-        args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
-        cmd->args = args;
+        
+        // 기존 args 백업 및 새로운 args 생성
+        char **old_args = cmd->args;
+        char **new_args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
+        
+        if (!new_args)
+            exit(1);  // 메모리 할당 실패
+        
+        // 기존 args 메모리 해제
+        if (old_args) {
+            int i = 0;
+            while (old_args[i]) {
+                free(old_args[i]);
+                i++;
+            }
+            free(old_args);
+        }
+        
+        // 새로운 args로 교체
+        cmd->args = new_args;
         if (cmd->cmd && is_builtint(cmd))
         {
             redirection_handler(cmd, shell_info);
@@ -94,9 +86,26 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, t_minishell *shell_
     } else if (pipe_node->right->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->right;
-        char **args;
-        args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
-        cmd->args = args;
+        
+        // 기존 args 백업 및 새로운 args 생성
+        char **old_args = cmd->args;
+        char **new_args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
+        
+        if (!new_args)
+            exit(1);  // 메모리 할당 실패
+        
+        // 기존 args 메모리 해제
+        if (old_args) {
+            int i = 0;
+            while (old_args[i]) {
+                free(old_args[i]);
+                i++;
+            }
+            free(old_args);
+        }
+        
+        // 새로운 args로 교체
+        cmd->args = new_args;
         if (cmd->cmd && is_builtint(cmd))
         {
             redirection_handler(cmd, shell_info);
@@ -159,9 +168,29 @@ void execute(t_node *node, t_minishell *shell_info)
     else if(node->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)node;
-        char **args;
-        args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
-        cmd->args = args;
+        
+        // 기존 args 백업 및 새로운 args 생성
+        char **old_args = cmd->args;
+        char **new_args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
+        
+        if (!new_args)
+        {
+            shell_info->status = 1;
+            return;  // 메모리 할당 실패
+        }
+        
+        // 기존 args 메모리 해제
+        if (old_args) {
+            int i = 0;
+            while (old_args[i]) {
+                free(old_args[i]);
+                i++;
+            }
+            free(old_args);
+        }
+        
+        // 새로운 args로 교체
+        cmd->args = new_args;
        
         if (cmd->cmd && is_builtint((t_cmd_node *)cmd))
         {

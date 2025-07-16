@@ -77,9 +77,23 @@ void run_command(t_cmd_node *cmd_node, char *cmd_path, char **envp)
     }
     i = 0;
     args[0] = ft_strdup(cmd_node->cmd);
+    if (!args[0])
+    {
+        free(args);
+        exit(1);
+    }
     while(cmd_node->args[i])
     {
         args[i+1] = ft_strdup(cmd_node->args[i]);
+        if (!args[i+1])
+        {
+            // 부분적으로 할당된 메모리 해제
+            int j = 0;
+            while (j <= i)
+                free(args[j++]);
+            free(args);
+            exit(1);
+        }
         i++;
     }
     args[i+1] = NULL;

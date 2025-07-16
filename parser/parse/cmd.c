@@ -16,14 +16,14 @@ static char **ft_args_realloc(char **old, int old_cap, int new_cap) {
 static void parse_cmd_args(t_parser *parser, t_cmd_node *cmd_head, int *i, int *cap) {
     if (peek_token(parser)->type == WORD) {
         if (cmd_head->cmd == NULL)
-            cmd_head->cmd = peek_token(parser)->value;
+            cmd_head->cmd = ft_strdup(peek_token(parser)->value);
         else {
             if (*i + 2 >= *cap) {
                 int new_cap = (*cap) * 2;
                 cmd_head->args = ft_args_realloc(cmd_head->args, *cap, new_cap);
                 *cap = new_cap;
             }
-            cmd_head->args[(*i)++] = peek_token(parser)->value;
+            cmd_head->args[(*i)++] = ft_strdup(peek_token(parser)->value);
             cmd_head->args[*i] = NULL;
         }
         consume_token(parser);

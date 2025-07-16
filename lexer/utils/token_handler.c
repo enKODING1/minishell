@@ -4,6 +4,7 @@ t_token_type *handle_pipe(t_lexer *self) {
     char str[2];
     str[0] = self->ch;
     str[1] = '\0';
+    self->read_char(self);
     return new_token(PIPE, str);
 }
 
@@ -102,6 +103,5 @@ t_token_type *next_token(t_lexer *self){
         tok = handle_end(self);
     else 
         tok = handle_word_or_single(self);
-    self->read_char(self);
     return tok;
 }

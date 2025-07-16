@@ -49,7 +49,8 @@ void free_redir_list(t_redir *redir)
     while (current)
     {
         next = current->next;
-        // filename은 토큰에서 관리하므로 해제하지 않음
+        if (current->filename)
+            free(current->filename);
         free(current);
         current = next;
     }
@@ -63,7 +64,9 @@ void free_cmd_node(t_cmd_node *cmd_node)
     if (!cmd_node)
         return;
     
-    // cmd와 args의 각 원소는 토큰에서 관리하므로 해제하지 않음
+    if (cmd_node->cmd) {
+        free(cmd_node->cmd);
+    }
     if (cmd_node->args) {
         i = 0;
         while (cmd_node->args[i]) {
@@ -113,8 +116,15 @@ void free_ast(t_node *node)
     }
     else if (node->type == NODE_CMD) {
         t_cmd_node *cmd_node = (t_cmd_node *)node;
+        if (cmd_node->cmd) {
+            free(cmd_node->cmd);
+        }
         if (cmd_node->args) {
-            // value는 free하지 않음!
+            int i = 0;
+            while (cmd_node->args[i]) {
+                free(cmd_node->args[i]);
+                i++;
+            }
             free(cmd_node->args);
             cmd_node->args = NULL;
         }

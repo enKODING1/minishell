@@ -25,11 +25,23 @@ void run_command(t_cmd_node *cmd_node, char *cmd_path, char **envp);
 void external_command(t_cmd_node *cmd_node, t_minishell *shell_info);
 void execute_pipe_command(t_cmd_node *cmd_node, t_minishell *shell_info);
 
+// 유틸리티 함수들
+void free_cmd_args(char **args);
+char **replace_cmd_args(t_cmd_node *cmd, t_minishell *shell_info);
+
 // 리다이렉션
 void redirection_handler(t_cmd_node *cmd_node, t_minishell *shell_info);
 
+// heredoc 관련
+void handle_heredoc(const char *limiter, t_minishell *shell_info);
+
+// heredoc 확장 관련
+void expand_and_write_line(int fd, char *line, t_minishell *shell_info);
+
 // 파이프 및 실행
 void execute_pipe(t_pipe_node *pipe_node, t_minishell *shell_info);
+void execute_pipe_left_child(t_pipe_node *pipe_node, t_minishell *shell_info, int *pipefd);
+void execute_pipe_right_child(t_pipe_node *pipe_node, t_minishell *shell_info, int *pipefd);
 void execute(t_node *node, t_minishell *shell_info);
 
 // 시그널 및 터미널

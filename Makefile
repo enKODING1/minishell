@@ -32,6 +32,7 @@ VPATH = ./executor ./builtin ./lexer ./parser
 SOURCES = ./lexer/lexer.c \
 			    ./lexer/utils/utils.c \
           ./lexer/utils/token_handler.c \
+          ./lexer/utils/token_word_handler.c \
           ./lexer/utils/redirection_handler.c \
           ./lexer/utils/read.c \
           ./lexer/utils/free.c \
@@ -44,7 +45,12 @@ SOURCES = ./lexer/lexer.c \
           ./executor/executor_env.c \
           ./executor/executor_cmd.c \
           ./executor/executor_redir.c \
+          ./executor/executor_heredoc.c \
+          ./executor/executor_heredoc_expand.c \
           ./executor/executor_pipe.c \
+          ./executor/executor_pipe_utils.c \
+          ./executor/executor_pipe_children.c \
+          ./executor/executor_utils.c \
           ./executor/executor_signal.c \
           ./executor/executor_signal2.c \
           ./executor/executor.c \

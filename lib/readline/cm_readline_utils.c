@@ -1,7 +1,7 @@
 
-#include "get_next_line.h"
+#include "cm_readline.h"
 
-size_t	gnl_strlcpy(char *dest, const char *src, size_t n)
+size_t	cm_strlcpy(char *dest, const char *src, size_t n)
 {
 	size_t	index;
 
@@ -15,10 +15,10 @@ size_t	gnl_strlcpy(char *dest, const char *src, size_t n)
 		}
 		dest[index] = '\0';
 	}
-	return (gnl_strlen(src));
+	return (cm_strlen(src));
 }
 
-size_t	gnl_strlen(const char *s)
+size_t	cm_strlen(const char *s)
 {
 	size_t	count;
 
@@ -28,7 +28,7 @@ size_t	gnl_strlen(const char *s)
 	return (count);
 }
 
-char	*gnl_strcat(char *dest, char *src)
+char	*cm_strcat(char *dest, char *src)
 {
 	int	index;
 	int	dest_len;
@@ -46,13 +46,13 @@ char	*gnl_strcat(char *dest, char *src)
 	return (dest);
 }
 
-char	*gnl_strdup(const char *s)
+char	*cm_strdup(const char *s)
 {
 	char	*dup_s;
 	size_t	s_len;
 	size_t	index;
 
-	s_len = gnl_strlen(s);
+	s_len = cm_strlen(s);
 	dup_s = (char *)malloc(sizeof(char) * (s_len + 1));
 	if (dup_s == NULL)
 		return (NULL);
@@ -66,7 +66,7 @@ char	*gnl_strdup(const char *s)
 	return (dup_s);
 }
 
-char	*gnl_strchr(const char *s, int c)
+char	*cm_strchr(const char *s, int c)
 {
 	if (!s)
 		return (NULL);

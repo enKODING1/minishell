@@ -5,7 +5,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "builtin.h"
-#include "get_next_line.h"
+#include "cm_readline.h"
 
 
 
@@ -15,7 +15,7 @@ static char	*read_heredoc_line(void)
 	int		i;
 
 	ft_putstr_fd("> ", STDERR_FILENO);
-	line = get_next_line(STDIN_FILENO);
+	line = cm_readline(STDIN_FILENO);
 	if (line == NULL)
 	{
 		ft_putendl_fd("\n error heredoc", STDERR_FILENO);

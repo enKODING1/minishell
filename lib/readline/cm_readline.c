@@ -10,28 +10,28 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "cm_readline.h"
 
-static char	*gnl_substr(char const *s, unsigned int start, size_t len)
+static char	*cm_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*sub_s;
 	size_t	size;
 
 	if (!s)
 		return (NULL);
-	if ((unsigned int)gnl_strlen(s) <= (unsigned int)start)
-		return (gnl_strdup(""));
-	size = gnl_strlen(s + start);
+	if ((unsigned int)cm_strlen(s) <= (unsigned int)start)
+		return (cm_strdup(""));
+	size = cm_strlen(s + start);
 	if (size < len)
 		len = size;
 	sub_s = (char *)malloc(sizeof(char) * (len + 1));
 	if (!sub_s)
 		return (NULL);
-	gnl_strlcpy(sub_s, s + start, len + 1);
+	cm_strlcpy(sub_s, s + start, len + 1);
 	return (sub_s);
 }
 
-static char	*gnl_strjoin(char const *s1, char const *s2)
+static char	*cm_strjoin(char const *s1, char const *s2)
 {
 	char	*join_str;
 	size_t	s1_len;
@@ -39,13 +39,13 @@ static char	*gnl_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	s1_len = gnl_strlen((char *)s1);
-	s2_len = gnl_strlen((char *)s2);
+	s1_len = cm_strlen((char *)s1);
+	s2_len = cm_strlen((char *)s2);
 	join_str = (char *)malloc(s1_len + s2_len + 1);
 	if (join_str == NULL)
 		return (NULL);
-	gnl_strlcpy(join_str, (char *)s1, gnl_strlen(s1) + 1);
-	gnl_strcat(join_str, (char *)s2);
+	cm_strlcpy(join_str, (char *)s1, cm_strlen(s1) + 1);
+	cm_strcat(join_str, (char *)s2);
 	return (join_str);
 }
 
@@ -57,20 +57,20 @@ static char	*split_stash_by_newline(char **stash)
 	int		newline_index;
 
 	temp_stash = *stash;
-	newline_addr = gnl_strchr(*stash, '\n');
+	newline_addr = cm_strchr(*stash, '\n');
 	if (newline_addr)
 	{
 		newline_index = (++newline_addr) - *stash;
-		result = gnl_substr(*stash, 0, newline_index);
-		*stash = gnl_substr(*stash, newline_index, gnl_strlen(*stash));
+		result = cm_substr(*stash, 0, newline_index);
+		*stash = cm_substr(*stash, newline_index, cm_strlen(*stash));
 	}
 	else
 	{
-		result = gnl_strdup(*stash);
+		result = cm_strdup(*stash);
 		*stash = NULL;
 	}
 	free(temp_stash);
-	if (gnl_strlen(result) == 0 || !result)
+	if (cm_strlen(result) == 0 || !result)
 	{
 		free(result);
 		return (NULL);
@@ -78,7 +78,7 @@ static char	*split_stash_by_newline(char **stash)
 	return (result);
 }
 
-static char	*get_read_line(int fd, char *stash, ssize_t *buffer_read)
+static char	*cm_read_line(int fd, char *stash, ssize_t *buffer_read)
 {
 	char	*buffer;
 	char	*temp_stash;
@@ -95,18 +95,18 @@ static char	*get_read_line(int fd, char *stash, ssize_t *buffer_read)
 	}
 	buffer[*buffer_read] = '\0';
 	if (!stash)
-		stash = gnl_strdup(buffer);
+		stash = cm_strdup(buffer);
 	else
 	{
 		temp_stash = stash;
-		stash = gnl_strjoin(stash, buffer);
+		stash = cm_strjoin(stash, buffer);
 		free(temp_stash);
 	}
 	free(buffer);
 	return (stash);
 }
 
-char	*get_next_line(int fd)
+char	*cm_readline(int fd)
 {
 	static char	*stash;
 	ssize_t		buffer_read;
@@ -114,9 +114,9 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer_read = 1;
-	while (!gnl_strchr(stash, '\n') && buffer_read > 0)
-		stash = get_read_line(fd, stash, &buffer_read);
-	if (!stash || (buffer_read == 0 && gnl_strlen(stash) == 0))
+	while (!cm_strchr(stash, '\n') && buffer_read > 0)
+		stash = cm_read_line(fd, stash, &buffer_read);
+	if (!stash || (buffer_read == 0 && cm_strlen(stash) == 0))
 	{
 		free(stash);
 		stash = NULL;

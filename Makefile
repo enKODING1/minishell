@@ -50,6 +50,7 @@ EXECUTOR_SOURCES = $(COMMON_SOURCES) \
           ./builtin/builtin_util.c \
           ./builtin/builtin_util2.c \
           ./builtin/exec_cd.c \
+          ./builtin/exec_cd2.c \
           ./builtin/exec_echo.c \
           ./builtin/exec_env.c \
           ./builtin/exec_error.c \

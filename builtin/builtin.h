@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 18:31:03 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:26:12 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void				exec_error_handler(int fd, char *command, char *target,
 						char *error_message);
 void				exec_cd(char **argv, char ***envp_list, int *status);
 void				exec_env(char **argv, char **envp_list, int *status);
-void	exec_echo(char **argv, int *status);
+void				exec_echo(char **argv, int *status);
 void				exec_exit(char **argv, int *status);
 void				exec_export(char *env_vaiable, char **argv,
 						char ***envp_list, int *status);
@@ -71,5 +71,8 @@ void				update_or_add_entry(int j, char **tmp_list,
 void				ft_key_value(char *arg, char **key, char **value);
 int					ft_option_check(char *argv, int *status, char *cmd);
 void				two_free(char *str1, char *str2);
+char				*set_path(char **argv, int *status, int *is_minus,
+						char **envp_list);
+char	*get_path_from_env(char *str, char **envp_list, int fd, int *status);
 
 #endif

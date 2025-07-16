@@ -6,38 +6,13 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:39:29 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 18:33:41 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 22:16:39 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-char	*remove_quote(char *str);
-
-char	**get_envp_list(char **envp_list)
-{
-	char	**tmp_list;
-	int		i;
-
-	i = 0;
-	tmp_list = malloc(sizeof(char *) * (ft_arglen(envp_list) + 1));
-	if (!tmp_list)
-		return (NULL);
-	while (envp_list[i])
-	{
-		tmp_list[i] = ft_strdup(envp_list[i]);
-		if (!tmp_list[i])
-		{
-			while (i > 0)
-				free(tmp_list[--i]);
-			free(tmp_list);
-			return (NULL);
-		}
-		i++;
-	}
-	tmp_list[i] = NULL;
-	return (tmp_list);
-}
+char		*remove_quote(char *str);
 
 void	free_envp(char **envp_list)
 {
@@ -52,33 +27,37 @@ void	free_envp(char **envp_list)
 	free(envp_list);
 }
 
+static char	*get_value(char *env_str, size_t len)
+{
+	char	*value;
+	char	*removed;
+
+	value = ft_strdup(env_str + len + 1);
+	if (!value)
+		return (NULL);
+	removed = remove_quote(value);
+	if (removed != value)
+	{
+		free(value);
+		value = removed;
+	}
+	return (value);
+}
+
 char	*search_envp(char *target, char **envp_list)
 {
 	size_t	len;
 	int		i;
-	char	*value;
-	char	*removed;
 
 	if (!target || !envp_list)
 		return (NULL);
-	i = 0;
 	len = ft_strlen(target);
+	i = 0;
 	while (envp_list[i])
 	{
 		if (ft_strncmp(envp_list[i], target, len) == 0
 			&& envp_list[i][len] == '=')
-		{
-			value = ft_strdup(envp_list[i] + len + 1);
-			if (!value)
-				return (NULL);
-			removed = remove_quote(value);
-			if (removed != value)
-			{
-				free(value);
-				value = removed;
-			}
-			return (value);
-		}
+			return (get_value(envp_list[i], len));
 		i++;
 	}
 	return (NULL);
@@ -98,9 +77,8 @@ int	is_builtint(t_cmd_node *cmd)
 void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 {
 	char	**argv;
-	argv = cmd->args;
 
-	// argv = ft_argv_filter(cmd->args, *envp, status);
+	argv = cmd->args;
 	if (!ft_strncmp(cmd->cmd, "echo", 4))
 		exec_echo(argv, status);
 	else if (!ft_strncmp(cmd->cmd, "pwd", 3))
@@ -115,5 +93,4 @@ void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 		exec_env(argv, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "exit", 4))
 		exec_exit(argv, status);
-	// free_matrix_str(argv);
 }

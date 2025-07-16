@@ -66,21 +66,9 @@ static void execute_pipe_left_child(t_pipe_node *pipe_node, t_minishell *shell_i
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->left;
         if (!cmd || !cmd->cmd) exit(0);
-        int i = 0;
-        if (cmd->cmd && ft_strncmp(cmd->cmd, "echo", 4) != 0)
-        {
-        while(cmd->args[i])
-        {
-                char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote_equal(cmd->args[i]);
-                if (prev_quote != removed_quote)
-                {
-                    free(prev_quote);
-                    cmd->args[i] = removed_quote;
-                } 
-            i++;
-        }
-        }
+        char **args;
+        args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
+        cmd->args = args;
         if (cmd->cmd && is_builtint(cmd))
         {
             redirection_handler(cmd, shell_info);
@@ -106,22 +94,9 @@ static void execute_pipe_right_child(t_pipe_node *pipe_node, t_minishell *shell_
     } else if (pipe_node->right->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)pipe_node->right;
-        if (!cmd || !cmd->cmd) exit(0);
-        int i = 0;
-        if (cmd->cmd && ft_strncmp(cmd->cmd, "echo", 4) != 0)
-        {
-        while(cmd->args[i])
-        {
-                char *prev_quote = cmd->args[i];
-                char *removed_quote = remove_quote_equal(cmd->args[i]);
-                if (prev_quote != removed_quote)
-                {
-                    free(prev_quote);
-                    cmd->args[i] = removed_quote;
-                } 
-            i++;
-        }
-        }
+        char **args;
+        args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
+        cmd->args = args;
         if (cmd->cmd && is_builtint(cmd))
         {
             redirection_handler(cmd, shell_info);
@@ -184,22 +159,10 @@ void execute(t_node *node, t_minishell *shell_info)
     else if(node->type == NODE_CMD)
     {
         t_cmd_node *cmd = (t_cmd_node *)node;
-        // int i = 0;
-        // if (cmd->cmd && ft_strncmp(cmd->cmd, "echo", 4) != 0)
-        // {
-        // while(cmd->args[i])
-        // {
-        //         char *prev_quote = cmd->args[i];
-        //         char *removed_quote = remove_quote_equal(cmd->args[i]);
-        //         if (prev_quote != removed_quote)
-        //         {
-        //             // free(prev_quote);
-        //             cmd->args[i] = removed_quote;
-        //         } 
-            
-        //     i++;
-        // }
-        // }
+        char **args;
+        args = ft_argv_filter(cmd->args, shell_info->envp, &shell_info->status);
+        cmd->args = args;
+       
         if (cmd->cmd && is_builtint((t_cmd_node *)cmd))
         {
             int stdout_fd;

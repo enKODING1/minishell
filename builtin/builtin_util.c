@@ -98,8 +98,9 @@ int	is_builtint(t_cmd_node *cmd)
 void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 {
 	char	**argv;
+	argv = cmd->args;
 
-	argv = ft_argv_filter(cmd->args, *envp, status);
+	// argv = ft_argv_filter(cmd->args, *envp, status);
 	if (!ft_strncmp(cmd->cmd, "echo", 4))
 		exec_echo(argv, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "pwd", 3))
@@ -114,5 +115,5 @@ void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 		exec_env(argv, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "exit", 4))
 		exec_exit(argv, status);
-	free_matrix_str(argv);
+	// free_matrix_str(argv);
 }

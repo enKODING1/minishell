@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_pipe_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 23:20:04 by jinwpark          #+#    #+#             */
+/*   Updated: 2025/07/16 23:29:37 by jinwpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "executor.h"
 
-static int create_pipe_and_fork_left(t_pipe_node *pipe_node, 
-									t_minishell *shell_info, int *pipefd)
+static int	create_pipe_and_fork_left(t_pipe_node *pipe_node,
+		t_minishell *shell_info, int *pipefd)
 {
 	int	left_pid;
 
@@ -21,8 +33,8 @@ static int create_pipe_and_fork_left(t_pipe_node *pipe_node,
 	return (left_pid);
 }
 
-static int fork_right_child(t_pipe_node *pipe_node, 
-							t_minishell *shell_info, int *pipefd)
+static int	fork_right_child(t_pipe_node *pipe_node, t_minishell *shell_info,
+		int *pipefd)
 {
 	int	right_pid;
 
@@ -37,7 +49,7 @@ static int fork_right_child(t_pipe_node *pipe_node,
 	return (right_pid);
 }
 
-void execute_pipe(t_pipe_node *pipe_node, t_minishell *shell_info)
+void	execute_pipe(t_pipe_node *pipe_node, t_minishell *shell_info)
 {
 	int	pipefd[2];
 	int	left_status;
@@ -47,13 +59,13 @@ void execute_pipe(t_pipe_node *pipe_node, t_minishell *shell_info)
 
 	left_pid = create_pipe_and_fork_left(pipe_node, shell_info, pipefd);
 	if (left_pid == -1)
-		return;
+		return ;
 	right_pid = fork_right_child(pipe_node, shell_info, pipefd);
 	if (right_pid == -1)
-		return;
+		return ;
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(left_pid, &left_status, 0);
 	waitpid(right_pid, &right_status, 0);
 	pipe_signal(left_status, right_status, &shell_info->status);
-} 
+}

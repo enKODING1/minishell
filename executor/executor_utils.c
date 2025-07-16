@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 23:42:01 by jinwpark          #+#    #+#             */
+/*   Updated: 2025/07/16 23:42:08 by jinwpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "builtin.h"
 #include "executor.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "builtin.h"
 
-void	cleanup_resources(char *line, t_node *ast_root, 
-	t_token_node *tok_head, t_lexer *lexer)
+void	cleanup_resources(char *line, t_node *ast_root, t_token_node *tok_head,
+		t_lexer *lexer)
 {
 	free(line);
 	free_ast(ast_root);
@@ -12,12 +24,12 @@ void	cleanup_resources(char *line, t_node *ast_root,
 	free_lexer(lexer);
 }
 
-void free_cmd_args(char **args)
+void	free_cmd_args(char **args)
 {
 	int	i;
 
 	if (!args)
-		return;
+		return ;
 	i = 0;
 	while (args[i])
 	{
@@ -27,7 +39,7 @@ void free_cmd_args(char **args)
 	free(args);
 }
 
-char **replace_cmd_args(t_cmd_node *cmd, t_minishell *shell_info)
+char	**replace_cmd_args(t_cmd_node *cmd, t_minishell *shell_info)
 {
 	char	**old_args;
 	char	**new_args;
@@ -39,4 +51,4 @@ char **replace_cmd_args(t_cmd_node *cmd, t_minishell *shell_info)
 	free_cmd_args(old_args);
 	cmd->args = new_args;
 	return (new_args);
-} 
+}

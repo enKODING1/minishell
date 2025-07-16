@@ -1,17 +1,27 @@
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "executor.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 23:42:23 by jinwpark          #+#    #+#             */
+/*   Updated: 2025/07/16 23:42:31 by jinwpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static void	init_shell(t_minishell *shell_info, int argc, char **argv, 
-	char **envp)
+#include "executor.h"
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <stdio.h>
+
+static void	init_shell(t_minishell *shell_info, int argc, char **argv,
+		char **envp)
 {
 	shell_info->envp = main_init(argc, argv, envp);
 	shell_info->status = 0;
 	set_sig();
 }
-
-
 
 static int	process_input_line(char **line)
 {
@@ -28,12 +38,12 @@ static int	process_input_line(char **line)
 
 static void	execute_command_line(char *line, t_minishell *shell_info)
 {
-	t_lexer		*lexer;
+	t_lexer			*lexer;
 	t_token_node	*tok_head;
-	t_parser	parser;
-	t_node		*ast_root;
+	t_parser		parser;
+	t_node			*ast_root;
 
-	lexer = new(line);
+	lexer = new (line);
 	tok_head = create_token_list(lexer);
 	parser_init(&parser, tok_head);
 	ast_root = parse_pipe(&parser);

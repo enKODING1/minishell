@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_heredoc_expand.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 23:30:23 by jinwpark          #+#    #+#             */
+/*   Updated: 2025/07/16 23:44:13 by jinwpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "builtin.h"
 #include "executor.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "builtin.h"
 
 static void	write_status_variable(int fd, t_minishell *shell_info)
 {
@@ -17,8 +29,8 @@ static void	write_status_variable(int fd, t_minishell *shell_info)
 	free(status_str);
 }
 
-static void	write_env_variable(int fd, char *line, int *i, 
-	t_minishell *shell_info)
+static void	write_env_variable(int fd, char *line, int *i,
+		t_minishell *shell_info)
 {
 	int		start;
 	char	*var_name;
@@ -42,9 +54,9 @@ void	expand_and_write_line(int fd, char *line, t_minishell *shell_info)
 	int	i;
 	int	start;
 
-	i = 0;
+	i = -1;
 	start = 0;
-	while (line[i])
+	while (line[++i])
 	{
 		if (line[i] == '$')
 		{
@@ -60,9 +72,8 @@ void	expand_and_write_line(int fd, char *line, t_minishell *shell_info)
 			write_env_variable(fd, line, &i, shell_info);
 			start = i + 1;
 		}
-		i++;
 	}
 	if (i > start)
 		write(fd, line + start, i - start);
 	write(fd, "\n", 1);
-} 
+}

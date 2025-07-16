@@ -1,11 +1,23 @@
-#include "executor.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_heredoc.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 23:30:41 by jinwpark          #+#    #+#             */
+/*   Updated: 2025/07/16 23:30:50 by jinwpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtin.h"
 #include "cm_readline.h"
+#include "executor.h"
+#include <fcntl.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static void	cm_clear_buffer(void)
 {
@@ -20,8 +32,6 @@ static void	cm_clear_buffer(void)
 		free(dummy_line);
 	close(dev_null_fd);
 }
-
-
 
 static char	*read_heredoc_line(void)
 {
@@ -42,8 +52,7 @@ static char	*read_heredoc_line(void)
 	return (line);
 }
 
-static void	heredoc_child_process(const char *limiter, 
-	t_minishell *shell_info)
+static void	heredoc_child_process(const char *limiter, t_minishell *shell_info)
 {
 	int		temp_fd;
 	char	*line;
@@ -96,4 +105,4 @@ void	handle_heredoc(const char *limiter, t_minishell *shell_info)
 	{
 		heredoc_parent_process(temp_fd, pid);
 	}
-} 
+}

@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:39:29 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 01:04:14 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 18:33:41 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	builtin_handler(t_cmd_node *cmd, char ***envp, int *status)
 
 	// argv = ft_argv_filter(cmd->args, *envp, status);
 	if (!ft_strncmp(cmd->cmd, "echo", 4))
-		exec_echo(argv, *envp, status);
+		exec_echo(argv, status);
 	else if (!ft_strncmp(cmd->cmd, "pwd", 3))
 		exec_pwd(argv, *envp, status);
 	else if (!ft_strncmp(cmd->cmd, "cd", 2))

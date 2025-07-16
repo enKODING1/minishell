@@ -6,28 +6,11 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:00:35 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 01:19:21 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 18:30:27 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-
-void	free_matrix_str(char **matrix)
-{
-	int	i;
-
-	if (!matrix)
-		return ;
-	i = 0;
-	while (matrix[i])
-	{
-		free(matrix[i]);
-		matrix[i] = NULL;
-		i++;
-	}
-	free(matrix);
-	matrix = NULL;
-}
 
 int	find_message(char **argv)
 {
@@ -49,7 +32,7 @@ int	find_message(char **argv)
 	return (i);
 }
 
-void	exec_echo(char **argv, char **envp_list, int *status)
+void	exec_echo(char **argv, int *status)
 {
 	int	option;
 	int	i;

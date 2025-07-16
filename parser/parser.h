@@ -73,7 +73,6 @@ void					consume_token(t_parser *parser);
 void					free_token_list(t_token_node *head);
 void					free_ast(t_node *node);
 void					free_cmd_node(t_cmd_node *cmd_node);
-void					free_pipe_node(t_pipe_node *pipe_node);
 void					free_redir_list(t_redir *redir);
 void					print_ast(t_node *node, int indent);
 

@@ -3,6 +3,15 @@
 #include <stdlib.h>
 #include "builtin.h"
 
+void	cleanup_resources(char *line, t_node *ast_root, 
+	t_token_node *tok_head, t_lexer *lexer)
+{
+	free(line);
+	free_ast(ast_root);
+	free_token_list(tok_head);
+	free_lexer(lexer);
+}
+
 void free_cmd_args(char **args)
 {
 	int	i;

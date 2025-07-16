@@ -28,6 +28,7 @@ void execute_pipe_command(t_cmd_node *cmd_node, t_minishell *shell_info);
 // 유틸리티 함수들
 void free_cmd_args(char **args);
 char **replace_cmd_args(t_cmd_node *cmd, t_minishell *shell_info);
+void cleanup_resources(char *line, t_node *ast_root, t_token_node *tok_head, t_lexer *lexer);
 
 // 리다이렉션
 void redirection_handler(t_cmd_node *cmd_node, t_minishell *shell_info);

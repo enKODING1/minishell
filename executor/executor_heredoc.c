@@ -7,6 +7,20 @@
 #include "builtin.h"
 #include "cm_readline.h"
 
+static void	cm_clear_buffer(void)
+{
+	int		dev_null_fd;
+	char	*dummy_line;
+
+	dev_null_fd = open("/dev/null", O_RDONLY);
+	if (dev_null_fd == -1)
+		return ;
+	dummy_line = cm_readline(dev_null_fd);
+	if (dummy_line)
+		free(dummy_line);
+	close(dev_null_fd);
+}
+
 
 
 static char	*read_heredoc_line(void)
@@ -58,6 +72,7 @@ static void	heredoc_parent_process(int temp_fd, pid_t pid)
 
 	close(temp_fd);
 	waitpid(pid, &status, 0);
+	cm_clear_buffer();
 	temp_fd = open("/tmp/heredoc_tmp", O_RDONLY);
 	dup2(temp_fd, STDIN_FILENO);
 	close(temp_fd);

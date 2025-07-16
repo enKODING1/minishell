@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_unset.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:20:54 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/15 07:02:06 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/16 18:34:19 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,6 @@ void	process_unset(char **argv, char ***envp_list, size_t i, size_t j)
 
 void	exec_unset(char **argv, char ***envp_list, int *status)
 {
-	size_t	key_len;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
 	if (ft_option_check(argv[0], status, "unset"))
 		return ;
 	process_unset(argv, envp_list, 0, 0);

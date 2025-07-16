@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 22:26:12 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 00:12:02 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int					ft_option_check(char *argv, int *status, char *cmd);
 void				two_free(char *str1, char *str2);
 char				*set_path(char **argv, int *status, int *is_minus,
 						char **envp_list);
-char	*get_path_from_env(char *str, char **envp_list, int fd, int *status);
+char				*get_path_from_env(char *str, char **envp_list, int fd,
+						int *status);
 
 #endif

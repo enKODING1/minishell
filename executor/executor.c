@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 23:42:23 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 23:52:09 by skang            ###   ########.fr       */
+/*   Updated: 2025/07/17 19:19:26 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ int	main(int argc, char **argv, char **envp)
 	shell_loop(&shell_info);
 	free_envp_tmp(shell_info.envp);
 	set_printf_on();
+	rl_clear_history();
 	return (0);
 }

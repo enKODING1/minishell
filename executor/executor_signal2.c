@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 20:17:25 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/17 17:24:22 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 19:19:40 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ void	external_signal(int *status)
 			ft_putendl_fd("^\\Quit", STDERR_FILENO);
 			*status = 131;
 		}
+	}
+	else
+	{
+		if (WIFEXITED(*status))
+			*status = WEXITSTATUS(*status);
+		else if (WIFSIGNALED(*status))
+			*status = 128 + WTERMSIG(*status);
 	}
 	signal(SIGINT, sig_c);
 	signal(SIGQUIT, SIG_IGN);

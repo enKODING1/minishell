@@ -51,7 +51,7 @@ void	execute(t_node *node, t_minishell *shell_info)
 		return ;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-	if (node->type == PIPE)
+	if (node->type == NODE_PIPE)
 	{
 		execute_pipe((t_pipe_node *)node, shell_info);
 		return ;

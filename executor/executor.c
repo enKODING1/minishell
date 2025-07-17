@@ -47,6 +47,8 @@ static void	execute_command_line(char *line, t_minishell *shell_info)
 	tok_head = create_token_list(lexer);
 	parser_init(&parser, tok_head);
 	ast_root = parse_pipe(&parser);
+	if (parser.has_error)
+		printf("minishell: syntax error near unexpected token\n");
 	execute(ast_root, shell_info);
 	cleanup_resources(line, ast_root, tok_head, lexer);
 }

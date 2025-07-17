@@ -43,6 +43,12 @@ t_token_node	*create_token_list(t_lexer *lexer)
 			break ;
 		}
 		tok_node = create_token_node(tok);
+		if (!tok_node)
+		{
+			free_token(tok);
+			free_token_list(tok_head);
+			return (NULL);
+		}
 		add_token_node(&tok_head, tok_node);
 	}
 	return (tok_head);

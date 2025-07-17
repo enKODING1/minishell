@@ -52,6 +52,8 @@ char	*ft_advanced_substr(char *str, char **envp_list, int *status)
 	int					error_check;
 
 	list = builder_init();
+	if (!list)
+		return (NULL);
 	error_check = 0;
 	while (*str && !error_check)
 	{
@@ -84,9 +86,18 @@ char	**ft_argv_filter(char **argv, char **envp_list, int *status)
 	len = ft_arglen(argv);
 	i = 0;
 	argv_list = malloc(sizeof(char *) * (len + 1));
+	if (!argv_list)
+		return (NULL);
 	while (i < len)
 	{
 		argv_list[i] = ft_advanced_substr(argv[i], envp_list, status);
+		if (!argv_list[i])
+		{
+			while (i > 0)
+				free(argv_list[--i]);
+			free(argv_list);
+			return (NULL);
+		}
 		i++;
 	}
 	argv_list[i] = NULL;

@@ -46,7 +46,8 @@ static void	write_env_variable(int fd, char *line, int *i,
 	if (var_value)
 		write(fd, var_value, ft_strlen(var_value));
 	free(var_name);
-	free(var_value);
+	if (var_value)
+		free(var_value);
 }
 
 void	expand_and_write_line(int fd, char *line, t_minishell *shell_info)

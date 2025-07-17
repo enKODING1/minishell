@@ -78,6 +78,8 @@ char	*free_return_str(t_string_builder *sb)
 
 void	free_builder(t_string_builder *sb)
 {
+	if (!sb)
+		return ;
 	free(sb->str);
 	free(sb);
 }

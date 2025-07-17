@@ -26,6 +26,8 @@ static int	create_pipe_and_fork_left(t_pipe_node *pipe_node,
 	if (left_pid == -1)
 	{
 		printf("fork error\n");
+		close(pipefd[0]);
+		close(pipefd[1]);
 		return (-1);
 	}
 	if (left_pid == 0)
@@ -42,6 +44,8 @@ static int	fork_right_child(t_pipe_node *pipe_node, t_minishell *shell_info,
 	if (right_pid == -1)
 	{
 		printf("fork error\n");
+		close(pipefd[0]);
+		close(pipefd[1]);
 		return (-1);
 	}
 	if (right_pid == 0)
@@ -62,7 +66,10 @@ void	execute_pipe(t_pipe_node *pipe_node, t_minishell *shell_info)
 		return ;
 	right_pid = fork_right_child(pipe_node, shell_info, pipefd);
 	if (right_pid == -1)
+	{
+		waitpid(left_pid, &left_status, 0);
 		return ;
+	}
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(left_pid, &left_status, 0);

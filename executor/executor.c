@@ -44,7 +44,14 @@ static void	execute_command_line(char *line, t_minishell *shell_info)
 	t_node			*ast_root;
 
 	lexer = new (line);
+	if (!lexer)
+		return ;
 	tok_head = create_token_list(lexer);
+	if (!tok_head)
+	{
+		free_lexer(lexer);
+		return ;
+	}
 	parser_init(&parser, tok_head);
 	ast_root = parse_pipe(&parser);
 	if (parser.has_error)

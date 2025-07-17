@@ -17,6 +17,11 @@ t_redir	*parse_redirs(t_parser *parser)
 	t_redir	*redir_head;
 
 	redir_head = (t_redir *)ft_calloc(1, sizeof(t_redir));
+	if (!redir_head)
+	{
+		parser->has_error = 1;
+		return (NULL);
+	}
 	redir_head->type = peek_token(parser)->type;
 	consume_token(parser);
 	if (!peek_token(parser) || peek_token(parser)->type != WORD)
@@ -26,6 +31,12 @@ t_redir	*parse_redirs(t_parser *parser)
 		return (NULL);
 	}
 	redir_head->filename = ft_strdup(peek_token(parser)->value);
+	if (!redir_head->filename)
+	{
+		parser->has_error = 1;
+		free(redir_head);
+		return (NULL);
+	}
 	consume_token(parser);
 	return (redir_head);
 }

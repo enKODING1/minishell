@@ -76,6 +76,8 @@ void	echo_export(char **envp_list, int fd)
 
 	j = 0;
 	tmp_list = get_envp_list(envp_list);
+	if (!tmp_list)
+		return ;
 	sort_envp(tmp_list);
 	while (tmp_list[j])
 	{

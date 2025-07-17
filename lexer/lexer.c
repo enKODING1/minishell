@@ -17,7 +17,14 @@ t_lexer	*new(char *input)
 	t_lexer	*lexer;
 
 	lexer = (t_lexer *)ft_calloc(sizeof(t_lexer), 1);
+	if (!lexer)
+		return (NULL);
 	lexer->input = ft_strdup(input);
+	if (!lexer->input)
+	{
+		free(lexer);
+		return (NULL);
+	}
 	lexer->read_char = read_char;
 	lexer->next_token = next_token;
 	lexer->read_identifier = read_identifier;

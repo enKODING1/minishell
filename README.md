@@ -25,7 +25,7 @@
 ### **토큰 정의**
 ``` BNF
 typedef enum e_token{
-	PIPE,  |
+	PIPE,     // |
 	HEREDOC,  // <<
 	APPEND,   // >>
 	OUT,      // >

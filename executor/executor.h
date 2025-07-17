@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 23:41:50 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/17 00:36:02 by skang            ###   ########.fr       */
+/*   Updated: 2025/07/17 17:24:45 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void		set_signal_dfl(void);
 void		set_printf_off(void);
 void		set_sig(void);
 void		set_printf_on(void);
-void		pipe_signal(int left_status, int right_status, int *status);
+void		pipe_status_handler(int right_status, int *status);
+
 void		external_signal(int *status);
 #endif

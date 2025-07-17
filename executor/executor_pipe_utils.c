@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 23:20:04 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 23:29:37 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 17:21:26 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,5 @@ void	execute_pipe(t_pipe_node *pipe_node, t_minishell *shell_info)
 	close(pipefd[1]);
 	waitpid(left_pid, &left_status, 0);
 	waitpid(right_pid, &right_status, 0);
-	pipe_signal(left_status, right_status, &shell_info->status);
+	pipe_status_handler(right_status, &shell_info->status);
 }

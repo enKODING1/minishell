@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:33:03 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/17 19:13:50 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 19:59:19 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,12 @@ char	**add_envp(char *arg, char **envp_list)
 	return (tmp_list);
 }
 
-void	echo_export(char **envp_list, int fd)
+void	echo_export(char **envp_list, int fd, size_t j)
 {
-	size_t	j;
 	char	**tmp_list;
 	char	*key;
 	char	*value;
 
-	j = 0;
 	tmp_list = get_envp_list(envp_list);
 	if (!tmp_list)
 		return ;
@@ -136,7 +134,7 @@ void	exec_export(char *env_vaiable, char **argv, char ***envp_list,
 	tmp_list = NULL;
 	(void)env_vaiable;
 	if (ft_arglen(argv) == 0)
-		echo_export(*envp_list, STDOUT_FILENO);
+		echo_export(*envp_list, STDOUT_FILENO, 0);
 	else
 		process_export_args(argv, envp_list, status, -1);
 }

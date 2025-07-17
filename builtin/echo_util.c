@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_util.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 00:17:19 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/15 06:12:57 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 19:59:51 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,7 @@ char	*ft_advanced_substr(char *str, char **envp_list, int *status)
 		else if (*str == '$')
 			str += expand_env(str + 1, envp_list, list, status) + 1;
 		else
-		{
-			append_char(list, *str);
-			str++;
-		}
+			append_char(list, *(str++));
 	}
 	if (error_check)
 	{

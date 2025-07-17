@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_export3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinwpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 23:50:56 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/12 01:05:49 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 19:14:26 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,12 @@ int	ft_strcmp(char *str1, char *str2)
 	while (str1[i] && (str1[i] == str2[i]))
 		i++;
 	return (str1[i] - str2[i]);
+}
+
+char	**cleanup_and_fail(char **list, char *key, char *value)
+{
+	free_envp(list);
+	free(key);
+	free(value);
+	return (NULL);
 }

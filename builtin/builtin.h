@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:27:26 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/17 16:47:09 by skang            ###   ########.fr       */
+/*   Updated: 2025/07/17 19:12:34 by jinwpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,5 @@ char				*set_path(char **argv, int *status, int *is_minus,
 char				*get_path_from_env(char *str, char **envp_list, int fd,
 						int *status);
 char				*remove_quote(char *str);
-
+char				**cleanup_and_fail(char **list, char *key, char *value);
 #endif

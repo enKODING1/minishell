@@ -12,8 +12,6 @@
 
 #include "builtin.h"
 
-char		*remove_quote(char *str);
-
 void	free_envp(char **envp_list)
 {
 	int	i;

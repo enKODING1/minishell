@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 23:53:54 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 22:16:52 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 16:47:01 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,28 @@ char	**get_envp_list(char **envp_list)
 	}
 	tmp_list[i] = NULL;
 	return (tmp_list);
+}
+
+char	*remove_quote(char *str)
+{
+	int		position;
+	int		current_position;
+	char	quote;
+
+	position = 0;
+	current_position = -1;
+	quote = str[0];
+	if (!(quote == '\"' || quote == '\''))
+		return (str);
+	while (str[position])
+	{
+		if (str[position] == quote)
+			current_position = position;
+		else if (str[position] == '\0')
+			break ;
+		position++;
+	}
+	if (current_position == -1)
+		return (str);
+	return (ft_substr(str, 1, current_position - 1));
 }

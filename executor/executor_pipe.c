@@ -16,30 +16,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-char	*remove_quote(char *str)
-{
-	int		position;
-	int		current_position;
-	char	quote;
-
-	position = 0;
-	current_position = -1;
-	quote = str[0];
-	if (!(quote == '\"' || quote == '\''))
-		return (str);
-	while (str[position])
-	{
-		if (str[position] == quote)
-			current_position = position;
-		else if (str[position] == '\0')
-			break ;
-		position++;
-	}
-	if (current_position == -1)
-		return (str);
-	return (ft_substr(str, 1, current_position - 1));
-}
-
 static void	run_cmd_node(t_cmd_node *cmd, t_minishell *shell_info)
 {
 	int	stdout_fd;

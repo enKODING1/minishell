@@ -66,7 +66,7 @@ int					handle_single_quote(char **str, t_string_builder *list,
 int					ft_strcmp(char *str1, char *str2);
 int					find_key_and_copy(char *key, char **envp_list,
 						char **tmp_list);
-void				update_or_add_entry(int j, char **tmp_list,
+int					update_or_add_entry(int j, char **tmp_list,
 						char *update_arg, int list_len);
 void				ft_key_value(char *arg, char **key, char **value);
 int					ft_option_check(char *argv, int *status, char *cmd);

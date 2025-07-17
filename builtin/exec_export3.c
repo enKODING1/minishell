@@ -26,26 +26,38 @@ int	find_key_and_copy(char *key, char **envp_list, char **tmp_list)
 		if (ft_strcmp(key, old_key) == 0)
 			found_idx = i;
 		tmp_list[i] = ft_strdup(envp_list[i]);
+		if (!tmp_list[i])
+		{
+			while (i > 0)
+				free(tmp_list[--i]);
+			free(old_key);
+			return (-2);
+		}
 		free(old_key);
 		i++;
 	}
 	return (found_idx);
 }
 
-void	update_or_add_entry(int j, char **tmp_list, char *update_arg,
+int	update_or_add_entry(int j, char **tmp_list, char *update_arg,
 		int list_len)
 {
 	if (j != -1)
 	{
 		free(tmp_list[j]);
 		tmp_list[j] = ft_strdup(update_arg);
+		if (!tmp_list[j])
+			return (-1);
 		tmp_list[list_len] = NULL;
 	}
 	else
 	{
 		tmp_list[list_len] = ft_strdup(update_arg);
+		if (!tmp_list[list_len])
+			return (-1);
 		tmp_list[list_len + 1] = NULL;
 	}
+	return (0);
 }
 
 int	ft_strcmp(char *str1, char *str2)

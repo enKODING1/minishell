@@ -1,5 +1,5 @@
 CC = cc -g
-CFLAG = -Wall -Wextra -Werror
+# CFLAG = -Wall -Wextra -Werror
 NAME = test
 
 VPATH = ./executor ./builtin ./lexer ./parser

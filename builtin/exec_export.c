@@ -52,9 +52,26 @@ char	**add_envp(char *arg, char **envp_list)
 	len = ft_arglen(envp_list);
 	tmp_list = malloc(sizeof(char *) * (len + 2));
 	if (!envp_list || !tmp_list)
+	{
+		free(key);
+		free(update_arg);
 		return (NULL);
+	}
 	found_idx = find_key_and_copy(key, envp_list, tmp_list);
-	update_or_add_entry(found_idx, tmp_list, update_arg, len);
+	if (found_idx == -2)
+	{
+		free(tmp_list);
+		free(key);
+		free(update_arg);
+		return (NULL);
+	}
+	if (update_or_add_entry(found_idx, tmp_list, update_arg, len) == -1)
+	{
+		free_envp(tmp_list);
+		free(key);
+		free(update_arg);
+		return (NULL);
+	}
 	free(key);
 	free(update_arg);
 	return (tmp_list);
@@ -108,6 +125,11 @@ void	process_export_args(char **argv, char ***envp_list, int *status)
 		else
 		{
 			tmp_list = add_envp(argv[i], *envp_list);
+			if (!tmp_list)
+			{
+				*status = 1;
+				return ;
+			}
 			free_envp(*envp_list);
 			*envp_list = tmp_list;
 		}
@@ -133,6 +155,11 @@ void	exec_export(char *env_vaiable, char **argv, char ***envp_list,
 			return ;
 		}
 		tmp_list = add_envp(env_vaiable, *envp_list);
+		if (!tmp_list)
+		{
+			*status = 1;
+			return ;
+		}
 		free_envp(*envp_list);
 		*envp_list = tmp_list;
 	}

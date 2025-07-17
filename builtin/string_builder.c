@@ -40,14 +40,19 @@ void	append_char(t_string_builder *sb, char c)
 	{
 		new_cap = sb->cap * 2;
 		str = malloc(sizeof(char) * new_cap);
+		if (!str)
+			return ;
 		ft_memcpy(str, sb->str, sb->len);
 		free(sb->str);
 		sb->str = str;
 		sb->cap = new_cap;
 	}
-	sb->str[sb->len] = c;
-	sb->len++;
-	sb->str[sb->len] = '\0';
+	if (sb->len + 1 < sb->cap)
+	{
+		sb->str[sb->len] = c;
+		sb->len++;
+		sb->str[sb->len] = '\0';
+	}
 }
 
 void	append_str(t_string_builder *sb, char *str)

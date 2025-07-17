@@ -6,7 +6,7 @@
 /*   By: jinwpark <jinwpark@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 23:31:01 by jinwpark          #+#    #+#             */
-/*   Updated: 2025/07/16 23:36:43 by jinwpark         ###   ########.fr       */
+/*   Updated: 2025/07/17 18:07:28 by skang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	execute_pipe_left_child(t_pipe_node *pipe_node, t_minishell *shell_info,
 	else if (pipe_node->left->type == NODE_CMD)
 	{
 		cmd = (t_cmd_node *)pipe_node->left;
-		if (!cmd || !cmd->cmd)
+		if (!cmd && !cmd->cmd)
 			exit(0);
 		if (!replace_cmd_args(cmd, shell_info))
 			exit(1);

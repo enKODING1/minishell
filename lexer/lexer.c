@@ -40,7 +40,7 @@ t_token_type	*new_token(t_token token_type, char *ch)
 	if (!tok->value)
 	{
 		free(tok);
-		tok->value = NULL;
+		tok = NULL;
 		return (NULL);
 	}
 	return (tok);

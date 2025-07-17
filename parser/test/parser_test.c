@@ -11,11 +11,12 @@
 /* ************************************************************************** */
 
 #include "parser.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
-static int	get_input(char *input, size_t size)
+static char	*get_input(void)
 {
-	printf(">> ");
-	return (fgets(input, size, stdin) != NULL);
+	return (readline(">> "));
 }
 
 static void	handle_parse_error(void)
@@ -38,28 +39,34 @@ static void	parse_and_print(char *input)
 	if (parser.has_error)
 	{
 		handle_parse_error();
-		free_ast(ast_root);
+		free_token_list(tok_head);
+		free_lexer(lexer);
+		return ;
 	}
-	else
-	{
-		printf("--- 파싱 완료 ---\n\n");
-		print_ast(ast_root, 0);
-		free_ast(ast_root);
-	}
+	printf("--- 파싱 완료 ---\n\n");
+	print_ast(ast_root, 0);
+	free_ast(ast_root);
 	free_token_list(tok_head);
 	free_lexer(lexer);
 }
 
 int	main(void)
 {
-	char	input[255];
+	char	*input;
 
 	while (1)
 	{
-		if (!get_input(input, sizeof(input)))
+		input = get_input();
+		if (!input)
 			break ;
-		if (ft_strncmp(input, "exit", 4))
+		if (ft_strncmp(input, "exit", 4) != 0)
+		{
+			add_history(input);
 			parse_and_print(input);
+		}
+		free(input);
+		if (ft_strncmp(input, "exit", 4) == 0)
+			break ;
 	}
 	return (0);
 }

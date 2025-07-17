@@ -1,6 +1,6 @@
 CC = cc -g
-# CFLAG = -Wall -Wextra -Werror
-NAME = test
+CFLAG = -Wall -Wextra -Werror
+NAME = minishell
 
 VPATH = ./executor ./builtin ./lexer ./parser
 

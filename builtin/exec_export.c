@@ -127,11 +127,6 @@ void	process_export_args(char **argv, char ***envp_list, int *status, int i)
 void	exec_export(char *env_vaiable, char **argv, char ***envp_list,
 		int *status)
 {
-	char	**tmp_list;
-	int		i;
-
-	i = 0;
-	tmp_list = NULL;
 	(void)env_vaiable;
 	if (ft_arglen(argv) == 0)
 		echo_export(*envp_list, STDOUT_FILENO, 0);

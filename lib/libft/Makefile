@@ -1,4 +1,4 @@
-CC = gcc 
+CC = cc 
 CFLAGS = -Wall -Wextra -Werror
 NAME = libft.a
 NAME_BONUS = libft_bonus.a

@@ -1,6 +1,32 @@
 # minishell
 [minishell.webm](https://github.com/user-attachments/assets/6f4c0fb4-187b-41a6-be24-96724dfc13ef)
 
+# 설치
+- Linux (o)
+- macOS (x)
+- Windows (x)
+
+레포지토리 클론
+``` bash
+git clone https://github.com/enkoding1/minishell
+```
+make 명령어로 실행파일 생성
+``` bash
+make
+```
+minishell 실행
+``` bash
+./minishell
+```
+
+### lexer 테스터 설치
+``` bash
+make lexer
+```
+### parser 테스터 설치
+``` bash
+make parser
+```
 ## **빌트인 명령어**
 - [x] echo "-n" 옵션과 함께 구현
 - [x] cd 상대경로, 절대경로 구현

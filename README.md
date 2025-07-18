@@ -1,4 +1,5 @@
 # minishell
+[minishell.webm](https://github.com/user-attachments/assets/6f4c0fb4-187b-41a6-be24-96724dfc13ef)
 
 ## **빌트인 명령어**
 - [x] echo "-n" 옵션과 함께 구현
